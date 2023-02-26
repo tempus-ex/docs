@@ -1,23 +1,48 @@
-import {promises as fs} from 'fs';
 import Head from 'next/head'
 import { serialize } from 'next-mdx-remote/serialize'
 import { MDXRemote } from 'next-mdx-remote'
 
-export default function Home(props) {
+import {canonicalContentPath} from '../lib/content';
+import {getAllContent} from '../lib/content-loading';
+
+export default function Home({ allContent }) {
+    const source = allContent['/'];
+    const frontmatter = source.frontmatter;
+
     return (
         <>
             <Head>
-                <title>Tempus Ex Docs</title>
+                <title>{frontmatter.title ? `${frontmatter.title} - Tempus Ex Docs` : 'Tempus Ex Documentation'}</title>
             </Head>
             <main>
-                <MDXRemote {...props.source} />
+                <ul>
+                    {frontmatter.featuredContent.map((c) => {
+                        const source = allContent[canonicalContentPath(c.path)];
+                        return (
+                            <li key={c.path}>
+                                {source.frontmatter.title}
+                                {c.children && (
+                                    <ul>
+                                        {c.children.map((c) => {
+                                            const source = allContent[canonicalContentPath(c)];
+                                            return (<li key={c}>{source.frontmatter.title}</li>);
+                                        })}
+                                    </ul>
+                                )}
+                            </li>
+                        );
+                    })}
+                </ul>
+                <MDXRemote {...source} />
             </main>
         </>
     )
 }
 
 export async function getStaticProps() {
-    const source = await fs.readFile('content/index.mdx', 'utf8');
-    const mdxSource = await serialize(source, { parseFrontmatter: true });
-    return { props: { source: mdxSource } };
+    return {
+        props: {
+            allContent: await getAllContent(),
+        },
+    };
 }

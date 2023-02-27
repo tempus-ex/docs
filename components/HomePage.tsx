@@ -1,6 +1,9 @@
 import Head from 'next/head';
 import Link from 'next/link';
 
+import { Footer } from './Footer';
+import { Header } from './Header';
+
 interface ProductChildProps {
     path: string;
     title: string;
@@ -22,6 +25,7 @@ export const HomePage = (props: Props) => {
             <Head>
                 <title>Tempus Ex Documentation</title>
             </Head>
+            <Header />
             <main>
                 <ul>
                     {props.products.map((p) => (
@@ -36,6 +40,7 @@ export const HomePage = (props: Props) => {
                     ))}
                 </ul>
             </main>
+            <Footer />
         </>
     )
 };

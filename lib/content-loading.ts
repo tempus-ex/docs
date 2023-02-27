@@ -12,9 +12,9 @@ async function* walk(dir) {
     }
 }
 
-// Returns an object where each property is a path, such as "/" or "/fusion-feed".
-export async function getAllContent(): Record<string, MDXRemoteSerializeResult> {
-    const ret = {};
+// Returns a map where each key is a path, such as "/" or "/fusion-feed".
+export async function getAllContent(): Map<string, MDXRemoteSerializeResult> {
+    const ret = new Map();
     for await (const p of walk('./content')) {
         if (!p.endsWith('.mdx')) {
             continue;
@@ -26,7 +26,7 @@ export async function getAllContent(): Record<string, MDXRemoteSerializeResult> 
             contentPath = contentPath.slice(0, contentPath.length - 5);
         }
         contentPath = canonicalContentPath(contentPath);
-        ret[contentPath] = await serialize(source, { parseFrontmatter: true });
+        ret.set(contentPath, await serialize(source, { parseFrontmatter: true }));
     }
     return ret;
 };

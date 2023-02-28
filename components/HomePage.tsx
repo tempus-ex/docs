@@ -21,17 +21,14 @@ interface ProductChildProps {
 
 interface ProductProps {
     path: string;
+    icon: TablerIcon;
     title: string;
+    description: string;
     children: ProductChildProps[];
 }
 
 interface Props {
     products: ProductProps[];
-}
-
-interface FeatureProps {
-    title: React.ReactNode;
-    description: React.ReactNode;
 }
 
 const useStyles = createStyles((theme) => ({
@@ -41,15 +38,26 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-export function Feature({ title, description }: FeatureProps) {
+export function Product(props: ProductProps) {
     const theme = useMantineTheme();
+
+    const icons = require(`@tabler/icons-react`);
+    const Icon = icons[props.icon];
 
     return (
         <div>
-            <Text style={{ marginTop: theme.spacing.sm, marginBottom: 7 }}>{title}</Text>
+            <ThemeIcon variant="light" size={40} radius={40}>
+                <Icon size={20} stroke={1.5} />
+            </ThemeIcon>
+            <Text style={{ marginTop: theme.spacing.sm, marginBottom: 7 }}>{props.title}</Text>
             <Text size="sm" color="dimmed" style={{ lineHeight: 1.6 }}>
-                {description}
+                {props.description}
             </Text>
+            <ul>
+                {props.children.map((c) => (
+                    <li key={c.path}><Link href={c.path}>{c.title}</Link></li>
+                ))}
+            </ul>
         </div>
     );
 }
@@ -74,19 +82,7 @@ export const HomePage = (props: Props) => {
                             { maxWidth: 755, cols: 1, spacing: 'xl' },
                         ]}
                     >
-                        {props.products.map((p) => (
-                            <Feature
-                                key={p.path}
-                                title={p.title}
-                                description={p.description}
-                            >
-                                <ul>
-                                    {p.children.map((c) => (
-                                        <li key={c.path}><Link href={c.path}>{c.title}</Link></li>
-                                    ))}
-                                </ul>
-                            </Feature>
-                        ))}
+                        {props.products.map((p) => (<Product key={p.path} {...p} />))}
                     </SimpleGrid>
                 </Container>
             </main>

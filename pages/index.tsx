@@ -15,6 +15,7 @@ export async function getStaticProps() {
                 return {
                     path,
                     title: content.frontmatter.title,
+                    description: content.frontmatter.description,
                     children: p.children?.map((c) => {
                         const path = canonicalContentPath(c);
                         const content = allContent.get(path);

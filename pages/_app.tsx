@@ -8,6 +8,11 @@ export default function App({ Component, pageProps }: AppProps) {
             withNormalizeCSS
             theme={{
                 colorScheme: 'light',
+                globalStyles: (theme) => ({
+                    a: {
+                        textDecoration: 'none',
+                    },
+                }),
             }}
         >
             <Component {...pageProps} />

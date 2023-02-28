@@ -1,3 +1,4 @@
+import { Container } from '@mantine/core';
 import Head from 'next/head';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 
@@ -18,7 +19,9 @@ export const DefaultPage = (props: Props) => {
             </Head>
             <Header />
             <main>
-                <MDXRemote {...props.source} />
+                <Container>
+                    <MDXRemote {...props.source} />
+                </Container>
             </main>
             <Footer />
         </>

@@ -18,7 +18,6 @@ const useStyles = createStyles((theme) => ({
         alignItems: 'center',
         color: 'inherit',
         display: 'flex',
-        textDecoration: 'none',
     },
 }));
 

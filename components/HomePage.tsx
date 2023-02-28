@@ -49,7 +49,9 @@ export function Product(props: ProductProps) {
             <ThemeIcon variant="light" size={40} radius={40}>
                 <Icon size={20} stroke={1.5} />
             </ThemeIcon>
-            <Text style={{ marginTop: theme.spacing.sm, marginBottom: 7 }}>{props.title}</Text>
+            <Text style={{ marginTop: theme.spacing.sm, marginBottom: 7 }}>
+                <Link href={props.path}>{props.title}</Link>
+            </Text>
             <Text size="sm" color="dimmed" style={{ lineHeight: 1.6 }}>
                 {props.description}
             </Text>

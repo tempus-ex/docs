@@ -1,10 +1,11 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import { serialize, MDXRemoteSerializeResult } from 'next-mdx-remote/serialize'
+import { MDXRemoteSerializeResult } from 'next-mdx-remote';
+import { serialize } from 'next-mdx-remote/serialize'
 
 import { canonicalContentPath} from './content';
 
-async function* walk(dir) {
+async function* walk(dir: string): AsyncGenerator<string> {
     for await (const d of await fs.opendir(dir)) {
         const entry = path.join(dir, d.name);
         if (d.isDirectory()) yield* walk(entry);
@@ -13,7 +14,7 @@ async function* walk(dir) {
 }
 
 // Returns a map where each key is a path, such as "/" or "/fusion-feed".
-export async function getAllContent(): Map<string, MDXRemoteSerializeResult> {
+export async function getAllContent(): Promise<Map<string, MDXRemoteSerializeResult>> {
     const ret = new Map();
     for await (const p of walk('./content')) {
         if (!p.endsWith('.mdx')) {

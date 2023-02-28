@@ -6,7 +6,11 @@ import { getAllContent } from '../lib/content-loading';
 
 export default DefaultPage;
 
-export async function getStaticProps({ params }) {
+interface Params {
+    path: string[];
+}
+
+export async function getStaticProps({ params }: { params: Params }) {
     const allContent = await getAllContent();
     const source = allContent.get('/' + params.path.join('/'));
     return {

@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { MDXRemote } from 'next-mdx-remote';
+import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 
 import { Footer } from './Footer';
 import { Header } from './Header';
@@ -14,7 +14,7 @@ export const DefaultPage = (props: Props) => {
     return (
         <>
             <Head>
-                <title>{frontmatter.title}</title>
+                <title>{frontmatter?.title}</title>
             </Head>
             <Header />
             <main>

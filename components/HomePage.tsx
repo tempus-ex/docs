@@ -21,7 +21,7 @@ interface ProductChildProps {
 
 interface ProductProps {
     path: string;
-    icon: TablerIcon;
+    icon: string;
     title: string;
     description: string;
     children: ProductChildProps[];

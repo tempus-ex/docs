@@ -3,7 +3,7 @@ import path from 'path';
 import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize'
 
-import { canonicalContentPath} from './content';
+import { canonicalContentPath, Frontmatter, TableOfContents, TableOfContentsPage } from './content';
 
 async function* walk(dir: string): AsyncGenerator<string> {
     for await (const d of await fs.opendir(dir)) {
@@ -30,4 +30,31 @@ export async function getAllContent(): Promise<Map<string, MDXRemoteSerializeRes
         ret.set(contentPath, await serialize(source, { parseFrontmatter: true }));
     }
     return ret;
+};
+
+function tocPagesForSource(allContent: Map<string, MDXRemoteSerializeResult>, source: MDXRemoteSerializeResult, path: string): TableOfContentsPage[] {
+    const frontmatter: Frontmatter = source.frontmatter as unknown as Frontmatter;
+
+    return (frontmatter.children || []).map((c) => {
+        const childPath = canonicalContentPath(path + '/' + c);
+        const source = allContent.get(childPath)!;
+        const frontmatter: Frontmatter = source.frontmatter as unknown as Frontmatter;
+        return {
+            pages: tocPagesForSource(allContent, source, childPath),
+            path: childPath,
+            title: frontmatter.title,
+        };
+    });
+}
+
+export async function getProductTableOfContents(path: string): Promise<TableOfContents> {
+    const allContent = await getAllContent();
+    const source = allContent.get(canonicalContentPath(path))!;
+    const frontmatter: Frontmatter = source.frontmatter as unknown as Frontmatter;
+
+    return {
+        title: frontmatter.title,
+        pages: tocPagesForSource(allContent, source, path),
+        path: canonicalContentPath(path),
+    };
 };

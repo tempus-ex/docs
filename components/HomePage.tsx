@@ -10,7 +10,6 @@ import {
 import Head from 'next/head';
 import Link from 'next/link';
 
-import styles from '../styles/HomePage.module.css';
 import { Footer } from './Footer';
 import { Header } from './Header';
 

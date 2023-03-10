@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 
 import { DefaultPage } from '../components/DefaultPage';
 import { canonicalContentPath } from '../lib/content';
-import { getAllContent } from '../lib/content-loading';
+import { getAllContent, getProductTableOfContents } from '../lib/content-loading';
 
 export default DefaultPage;
 
@@ -12,10 +12,14 @@ interface Params {
 
 export async function getStaticProps({ params }: { params: Params }) {
     const allContent = await getAllContent();
-    const source = allContent.get('/' + params.path.join('/'));
+    const tableOfContents = await getProductTableOfContents(params.path[0]);
+    const path = '/' + params.path.join('/');
+    const source = allContent.get(path);
     return {
         props: {
+            path,
             source,
+            tableOfContents,
         },
     };
 }

@@ -37,7 +37,11 @@ function tocPagesForSource(allContent: Map<string, MDXRemoteSerializeResult>, so
 
     return (frontmatter.children || []).map((c) => {
         const childPath = canonicalContentPath(path + '/' + c);
-        const source = allContent.get(childPath)!;
+        const source = allContent.get(childPath);
+        if (!source) {
+            throw new Error(`path for child does not exist: ${childPath}`);
+        }
+
         const frontmatter: Frontmatter = source.frontmatter as unknown as Frontmatter;
         return {
             pages: tocPagesForSource(allContent, source, childPath),
@@ -47,9 +51,13 @@ function tocPagesForSource(allContent: Map<string, MDXRemoteSerializeResult>, so
     });
 }
 
-export async function getProductTableOfContents(path: string): Promise<TableOfContents> {
+export async function getProductTableOfContents(path: string): Promise<TableOfContents | null> {
     const allContent = await getAllContent();
-    const source = allContent.get(canonicalContentPath(path))!;
+    const source = allContent.get(canonicalContentPath(path));
+    if (!source) {
+        return null;
+    }
+
     const frontmatter: Frontmatter = source.frontmatter as unknown as Frontmatter;
 
     return {

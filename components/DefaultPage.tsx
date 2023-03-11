@@ -8,7 +8,7 @@ import { Header } from './Header';
 
 import { TableOfContents } from '../lib/content';
 
-interface Props {
+export interface Props {
     path: string;
     source: MDXRemoteSerializeResult;
     tableOfContents: TableOfContents;

@@ -1,6 +1,7 @@
 import { IconPhoto } from '@tabler/icons-react';
 
-import { HomePage } from '../components/HomePage';
+import { HomePage, Props } from '../components/HomePage';
+import { withAuth } from '../lib/auth';
 import { canonicalContentPath, Frontmatter } from '../lib/content';
 import { getAllContent } from '../lib/content-loading';
 
@@ -17,7 +18,7 @@ interface HomePageFrontmatter extends Frontmatter {
     products: ProductFrontmatter[];
 }
 
-export async function getStaticProps() {
+export const getServerSideProps = withAuth<{}, Props>(async function ({ req, res }) {
     const allContent = await getAllContent();
     const source = allContent.get('/')!;
     const frontmatter = source.frontmatter as unknown as HomePageFrontmatter;
@@ -48,4 +49,4 @@ export async function getStaticProps() {
             }),
         },
     };
-}
+});

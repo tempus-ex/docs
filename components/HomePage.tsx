@@ -26,7 +26,7 @@ interface ProductProps {
     children: ProductChildProps[];
 }
 
-interface Props {
+export interface Props {
     products: ProductProps[];
 }
 

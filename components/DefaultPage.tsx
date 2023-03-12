@@ -1,3 +1,4 @@
+import React from 'react';
 import { Container, createStyles, Navbar, Title } from '@mantine/core';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -19,10 +20,15 @@ const useStyles = createStyles((theme) => ({
         display: 'flex',
         flexDirection: 'row',
     },
+    tocNestedLink: {
+        paddingLeft: `${2 * theme.spacing.md}px`,
+    },
+    tocTopLink: {
+        paddingLeft: `${theme.spacing.md}px`,
+    },
     tocLink: {
         color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
         display: 'block',
-        padding: `0 ${theme.spacing.md}px`,
         '&:hover': {
             backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1],
             color: theme.colorScheme === 'dark' ? theme.white : theme.black,
@@ -33,7 +39,6 @@ const useStyles = createStyles((theme) => ({
         color: theme.colorScheme === 'dark' ? theme.white : theme.black,
         display: 'block',
         fontWeight: 'bold',
-        padding: `0 ${theme.spacing.md}px`,
     },
     tocTop: {
         borderBottom: `1px solid ${
@@ -68,7 +73,12 @@ export const DefaultPage = (props: Props) => {
                     </Navbar.Section>
                     <Navbar.Section>
                         {toc.pages.map((p) => (
-                            <Link className={p.path === props.path ? classes.tocLinkCurrent : classes.tocLink} href={p.path} key={p.path}>{p.title}</Link>
+                            <React.Fragment key={p.path}>
+                                <Link className={`${p.path === props.path ? classes.tocLinkCurrent : classes.tocLink} ${classes.tocTopLink}`} href={p.path}>{p.title}</Link>
+                                {p.children?.map((p) => (
+                                    <Link className={`${p.path === props.path ? classes.tocLinkCurrent : classes.tocLink} ${classes.tocNestedLink}`} href={p.path} key={p.path}>{p.title}</Link>
+                                ))}
+                            </React.Fragment>
                         ))}
                     </Navbar.Section>
                 </Navbar>

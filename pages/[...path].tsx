@@ -11,7 +11,7 @@ interface Params {
     path: string[];
 }
 
-export const getServerSideProps = withAuth<Params, Props>(async function ({ req, res, params }) {
+export const getServerSideProps = withAuth<Params, Props>(async function ({ params }) {
     if (!params) {
         return { notFound: true };
     }

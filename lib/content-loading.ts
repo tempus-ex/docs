@@ -44,7 +44,7 @@ function tocPagesForSource(allContent: Map<string, MDXRemoteSerializeResult>, so
 
         const frontmatter: Frontmatter = source.frontmatter as unknown as Frontmatter;
         return {
-            pages: tocPagesForSource(allContent, source, childPath),
+            children: tocPagesForSource(allContent, source, childPath),
             path: childPath,
             title: frontmatter.title,
         };

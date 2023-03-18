@@ -29,6 +29,7 @@ For most pages, all that's needed is to add an MDX file to the content directory
 
 To include a GraphQL example in the documentation, you can use a standard Markdown code block, but you must include a Fusion Feed version in the metadata like so:
 
+````markdown
 ```gql v2
 query Foo($id: Id!) {
     node(id: $id) {
@@ -36,6 +37,7 @@ query Foo($id: Id!) {
     }
 }
 ```
+````
 
 This will allow the example to be automatically validated by tests and gain additional UI functionality.
 

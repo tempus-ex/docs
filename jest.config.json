@@ -1,0 +1,21 @@
+{
+    "testPathIgnorePatterns": ["fixtures"],
+    "transformIgnorePatterns": [],
+    "transform": {
+        "\\.m?[jt]sx?$": [
+            "esbuild-jest",
+            {
+                "sourcemap": true,
+                "loaders": {
+                    ".mjs": "jsx"
+                }
+            }
+        ]
+    },
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "mjs"],
+    "moduleNameMapper": {
+        "(estree-walker|periscopic|is-reference)": "<rootDir>/node_modules/$1/src/index.js"
+    },
+    "setupFilesAfterEnv": ["jest-expect-message", "<rootDir>/jest.setup.js"],
+    "verbose": true
+}

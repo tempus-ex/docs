@@ -23,15 +23,15 @@ export const getServerSideProps = withAuth<Params, Props>(async function ({ para
     }
 
     const path = '/' + params.path.join('/');
-    const source = allContent.get(path);
-    if (!source) {
+    const content = allContent.get(path);
+    if (!content) {
         return { notFound: true };
     }
 
     return {
         props: {
             path,
-            source,
+            source: content.source,
             tableOfContents,
         },
     };

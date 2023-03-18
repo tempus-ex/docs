@@ -18,29 +18,27 @@ interface HomePageFrontmatter extends Frontmatter {
 
 export const getServerSideProps = withAuth<{}, Props>(async function () {
     const allContent = await getAllContent();
-    const source = allContent.get('/')!;
-    const frontmatter = source.frontmatter as unknown as HomePageFrontmatter;
+    const content = allContent.get('/')!;
+    const frontmatter = content.frontmatter as unknown as HomePageFrontmatter;
 
     return {
         props: {
             products: frontmatter.products.map((p) => {
                 const path = canonicalContentPath(p.path);
                 const content = allContent.get(path)!;
-                const frontmatter = content.frontmatter as unknown as Frontmatter;
 
                 return {
                     path,
                     icon: p.icon,
-                    title: frontmatter.title,
+                    title: content.frontmatter.title,
                     description: p.description,
                     children: p.children?.map((c) => {
                         const path = canonicalContentPath(c);
                         const content = allContent.get(path)!;
-                        const frontmatter = content.frontmatter as unknown as Frontmatter;
 
                         return {
                             path,
-                            title: frontmatter.title,
+                            title: content.frontmatter.title,
                         };
                     }) || [],
                 };

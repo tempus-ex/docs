@@ -20,5 +20,9 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "files": [
+      "globals.d.ts",
+      "node_modules/jest-expect-message/types/index.d.ts"
+  ]
 }

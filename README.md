@@ -12,7 +12,7 @@ This is the repo for [docs.tempus-ex.com](https://docs.tempus-ex.com).
 
 ## Running
 
-To run the development server:
+To run the development server...
 
 ```bash
 npm install
@@ -20,3 +20,31 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result. The site will auto-reload as you make changes to the repo.
+
+## Writing Docs
+
+For most pages, all that's needed is to add an MDX file to the content directory. Each MDX file should have at least a title in the frontmatter and should be added as a child to another page's frontmatter.
+
+### GraphQL Examples
+
+To include a GraphQL example in the documentation, you can use a standard Markdown code block, but you must include a Fusion Feed version in the metadata like so:
+
+```gql v2
+query Foo($id: Id!) {
+    node(id: $id) {
+        __typename
+    }
+}
+```
+
+This will allow the example to be automatically validated by tests and gain additional UI functionality.
+
+## Testing
+
+To run the tests, use `npm run test`.
+
+Some tests require interaction with Fusion Feed and will fail unless you define the `FUSION_FEED_AUTHORIZATION` environment variable to the value of the Authorization header to be used:
+
+```bash
+FUSION_FEED_AUTHORIZATION="token $MY_FUSION_FEED_TOKEN" npm run test
+```

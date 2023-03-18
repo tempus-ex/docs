@@ -1,7 +1,6 @@
 import { createStyles, Text } from '@mantine/core';
 import Image from 'next/image';
 
-import logo from '../public/images/logo.svg';
 import styles from '../styles/Footer.module.css';
 
 const useStyles = createStyles((theme) => ({

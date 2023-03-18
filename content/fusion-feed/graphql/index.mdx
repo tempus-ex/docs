@@ -3,4 +3,13 @@ title: GraphQL API
 children:
   - explorer
 ---
-TODO
+
+Example query:
+
+```gql v2
+query Foo($id: ID!) {
+    node(id: $id) {
+        __typename
+    }
+}
+```

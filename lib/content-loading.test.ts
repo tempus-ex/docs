@@ -17,6 +17,15 @@ describe('getAllContent', () => {
         }
         expect(count).toBeGreaterThan(0);
     });
+
+    it('finds some links', async () => {
+        const allContent = await getAllContent();
+        let count = 0;
+        for (const content of Array.from(allContent.values())) {
+            count += content.links.size;
+        }
+        expect(count).toBeGreaterThan(0);
+    });
 })
 
 describe('graphql', () => {
@@ -33,6 +42,28 @@ describe('graphql', () => {
                 const doc = parse(graphql.document);
                 const schema = graphql.version === 'v1' ? v1Schema : v2Schema;
                 expect(validate(schema, doc)).toHaveLength(0);
+            }
+        }
+    });
+})
+
+describe('links', () => {
+    it('validate', async () => {
+        const allContent = await getAllContent();
+        for (const content of Array.from(allContent.values())) {
+            for (const link of Array.from(content.links)) {
+                if (link.indexOf('://') > 0 || link.indexOf('//') === 0) {
+                    // external url
+                    const resp = await fetch(link);
+                    expect(resp.status).toBe(200);
+                } else {
+                    // content url
+
+                    // all links should have been made absolute
+                    expect(link[0]).toBe('/');
+
+                    expect(allContent.get(link), `Invalid link in ${content.path}: ${link}`).toBeDefined();
+                }
             }
         }
     });

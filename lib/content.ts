@@ -18,6 +18,7 @@ export interface Content {
     source: MDXRemoteSerializeResult;
     path: string;
     graphql: GraphQL[];
+    links: Set<string>;
 }
 
 export function canonicalContentPath(p: string): string {

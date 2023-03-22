@@ -5,6 +5,8 @@ import { serialize } from 'next-mdx-remote/serialize';
 import rehypeHighlight from 'rehype-highlight';
 import remarkCodeExtra from 'remark-code-extra';
 import { MDASTCode } from 'remark-code-extra/types';
+import { visit } from 'unist-util-visit';
+import type { Root } from 'mdast';
 
 import { canonicalContentPath, Content, Frontmatter, GraphQL, TableOfContents, TableOfContentsPage } from './content';
 
@@ -26,12 +28,30 @@ export async function getAllContent(): Promise<Map<string, Content>> {
 
         const body = await fs.readFile(p, 'utf8');
         let contentPath = p.slice(8, p.length - 4);
+        let isIndex = false;
         if (contentPath.endsWith('/index') || contentPath === 'index') {
             contentPath = contentPath.slice(0, contentPath.length - 5);
+            isIndex = true;
         }
         contentPath = canonicalContentPath(contentPath);
+        const contentPathBase = isIndex ? contentPath : contentPath.slice(0, contentPath.lastIndexOf('/'));
 
         const graphql: GraphQL[] = [];
+        const links = new Set<string>();
+
+        const markdownLinkPlugin = () => {
+            return (tree: Root) => {
+                visit(tree, (node) => {
+                    if (node.type === 'link') {
+                        // make relative content links absolute
+                        if (node.url.indexOf('://') < 0 && node.url[0] !== '/') {
+                            node.url = canonicalContentPath(contentPathBase + '/' + node.url);
+                        }
+                        links.add(node.url);
+                    }
+                });
+            };
+        };
 
         const source = await serialize(body, {
             mdxOptions: {
@@ -60,6 +80,7 @@ export async function getAllContent(): Promise<Map<string, Content>> {
                             };
                         },
                     }],
+                    [markdownLinkPlugin, {}]
                 ],
                 rehypePlugins: [rehypeHighlight],
             },
@@ -69,6 +90,7 @@ export async function getAllContent(): Promise<Map<string, Content>> {
         ret.set(contentPath, {
             frontmatter: source.frontmatter as unknown as Frontmatter,
             graphql,
+            links,
             source,
             path: contentPath,
         });

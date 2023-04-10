@@ -45,7 +45,7 @@ export async function getAllContent(): Promise<Map<string, Content>> {
                 visit(tree, (node) => {
                     if (node.type === 'link') {
                         // make relative content links absolute
-                        if (node.url.indexOf('://') < 0 && node.url[0] !== '/') {
+                        if (node.url.indexOf('://') < 0 && node.url[0] !== '/' && !node.url.startsWith('mailto:')) {
                             node.url = canonicalContentPath(contentPathBase + '/' + node.url);
                         }
                         links.add(node.url);

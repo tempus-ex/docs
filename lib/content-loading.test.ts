@@ -52,7 +52,10 @@ describe('links', () => {
         const allContent = await getAllContent();
         for (const content of Array.from(allContent.values())) {
             for (const link of Array.from(content.links)) {
-                if (link.indexOf('://') > 0 || link.indexOf('//') === 0) {
+                if (link.startsWith('mailto:')) {
+                    // mailto
+                    continue;
+                } else if (link.indexOf('://') > 0 || link.indexOf('//') === 0) {
                     // external url
                     const resp = await fetch(link);
                     expect(resp.status).toBe(200);

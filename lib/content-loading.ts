@@ -5,6 +5,7 @@ import { serialize } from 'next-mdx-remote/serialize';
 import rehypeHighlight from 'rehype-highlight';
 import remarkCodeExtra from 'remark-code-extra';
 import { MDASTCode } from 'remark-code-extra/types';
+import remarkGfm from 'remark-gfm';
 import { visit } from 'unist-util-visit';
 import type { Root } from 'mdast';
 
@@ -44,7 +45,7 @@ export async function getAllContent(): Promise<Map<string, Content>> {
                 visit(tree, (node) => {
                     if (node.type === 'link') {
                         // make relative content links absolute
-                        if (node.url.indexOf('://') < 0 && node.url[0] !== '/') {
+                        if (node.url.indexOf('://') < 0 && node.url[0] !== '/' && !node.url.startsWith('mailto:')) {
                             node.url = canonicalContentPath(contentPathBase + '/' + node.url);
                         }
                         links.add(node.url);
@@ -56,6 +57,7 @@ export async function getAllContent(): Promise<Map<string, Content>> {
         const source = await serialize(body, {
             mdxOptions: {
                 remarkPlugins: [
+                    remarkGfm,
                     [remarkCodeExtra, {
                         transform: (node: MDASTCode) => {
                             if (node.lang !== 'gql' && node.lang !== 'graphql') {

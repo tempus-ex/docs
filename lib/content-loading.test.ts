@@ -1,7 +1,11 @@
 import { parse, validate } from 'graphql';
-
+import * as OpenApiValidator from 'express-openapi-validator';
 import { getAllContent } from './content-loading';
 import { getGraphQLSchema } from './fusion-feed';
+import getConfig from 'next/config';
+
+
+const { publicRuntimeConfig } = getConfig();
 
 describe('getAllContent', () => {
     it('returns some content', async () => {
@@ -17,6 +21,15 @@ describe('getAllContent', () => {
         }
         expect(count).toBeGreaterThan(0);
     });
+
+    // it('finds some REST calls', async () => {
+    //     const allContent = await getAllContent();
+    //     let count = 0;
+    //     for (const content of Array.from(allContent.values())) {
+    //         count += content.rest.length;
+    //     }
+    //     expect(count).toBeGreaterThan(0);
+    // });
 
     it('finds some links', async () => {
         const allContent = await getAllContent();
@@ -42,6 +55,32 @@ describe('graphql', () => {
                 const doc = parse(graphql.document);
                 const schema = graphql.version === 'v1' ? v1Schema : v2Schema;
                 expect(validate(schema, doc)).toHaveLength(0);
+            }
+        }
+    });
+})
+
+describe('rest', () => {
+    it('validates', async () => {
+        const token = process.env.FUSION_FEED_AUTHORIZATION || '';
+        expect(token, 'To perform validation, FUSION_FEED_AUTHORIZATION must be defined.').toBeTruthy();
+
+        const allContent = await getAllContent();
+        for (const content of Array.from(allContent.values())) {
+            for (const rest of content.rest) {
+                const url = `${publicRuntimeConfig.fusionFeedUrl}${rest}`;
+                console.log(url);
+                console.log(token);
+                const resp = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'token ' + token,
+                    },
+                });
+                expect(resp.status).toBe(200);
+                console.log(JSON.stringify(resp.json()));
+                expect(resp.json()).toHaveProperty('data');
             }
         }
     });

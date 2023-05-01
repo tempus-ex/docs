@@ -1,0 +1,1847 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Documentation of all REST APIs in Fusion Feed.",
+        "title": "Fusion Feed REST API",
+        "version": "2"
+    },
+    "basePath": "/v2",
+    "paths": {
+        "/av-streams/{streamId}/preview.jpg": {
+            "get": {
+                "produces": [
+                    "image/jpeg"
+                ],
+                "summary": "Gets a preview image for an AV stream.",
+                "operationId": "GetStreamPreview",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The unique stream ID.",
+                        "name": "streamId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "The time in video to take preview image from in RFC 3339 format.",
+                        "name": "t",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "If given, the output file will be scaled down until it fits entirely within these\ndimensions (e.g. 640x360).\n",
+                        "name": "fit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "If given, the output file will be scaled down to the smallest size that still fills these\ndimensions (e.g. 640x360).\n",
+                        "name": "fill",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Image not found"
+                    },
+                    "500": {
+                        "description": "Internal error"
+                    }
+                }
+            }
+        },
+        "/av-streams/{streamId}/transcode.mp4": {
+            "post": {
+                "produces": [
+                    "video/mp4"
+                ],
+                "summary": "Performs a one-off transcode to an MP4 file.",
+                "operationId": "TranscodeToMP4",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The unique stream ID.",
+                        "name": "streamId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "The request parameters.",
+                        "name": "parameters",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/TranscodeToMP4Parameters"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Transcode not available"
+                    },
+                    "500": {
+                        "description": "Internal error"
+                    }
+                }
+            }
+        },
+        "/games": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Gets games.",
+                "operationId": "GetGames",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "nfl",
+                            "pac12football",
+                            "epl"
+                        ],
+                        "type": "string",
+                        "name": "filter.league.code",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "name": "filter.team.id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.",
+                        "name": "filter.schedule.time.on.date.year",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a\nmonth and day.",
+                        "name": "filter.schedule.time.on.date.month",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0\nto specify a year by itself or a year and month where the day isn't\nsignificant.",
+                        "name": "filter.schedule.time.on.date.day",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "name": "filter.schedule.time.on.today",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Return items after the given time.",
+                        "name": "filter.schedule.time.range.after",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Return items before the given time.\n\nEquivalent to `after` + `duration`.",
+                        "name": "filter.schedule.time.range.before",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Return items before the given duration.\n\nEquivalent to `before` - `after`.",
+                        "name": "filter.schedule.time.range.duration",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Filter to the current season.",
+                        "name": "filter.schedule.season.current",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "int64",
+                        "description": "The starting year that a schedule is tied to.",
+                        "name": "filter.schedule.season.year",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Filter to the current stage of a season.",
+                        "name": "filter.schedule.stage.current",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Filter to the current stage of a season.",
+                        "name": "filter.schedule.round.current",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "enum": [
+                                "TYPE_UNSPECIFIED",
+                                "TYPE_REGULAR",
+                                "TYPE_PRE",
+                                "TYPE_POST",
+                                "TYPE_PLAYOFF",
+                                "TYPE_ALL_STAR"
+                            ],
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "description": "Filter based on the type of schedule.\n\n - TYPE_REGULAR: Regular season state.\n - TYPE_PRE: Pre-season stage.\n - TYPE_POST: Post-season stage.\n - TYPE_PLAYOFF: Playoff stage.\n - TYPE_ALL_STAR: All star break/match.",
+                        "name": "filter.schedule.stage.type",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/GetGamesResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/play-notifications": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Streams live filtered selection of all plays for specific game(s).",
+                "operationId": "GetPlayNotifications",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "name": "filter.game_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            "CONFIDENCE_LEVEL_UNSPECIFIED",
+                            "CONFIDENCE_LEVEL_HINT",
+                            "CONFIDENCE_LEVEL_STRONG"
+                        ],
+                        "type": "string",
+                        "name": "filter.strength",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/GetPlayNotificationsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/play-search": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Searches plays for a specific league.",
+                "operationId": "PlaySearch",
+                "parameters": [
+                    {
+                        "enum": [
+                            "nfl",
+                            "pac12football"
+                        ],
+                        "type": "string",
+                        "name": "filter.league.code",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "filter.fql.query",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "filter.fql.variables",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "int32",
+                        "name": "filter.limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "filter.cursor",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/PlaySearchResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/players": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Gets players.",
+                "operationId": "GetPlayers",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "nfl",
+                            "pac12football",
+                            "epl"
+                        ],
+                        "type": "string",
+                        "name": "filter.league.code",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/GetPlayersResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/plays": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Gets filtered selection of all plays for specific game(s).",
+                "operationId": "GetPlays",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "description": "Only fetch specific plays by id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "name": "filter.game_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Filter to allow excluding all non-action plays from response. \\n Example filter.meta_play=true only (gridiron_football plays returned) \\n Example default filter.meta_play=false - (gridiron_football and timeout plays returned)\"",
+                        "name": "filter.meta_play",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/GetPlaysResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/teams": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Gets teams.",
+                "operationId": "GetTeams",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "nfl",
+                            "pac12football",
+                            "epl"
+                        ],
+                        "type": "string",
+                        "name": "filter.league.code",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/GetTeamsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/{gameId}/av-stream-clips": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Gets av-stream-clips for a game.",
+                "operationId": "GetAVStreamClips",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The unique game ID.",
+                        "name": "gameId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "filter.stream_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "name": "filter.play_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "name": "filter.fusion_cam.any.home.jersey_number",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "name": "filter.fusion_cam.any.away.jersey_number",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "name": "filter.camera_angle",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "In lieu of a filter.play_id, you can provide a filter.time_range.after and filter.time_range.duration to generate a clip between those two points",
+                        "name": "filter.time_range.after",
+                        "in": "query"
+                    },
+                    {
+                        "type": "number",
+                        "format": "float",
+                        "description": "Number of seconds from the filter.time_range.after to end the clip at.",
+                        "name": "filter.time_range.duration",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of seconds before the start of the play to begin the clip.",
+                        "name": "filter.clip_start_padding",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of seconds after the end of the play to end the clip.",
+                        "name": "filter.clip_end_padding",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/GetAVStreamClipsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/{gameId}/av-streams": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Gets av-streams for a game.",
+                "operationId": "GetAVStreams",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The unique game ID.",
+                        "name": "gameId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "name": "filter.stream_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "name": "filter.camera_angle",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/GetAVStreamsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/{gameId}/{streamId}/camera-calibrations": {
+            "get": {
+                "description": "including intrinsic and extrinsic camera parameters useful for performing camera homography.",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Gets camera-calibrations over time for a particular game stream,",
+                "operationId": "GetCameraCalibrations",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The unique game ID.",
+                        "name": "gameId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "The unique stream ID.",
+                        "name": "streamId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The RFC3339 formatted time to start at",
+                        "name": "filter.time.start",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The RFC3339 formatted time to end at",
+                        "name": "filter.time.end",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Optionally limit the number of calibrations returned.",
+                        "name": "filter.limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/GetCameraCalibrationsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "AVCLevel": {
+            "type": "string"
+        },
+        "AVCProfile": {
+            "type": "string"
+        },
+        "CameraCalibration": {
+            "type": "object",
+            "properties": {
+                "camera_parameters": {
+                    "$ref": "#/definitions/CameraParameters"
+                },
+                "camera_view_polygon": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ImagePosition"
+                    }
+                },
+                "projection_view_matrix": {
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "number",
+                            "format": "double"
+                        }
+                    }
+                },
+                "time": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "CameraParameters": {
+            "type": "object",
+            "properties": {
+                "focal_point": {
+                    "$ref": "#/definitions/ImagePosition"
+                },
+                "principal_point": {
+                    "$ref": "#/definitions/ImagePosition"
+                },
+                "rotation": {
+                    "$ref": "#/definitions/Vector"
+                },
+                "translation": {
+                    "$ref": "#/definitions/ImagePosition"
+                }
+            }
+        },
+        "ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "FootballTeamDesignation": {
+            "type": "string"
+        },
+        "Game": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "league": {
+                    "type": "string"
+                },
+                "on": {
+                    "$ref": "#/definitions/ZonedDate"
+                },
+                "round": {
+                    "$ref": "#/definitions/Round"
+                },
+                "season": {
+                    "$ref": "#/definitions/Season"
+                },
+                "stage": {
+                    "$ref": "#/definitions/Stage"
+                },
+                "start": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "teams": {
+                    "$ref": "#/definitions/TeamPair"
+                }
+            }
+        },
+        "GameAVStream": {
+            "type": "object",
+            "properties": {
+                "content_descriptor": {
+                    "type": "string"
+                },
+                "expires_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "fusion_cam": {
+                    "$ref": "#/definitions/GameAVStreamFusionCam"
+                },
+                "hls_manifest_url": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "GameAVStreamClip": {
+            "type": "object",
+            "properties": {
+                "download_url": {
+                    "type": "string"
+                },
+                "hls_manifest_url": {
+                    "type": "string"
+                },
+                "play": {
+                    "$ref": "#/definitions/Play"
+                },
+                "stream": {
+                    "$ref": "#/definitions/GameAVStream"
+                }
+            }
+        },
+        "GameAVStreamFusionCam": {
+            "type": "object",
+            "properties": {
+                "players_info": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/GameAVStreamPlayerSubject"
+                    }
+                }
+            }
+        },
+        "GameAVStreamPlayerSubject": {
+            "type": "object",
+            "properties": {
+                "jersey_number": {
+                    "type": "string"
+                },
+                "team": {
+                    "$ref": "#/definitions/GameAVStreamPlayerSubjectTeamDesignation"
+                }
+            }
+        },
+        "GameAVStreamPlayerSubjectTeamDesignation": {
+            "type": "string"
+        },
+        "GetAVStreamClipsResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/GameAVStreamClip"
+                    }
+                }
+            }
+        },
+        "GetAVStreamsResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/GameAVStream"
+                    }
+                }
+            }
+        },
+        "GetCameraCalibrationsResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CameraCalibration"
+                    }
+                }
+            }
+        },
+        "GetGamesResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Game"
+                    }
+                }
+            }
+        },
+        "GetPlayNotificationsResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/Play"
+                }
+            }
+        },
+        "GetPlayersResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Player"
+                    }
+                }
+            }
+        },
+        "GetPlaysResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Play"
+                    }
+                }
+            }
+        },
+        "GetTeamsResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Team"
+                    }
+                }
+            }
+        },
+        "GridironFootballPlay": {
+            "type": "object",
+            "properties": {
+                "approach_line_of_scrimmage": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "attributes": {
+                    "$ref": "#/definitions/GridironFootballPlayAttributes"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "ended_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "game_id": {
+                    "type": "string"
+                },
+                "game_state": {
+                    "$ref": "#/definitions/GridironFootballPlayGameState"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "nfl": {
+                    "$ref": "#/definitions/NFLPlay"
+                },
+                "pac12football": {
+                    "$ref": "#/definitions/Pac12FootballPlay"
+                },
+                "result": {
+                    "$ref": "#/definitions/GridironFootballPlayResult"
+                },
+                "situation": {
+                    "$ref": "#/definitions/GridironFootballPlaySituation"
+                },
+                "started_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "GridironFootballPlayAttributes": {
+            "type": "object",
+            "properties": {
+                "assisted_tackle": {
+                    "type": "boolean"
+                },
+                "blocked": {
+                    "type": "boolean"
+                },
+                "failed_extra_point": {
+                    "type": "boolean"
+                },
+                "failed_two_point_pass": {
+                    "type": "boolean"
+                },
+                "failed_two_point_rush": {
+                    "type": "boolean"
+                },
+                "field_goal_attempt": {
+                    "type": "boolean"
+                },
+                "fumble_forced": {
+                    "type": "boolean"
+                },
+                "fumble_not_forced": {
+                    "type": "boolean"
+                },
+                "good_extra_point": {
+                    "type": "boolean"
+                },
+                "good_two_point_pass": {
+                    "type": "boolean"
+                },
+                "good_two_point_rush": {
+                    "type": "boolean"
+                },
+                "half_sack": {
+                    "type": "boolean"
+                },
+                "incomplete_pass": {
+                    "type": "boolean"
+                },
+                "interception": {
+                    "type": "boolean"
+                },
+                "kickoff": {
+                    "type": "boolean"
+                },
+                "pass_attempt": {
+                    "type": "boolean"
+                },
+                "punt": {
+                    "type": "boolean"
+                },
+                "rush_attempt": {
+                    "type": "boolean"
+                },
+                "sack": {
+                    "type": "boolean"
+                },
+                "safety": {
+                    "type": "boolean"
+                },
+                "solo_tackle": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "GridironFootballPlayGameState": {
+            "type": "object",
+            "properties": {
+                "drive_number": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "quarter": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            }
+        },
+        "GridironFootballPlayResult": {
+            "type": "object",
+            "properties": {
+                "is_scoring": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "GridironFootballPlaySituation": {
+            "type": "object",
+            "properties": {
+                "distance": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "down": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "line_of_scrimmage": {
+                    "$ref": "#/definitions/PlayLineOfScrimmage"
+                },
+                "possession_team": {
+                    "$ref": "#/definitions/PlayPossessionTeam"
+                }
+            }
+        },
+        "GridironFootballTimeout": {
+            "type": "object",
+            "properties": {
+                "approach_line_of_scrimmage": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "ended_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "game_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "quarter": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "started_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "type": {
+                    "$ref": "#/definitions/GridironFootballTimeoutType"
+                }
+            }
+        },
+        "GridironFootballTimeoutType": {
+            "type": "string"
+        },
+        "ImagePosition": {
+            "type": "object",
+            "properties": {
+                "x_meters": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "x_pixels": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "x_pixels_per_inch": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "y_meters": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "y_pixels": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "y_pixels_per_inch": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "z_meters": {
+                    "type": "number",
+                    "format": "double"
+                }
+            }
+        },
+        "InvolvedPlayer": {
+            "type": "object",
+            "properties": {
+                "jersey_number": {
+                    "type": "string"
+                },
+                "team": {
+                    "type": "string"
+                }
+            }
+        },
+        "NFLPlay": {
+            "type": "object",
+            "properties": {
+                "has_injury": {
+                    "type": "boolean"
+                },
+                "involved_players": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/InvolvedPlayer"
+                    }
+                }
+            }
+        },
+        "Pac12FootballPlay": {
+            "type": "object"
+        },
+        "Play": {
+            "type": "object",
+            "properties": {
+                "gridiron_football_play": {
+                    "$ref": "#/definitions/GridironFootballPlay"
+                },
+                "gridiron_football_timeout": {
+                    "$ref": "#/definitions/GridironFootballTimeout"
+                },
+                "soccer_event": {
+                    "$ref": "#/definitions/SoccerEvent"
+                },
+                "type": {
+                    "$ref": "#/definitions/PlayType"
+                }
+            }
+        },
+        "PlayLineOfScrimmage": {
+            "type": "object",
+            "properties": {
+                "number": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "team": {
+                    "type": "string"
+                },
+                "team_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "PlayPossessionTeam": {
+            "type": "object",
+            "properties": {
+                "team": {
+                    "type": "string"
+                },
+                "team_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "PlaySearchResponse": {
+            "type": "object",
+            "properties": {
+                "cursor": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Play"
+                    }
+                },
+                "has_more": {
+                    "type": "boolean"
+                },
+                "total_hits": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "PlayType": {
+            "type": "string"
+        },
+        "Player": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "jersey_number": {
+                    "type": "string"
+                },
+                "name": {
+                    "$ref": "#/definitions/PlayerName"
+                },
+                "team_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "PlayerName": {
+            "type": "object",
+            "properties": {
+                "first": {
+                    "type": "string"
+                },
+                "last": {
+                    "type": "string"
+                }
+            }
+        },
+        "Round": {
+            "type": "object",
+            "properties": {
+                "number": {
+                    "type": "integer",
+                    "format": "uint32"
+                },
+                "type": {
+                    "$ref": "#/definitions/RoundType"
+                }
+            }
+        },
+        "RoundType": {
+            "type": "string"
+        },
+        "Season": {
+            "type": "object",
+            "properties": {
+                "end_year": {
+                    "type": "integer",
+                    "format": "uint32"
+                },
+                "start_year": {
+                    "type": "integer",
+                    "format": "uint32"
+                }
+            }
+        },
+        "SoccerEvent": {
+            "type": "object",
+            "properties": {
+                "corner_kick": {
+                    "$ref": "#/definitions/SoccerEventCornerKick"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "game_id": {
+                    "type": "string"
+                },
+                "goal": {
+                    "$ref": "#/definitions/SoccerEventGoal"
+                },
+                "goal_disallowed": {
+                    "$ref": "#/definitions/SoccerEventGoalDisallowed"
+                },
+                "out_of_play": {
+                    "$ref": "#/definitions/SoccerEventOutOfPlay"
+                },
+                "penalty_awarded": {
+                    "$ref": "#/definitions/SoccerEventPenaltyAwarded"
+                },
+                "penalty_failed": {
+                    "$ref": "#/definitions/SoccerEventPenaltyFailed"
+                },
+                "period_clock_seconds": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "play_time_seconds": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "possession_by_team": {
+                    "$ref": "#/definitions/SoccerEventPossessionByTeam"
+                },
+                "possession_in_contest": {
+                    "$ref": "#/definitions/SoccerEventPossessionInContest"
+                },
+                "red_card": {
+                    "$ref": "#/definitions/SoccerEventRedCard"
+                },
+                "shot": {
+                    "$ref": "#/definitions/SoccerEventShot"
+                },
+                "substitution": {
+                    "$ref": "#/definitions/SoccerEventSubstitution"
+                },
+                "time": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "type": {
+                    "$ref": "#/definitions/SoccerEventType"
+                },
+                "video_assistant_referee_ended": {
+                    "$ref": "#/definitions/SoccerEventVideoAssistedRefereeEnded"
+                },
+                "video_assistant_referee_started": {
+                    "$ref": "#/definitions/SoccerEventVideoAssistedRefereeStarted"
+                },
+                "yellow_card": {
+                    "$ref": "#/definitions/SoccerEventYellowCard"
+                }
+            }
+        },
+        "SoccerEventCornerKick": {
+            "type": "object",
+            "properties": {
+                "kicked_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "SoccerEventGoal": {
+            "type": "object",
+            "properties": {
+                "assisted_by": {
+                    "type": "string"
+                },
+                "disallowed_time": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "shot_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "SoccerEventGoalDisallowed": {
+            "type": "object"
+        },
+        "SoccerEventOutOfPlay": {
+            "type": "object"
+        },
+        "SoccerEventPenaltyAwarded": {
+            "type": "object"
+        },
+        "SoccerEventPenaltyFailed": {
+            "type": "object"
+        },
+        "SoccerEventPossessionByTeam": {
+            "type": "object",
+            "properties": {
+                "team_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "SoccerEventPossessionInContest": {
+            "type": "object"
+        },
+        "SoccerEventRedCard": {
+            "type": "object",
+            "properties": {
+                "carded_player": {
+                    "type": "string"
+                }
+            }
+        },
+        "SoccerEventShot": {
+            "type": "object",
+            "properties": {
+                "shot_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "SoccerEventSubstitution": {
+            "type": "object",
+            "properties": {
+                "player_substituted_off": {
+                    "type": "string"
+                },
+                "player_substituted_on": {
+                    "type": "string"
+                }
+            }
+        },
+        "SoccerEventType": {
+            "type": "string"
+        },
+        "SoccerEventVideoAssistedRefereeEnded": {
+            "type": "object"
+        },
+        "SoccerEventVideoAssistedRefereeStarted": {
+            "type": "object"
+        },
+        "SoccerEventYellowCard": {
+            "type": "object",
+            "properties": {
+                "carded_player": {
+                    "type": "string"
+                }
+            }
+        },
+        "Stage": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "$ref": "#/definitions/StageType"
+                }
+            }
+        },
+        "StageType": {
+            "type": "string"
+        },
+        "Team": {
+            "type": "object",
+            "properties": {
+                "abbreviation": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "TeamPair": {
+            "type": "object",
+            "properties": {
+                "away_team": {
+                    "type": "string"
+                },
+                "away_team_id": {
+                    "type": "string"
+                },
+                "home_team": {
+                    "type": "string"
+                },
+                "home_team_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "TranscodeOptionsAudio": {
+            "type": "object",
+            "properties": {
+                "copy": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "TranscodeOptionsCropping": {
+            "type": "object",
+            "properties": {
+                "fitFootballGameTelemetry": {
+                    "$ref": "#/definitions/TranscodeOptionsCroppingFitFootballGameTelemetry"
+                }
+            }
+        },
+        "TranscodeOptionsCroppingFitFootballGameTelemetry": {
+            "type": "object",
+            "properties": {
+                "maxSourceHeight": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "minSourceHeight": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "subjects": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/TranscodeOptionsCroppingSubject"
+                    }
+                }
+            }
+        },
+        "TranscodeOptionsCroppingSubject": {
+            "type": "object",
+            "properties": {
+                "ball": {
+                    "$ref": "#/definitions/TranscodeOptionsCroppingSubjectBall"
+                },
+                "official": {
+                    "$ref": "#/definitions/TranscodeOptionsCroppingSubjectOfficial"
+                },
+                "player": {
+                    "$ref": "#/definitions/TranscodeOptionsCroppingSubjectPlayer"
+                }
+            }
+        },
+        "TranscodeOptionsCroppingSubjectBall": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "TranscodeOptionsCroppingSubjectOfficial": {
+            "type": "object",
+            "properties": {
+                "jerseyNumber": {
+                    "type": "string"
+                }
+            }
+        },
+        "TranscodeOptionsCroppingSubjectPlayer": {
+            "type": "object",
+            "properties": {
+                "jerseyNumber": {
+                    "type": "string"
+                },
+                "team": {
+                    "$ref": "#/definitions/FootballTeamDesignation"
+                }
+            }
+        },
+        "TranscodeOptionsEncoding": {
+            "type": "object",
+            "properties": {
+                "audio": {
+                    "$ref": "#/definitions/TranscodeOptionsAudio"
+                },
+                "video": {
+                    "$ref": "#/definitions/TranscodeOptionsVideo"
+                }
+            }
+        },
+        "TranscodeOptionsVideo": {
+            "type": "object",
+            "properties": {
+                "avc": {
+                    "$ref": "#/definitions/TranscodeOptionsVideoAVC"
+                }
+            }
+        },
+        "TranscodeOptionsVideoAVC": {
+            "type": "object",
+            "properties": {
+                "bitrate": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "cropping": {
+                    "$ref": "#/definitions/TranscodeOptionsCropping"
+                },
+                "height": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "level": {
+                    "$ref": "#/definitions/AVCLevel"
+                },
+                "profile": {
+                    "$ref": "#/definitions/AVCProfile"
+                }
+            }
+        },
+        "TranscodeToMP4Parameters": {
+            "type": "object",
+            "properties": {
+                "durationSeconds": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "encoding": {
+                    "$ref": "#/definitions/TranscodeOptionsEncoding"
+                },
+                "time": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "Vector": {
+            "type": "object",
+            "properties": {
+                "x": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "y": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "z": {
+                    "type": "number",
+                    "format": "double"
+                }
+            }
+        },
+        "ZonedDate": {
+            "type": "string",
+            "format": "date-time"
+        }
+    },
+    "securityDefinitions": {
+        "api_key": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "security": [
+        {
+            "api_key": []
+        }
+    ]
+}

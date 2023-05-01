@@ -1,6 +1,5 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import rehypeHighlight from 'rehype-highlight';
 import remarkCodeExtra from 'remark-code-extra';
@@ -8,6 +7,8 @@ import { MDASTCode } from 'remark-code-extra/types';
 import remarkGfm from 'remark-gfm';
 import { visit } from 'unist-util-visit';
 import type { Root } from 'mdast';
+import {lowlight} from 'lowlight/lib/core.js'
+import http from 'highlight.js/lib/languages/http'
 
 import { canonicalContentPath, Content, Frontmatter, GraphQL, TableOfContents, TableOfContentsPage } from './content';
 
@@ -37,6 +38,8 @@ export async function getAllContent(): Promise<Map<string, Content>> {
         contentPath = canonicalContentPath(contentPath);
         const contentPathBase = isIndex ? contentPath : contentPath.slice(0, contentPath.lastIndexOf('/'));
 
+        lowlight.registerLanguage('http', http);
+        const rest: string[] = [];
         const graphql: GraphQL[] = [];
         const links = new Set<string>();
 
@@ -60,6 +63,14 @@ export async function getAllContent(): Promise<Map<string, Content>> {
                     remarkGfm,
                     [remarkCodeExtra, {
                         transform: (node: MDASTCode) => {
+                            if (node.lang == "http" || node.lang == "https") {
+                                if (node.meta !== 'v2') {
+                                    throw new Error("REST code must be marked as V2.");
+                                }
+                                rest.push(node.value);
+                                return {};
+                            }
+
                             if (node.lang !== 'gql' && node.lang !== 'graphql') {
                                 return null;
                             }
@@ -92,6 +103,7 @@ export async function getAllContent(): Promise<Map<string, Content>> {
         ret.set(contentPath, {
             frontmatter: source.frontmatter as unknown as Frontmatter,
             graphql,
+            rest,
             links,
             source,
             path: contentPath,

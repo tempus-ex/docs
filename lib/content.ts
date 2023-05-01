@@ -13,10 +13,17 @@ export interface GraphQL {
     version: 'v1' | 'v2';
 }
 
+export interface REST {
+    url: string;
+    method: 'GET';
+    version: 'v2';
+}
+
 export interface Content {
     frontmatter: Frontmatter;
     source: MDXRemoteSerializeResult;
     path: string;
+    rest: REST[];
     graphql: GraphQL[];
     links: Set<string>;
 }

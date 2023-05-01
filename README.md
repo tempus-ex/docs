@@ -25,21 +25,29 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 For most pages, all that's needed is to add an MDX file to the content directory. Each MDX file should have at least a title in the frontmatter and should be added as a child to another page's frontmatter.
 
-### GraphQL Examples
+### Request Examples
 
 To include a GraphQL example in the documentation, you can use a standard Markdown code block, but you must include a Fusion Feed version in the metadata like so:
 
 ````markdown
 ```gql v2
 query Foo($id: Id!) {
-    node(id: $id) {
-        __typename
-    }
+  node(id: $id) {
+    __typename
+  }
 }
 ```
 ````
 
 This will allow the example to be automatically validated by tests and gain additional UI functionality.
+
+To include a REST example:
+
+````markdown
+```http v2
+GET /api/v2/games?filter.league.code=NFL
+```
+````
 
 ## Testing
 

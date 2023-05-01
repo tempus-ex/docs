@@ -17,6 +17,7 @@ interface HomePageFrontmatter extends Frontmatter {
 }
 
 export const getServerSideProps = withAuth<{}, Props>(async function () {
+
     const allContent = await getAllContent();
     const content = allContent.get('/')!;
     const frontmatter = content.frontmatter as unknown as HomePageFrontmatter;

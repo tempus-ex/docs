@@ -1,7 +1,7 @@
 import { parse, validate } from 'graphql';
 
 import { getAllContent } from './content-loading';
-import { getGraphQLSchema } from './fusion-feed';
+import { getGraphQLSchema, getRESTSchema } from './fusion-feed';
 
 describe('getAllContent', () => {
     it('returns some content', async () => {
@@ -42,6 +42,23 @@ describe('graphql', () => {
                 const doc = parse(graphql.document);
                 const schema = graphql.version === 'v1' ? v1Schema : v2Schema;
                 expect(validate(schema, doc)).toHaveLength(0);
+            }
+        }
+    });
+})
+
+describe('rest', () => {
+    it('validates', async () => {
+        const auth = process.env.FUSION_FEED_AUTHORIZATION || '';
+        expect(auth, 'To perform validation, FUSION_FEED_AUTHORIZATION must be defined.').toBeTruthy();
+
+        const v1Schema = await getRESTSchema('v1', auth);
+        const v2Schema = await getRESTSchema('v2', auth);
+
+        const allContent = await getAllContent();
+        for (const content of Array.from(allContent.values())) {
+            for (const req of content.httpRequests) {
+                // TODO: validate REST
             }
         }
     });

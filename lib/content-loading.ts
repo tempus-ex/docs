@@ -38,6 +38,7 @@ export async function getAllContent(): Promise<Map<string, Content>> {
         const contentPathBase = isIndex ? contentPath : contentPath.slice(0, contentPath.lastIndexOf('/'));
 
         const graphql: GraphQL[] = [];
+        const httpRequests: HttpRequest[] = [];
         const links = new Set<string>();
 
         const markdownLinkPlugin = () => {
@@ -60,26 +61,32 @@ export async function getAllContent(): Promise<Map<string, Content>> {
                     remarkGfm,
                     [remarkCodeExtra, {
                         transform: (node: MDASTCode) => {
-                            if (node.lang !== 'gql' && node.lang !== 'graphql') {
+                            if (node.lang === 'http') {
+                                // TODO: parse value, append to httpRequests
                                 return null;
                             }
-                            if (node.meta !== 'v1' && node.meta !== 'v2') {
-                                throw new Error('GraphQL code must be marked as V1 or V2.');
+
+                            if (node.lang === 'gql' || node.lang === 'graphql') {
+                                if (node.meta !== 'v1' && node.meta !== 'v2') {
+                                    throw new Error('GraphQL code must be marked as V1 or V2.');
+                                }
+
+                                const version = node.meta;
+                                graphql.push({
+                                    document: node.value,
+                                    version,
+                                });
+
+                                return {
+                                    after: [{
+                                        type: 'text',
+                                        // TODO: Add a "run" button? Or example output?
+                                        value: `This GraphQL query can be executed against /${version}/graphql`,
+                                    }],
+                                };
                             }
 
-                            const version = node.meta;
-                            graphql.push({
-                                document: node.value,
-                                version,
-                            });
-
-                            return {
-                                after: [{
-                                    type: 'text',
-                                    // TODO: Add a "run" button? Or example output?
-                                    value: `This GraphQL query can be executed against /${version}/graphql`,
-                                }],
-                            };
+                            return null;
                         },
                     }],
                     [markdownLinkPlugin, {}]

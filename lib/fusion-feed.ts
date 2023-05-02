@@ -40,3 +40,8 @@ export async function getGraphQLSchema(version: 'v1' | 'v2', authorization: stri
     }
     return buildClientSchema(result.data);
 }
+
+export async function getRESTSchema(version: 'v1' | 'v2', authorization: string): Promise<{}> {
+    // TODO: implement
+    throw new Error('Not implemented.');
+}

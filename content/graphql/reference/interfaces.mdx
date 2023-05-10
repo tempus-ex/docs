@@ -1,0 +1,171 @@
+---
+title: Interfaces
+---
+
+<a name="avstreamsegmenttrack"></a>
+
+## AVStreamSegmentTrack
+
+A single track of an AV stream segment.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| rfc6381Codec | [String](graphqlobjects#string) | The RFC 6381 codec. |
+
+
+<a name="avstreamvarianttrack"></a>
+
+## AVStreamVariantTrack
+
+NEEDS DESCRIPTION
+
+| Field | Type | Description |
+|-------|------|-------------|
+| rfc6381Codec | [String](graphqlobjects#string) | The RFC 6381 codec. |
+
+
+<a name="fqlastnode"></a>
+
+## FQLASTNode
+
+NEEDS DESCRIPTION
+
+| Field | Type | Description |
+|-------|------|-------------|
+| position | [FQLTokenPosition](graphqlobjects#fqltokenposition) | NEEDS DESCRIPTION |
+
+
+<a name="footballgame"></a>
+
+## FootballGame
+
+A gridiron football game.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| avStreamsConnection | [FootballGameAVStreamsConnection](graphqlobjects#footballgameavstreamsconnection) | The AV streams available for the game. |
+| awayTeamEdge | [FootballGameTeamEdge](graphqlobjects#footballgameteamedge) | The away team and its game-related data. |
+| homeTeamEdge | [FootballGameTeamEdge](graphqlobjects#footballgameteamedge) | The home team and its game-related data. |
+| id | [ID](graphqlobjects#id) | The unique ID that you can use to identify this game throughout the API. |
+| playsConnection | [FootballGamePlaysConnection](graphqlobjects#footballgameplaysconnection) | The game's play-by-play data. |
+| v1Id | [ID](graphqlobjects#id) | The V1 id of the game if one exists. |
+
+
+<a name="footballgameteamedge"></a>
+
+## FootballGameTeamEdge
+
+An edge in a connection.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| node | [FootballTeam](graphqlobjects#footballteam) | The resource that you can access on this edge. |
+
+
+<a name="footballplay"></a>
+
+## FootballPlay
+
+A gridiron football play.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| description | [String](graphqlobjects#string) | A description of the play. |
+| down | [Int](graphqlobjects#int) | The down on which the play occurred. A value of 0 indicates a play that does not take place on a numbered down. |
+| driveNumber | [Int](graphqlobjects#int) | The current sequential drive of the game. |
+| game | [FootballGame](graphqlobjects#footballgame) | The game during which the play occurs. |
+| gameClockSeconds | [Int](graphqlobjects#int) | The time remaining on the game clock at the start of the play, in seconds. |
+| isInRedZone | [Boolean](graphqlobjects#boolean) | Indicates whether the play begins inside the 20 yard line of the defending team. May be null for timeouts. |
+| isLeft | [Boolean](graphqlobjects#boolean) | Indicates whether the play was a pass or run to the left. |
+| isMiddle | [Boolean](graphqlobjects#boolean) | Indicates whether the play was a pass or run to the middle. |
+| isRight | [Boolean](graphqlobjects#boolean) | Indicates whether the play was a pass or run to the right. |
+| isScoringPlay | [Boolean](graphqlobjects#boolean) | Indicates a scoring play of any type. |
+| playClockSeconds | [Int](graphqlobjects#int) | The time left on the play clock at the start of the play, in seconds. |
+| possessionTeam | [FootballTeamDesignation](graphqlobjects#footballteamdesignation) | The team that possesses the ball at the start of the play. |
+| quarter | [Int](graphqlobjects#int) | The quarter in which the play occurs. |
+| time | [DateTime](graphqlobjects#datetime) | The time at which the ball is snapped. |
+| yardLine | [FootballStatisticalYardLine](graphqlobjects#footballstatisticalyardline) | The statistical yard line of the play. |
+| yardsToGo | [Int](graphqlobjects#int) | The number of yards required for a first down. May be 0 for plays where this isn't applicable. |
+
+
+<a name="footballteam"></a>
+
+## FootballTeam
+
+NEEDS DESCRIPTION
+
+| Field | Type | Description |
+|-------|------|-------------|
+| abbreviation | [String](graphqlobjects#string) | The team's abbreviation. This should be used for display purposes only and never as an id. |
+| score | [Int](graphqlobjects#int) | The team's score. |
+
+
+<a name="node"></a>
+
+## Node
+
+The generic node interface.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| id | [ID](graphqlobjects#id) | The unique ID of the node that you can use to identify this node throughout the API. |
+
+
+<a name="soccermatch"></a>
+
+## SoccerMatch
+
+A single soccer match.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| avStreamsConnection | [SoccerMatchAVStreamsConnection](graphqlobjects#soccermatchavstreamsconnection) | The AV streams available for the match. |
+| awayTeamEdge | [SoccerMatchTeamEdge](graphqlobjects#soccermatchteamedge) | The away team and its game-related data. |
+| eventsConnection | [SoccerMatchEventsConnection](graphqlobjects#soccermatcheventsconnection) | The events that occurred during the match. |
+| homeTeamEdge | [SoccerMatchTeamEdge](graphqlobjects#soccermatchteamedge) | The home team and its game-related data. |
+| id | [ID](graphqlobjects#id) | The unique ID that you can use to identify the match throughout the API. |
+| scoreboard | [SoccerMatchScoreboard](graphqlobjects#soccermatchscoreboard) | The state of the scoreboard if available. |
+| scoreboardSamplesConnection | [SoccerMatchScoreboardSamplesConnection](graphqlobjects#soccermatchscoreboardsamplesconnection) | Provides nodes sorted by time. |
+| telemetryPacketsConnection | [SoccerMatchTelemetryPacketsConnection](graphqlobjects#soccermatchtelemetrypacketsconnection) | Provides nodes sorted by time. |
+| v1Id | [ID](graphqlobjects#id) | The V1 id of the game if one exists. |
+
+
+<a name="soccermatchevent"></a>
+
+## SoccerMatchEvent
+
+A gameplay event that occurs during a soccer match.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| description | [String](graphqlobjects#string) | A description of the event. |
+| minuteDisplay | [String](graphqlobjects#string) | The minute as conventionally displayed. For example, for the 96th minute (during stoppage time), this is "90'+6". |
+| period | [SoccerMatchPeriod](graphqlobjects#soccermatchperiod) | The period during which the event occurs. |
+| periodClock | [SoccerMatchClock](graphqlobjects#soccermatchclock) | The amount of time elapsed in the current period. |
+| playTimeSeconds | [Int](graphqlobjects#int) | The total play time elapsed since the start of the match, as seconds. |
+| time | [DateTime](graphqlobjects#datetime) | The time at which the event occurs. |
+
+
+<a name="soccermatchteamedge"></a>
+
+## SoccerMatchTeamEdge
+
+An edge in a connection.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| node | [SoccerTeam](graphqlobjects#soccerteam) | A soccer team. |
+| players | [List](graphqlobjects#list) | The players on the team's roster. |
+| stats | [SoccerMatchCumulativeTeamStats](graphqlobjects#soccermatchcumulativeteamstats) | The team's aggregated stats throughout the game. |
+
+
+<a name="soccerteam"></a>
+
+## SoccerTeam
+
+NEEDS DESCRIPTION
+
+| Field | Type | Description |
+|-------|------|-------------|
+| abbreviation | [String](graphqlobjects#string) | The team's abbreviation. This should be used for display purposes only and never as an id. |
+| name | [String](graphqlobjects#string) | The team's name. |

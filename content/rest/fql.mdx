@@ -1,0 +1,266 @@
+---
+title: FQL
+---
+
+# Fusion Query Language
+
+Fusion Query Language (FQL) is a powerful query language for Fusion Feed that enables a high degree of precision for searches.  The following REST endpoints support FQL queries:
+
+- GET /play-search
+
+## Syntax
+
+Queries are provided as an argument for the filter.fql.query parameter. Each query consists of one or more clauses. Each FQL *clause* consists of either a *variable* or a *function* that evaluates to `true` or `false` to define a condition for the search.
+
+The following operators are supported for constructing an FQL clause.
+
+|Operator|Description|
+|---|---|
+|`=`|Equal|
+|`!`|Not|
+|`>`|Greater than|
+|`<`|Less than|
+|`>=`|Greater than or equal|
+|`<=`|Less than or equal|
+
+You can combine multiple clauses into a single search using the operators described in the following table.
+
+|Operator|Description|
+|---|---|
+|`and`, `AND`|Returns results for which both clauses evaluate to `true`.|
+|`or`, `OR`|Returns results for which at least one clause evaluates to `true`.|
+
+## FQL Variables
+
+The following tables describe variables that can be used to construct an FQL clause.
+
+### String
+
+FQL variables of the `string` type are typically used in clauses with the `=` operator to filter results by a specific ID or other identifying attribute. You can also use the `!` operator to exclude specific results. The following table describes FQL variables of the `string` type.
+
+|Variable|Type|Description|Example|Sport|
+|---|---|---|---|---|
+|`GAME_ID`|String|The game ID. You can get game IDs from the `/games` endpoint.|`GAME_ID="WCrh4GFerJpjEykCo6v9rU"`|All|
+|`PLAY_ID`|String|The play ID. You can get play IDs from the `/plays` endpoint.|`PLAY_ID="T6nWouTeffDgrN6Hx1AFTM"`|All|
+|`POSSESSION_TEAM_ABBREVIATION`|String|The abbreviated name of the team with possession at the start of the play.|`POSSESSION_TEAM_ABBREVIATION="USC"`|Gridiron football|
+|`YARD_LINE_TEAM_ABBREVIATION`|String|The abbreviated name of the team on whose side of the field is the line of scrimmage at the start of the play.|`YARD_LINE_TEAM_ABBREVIATION="USC"`|Gridiron football|
+
+### Number
+
+FQL variables of the `number` type include statistical information (e.g., `PASSING_YARDS`) or game situation information (e.g.,`QUARTER`).
+
+|Variable|Type|Description|Example|Sport|
+|---|---|---|---|---|
+|`DOWN`|Number|The down on which the play occurs.|`DOWN=3`|Gridiron football|
+|`FIELD_GOAL_YARDS`|Number|The length of a successful field goal attempt.|`FIELD_GOAL_YARDS=30`|Gridiron football|
+|`INTERCEPTION_YARDS`|Number|The number of yards gained after an interception.|`INTERCEPTION_YARDS>20`|Gridiron football|
+|`KICKING_YARDS`|Number|The kicking yardage of the play.|`KICKING_YARDS>50`|Gridiron football|
+|`PASSING_YARDS`|Number|The passing yards gained on the play.|`PASSING_YARDS>25`|Gridiron football|
+|`PENALTY_YARDS`|Number|The penalty yardage of penalties assessed on the play.|`PENALTY_YARDS>5`|Gridiron football|
+|`PUNTING_YARDS`|Number|The punting yardage of the play.|`PUNTING_YARDS>60`|Gridiron football|
+|`QUARTER`|Number|The quarter during which the play occurs.|`QUARTER=2`|Gridiron football|
+|`RUSHING_YARDS`|Number|The rushing yards gained on the play.|`RUSHING_YARDS<15`|Gridiron football|
+|`SACK_YARDS`|Number|The sack yards credited on the play. This is a negative number.|`SACK_YARDS<-10`|Gridiron football|
+|`SEASON`|Number|The season year.|`SEASON=2022`|Gridiron football|
+|`WEEK`|Number|The week number of the game within a stage. For example, a value of `1` can refer to the first week of the preseason, the first week of the regular season, the first week of the postseason, or games that take place outside a season schedule such as exhibition games.|`WEEK=8`|Gridiron football|
+|`YARD_LINE_NUMBER`|Number|The yard line at which the play occurred.|`YARD_LINE_NUMBER=20`|Gridiron football|
+|`YARDS_TO_GO`|Number|The number of yards to go for a first down.|`YARDS_TO_GO>20`|Gridiron football|
+
+### Boolean
+
+FQL variables of the `boolean` type are useful for requesting results which a specified attribute is true. You can also use the `!` operator to exclude all results for which a specified attribute is true.
+
+|Variable|Type|Description|Sport|
+|---|---|---|---|
+|`ASSISTED_TACKLE`|Boolean|An assisted tackle is credited.|Gridiron football|
+|`BLOCKED`|Boolean|An extra point, punt, or field goal is blocked.|Gridiron football|
+|`FAILED_EXTRA_POINT`|Boolean|An extra point attempt is failed, including blocked extra point attempts.|Gridiron football|
+|`FIELD_GOAL_ATTEMPT`|Boolean|A field goal attempt is credited regardless of whether the attempt is successful.|Gridiron football|
+|`FUMBLE_FORCED`|Boolean|A player fumbled the ball due to force by a player on the opposing team.|Gridiron football|
+|`FUMBLE_NOT_FORCED`|Boolean|A player fumbled the ball not due to force by a player on the opposing team.|Gridiron football|
+|`GOOD_EXTRA_POINT`|Boolean|A successful extra point attempt is credited.|Gridiron football|
+|`GOOD_TWO_POINT_RUSH`|Boolean|A successful two point rush attempt is credited.|Gridiron football|
+|`GOOD_TWO_POINT_PASS`|Boolean|A successful two point pass attempt is credited.|Gridiron football|
+|`HALF_SACK`|Boolean|A half-sack is credited.|Gridiron football|
+|`INCOMPLETE_PASS`|Boolean|An incomplete pass is credited.|Gridiron football|
+|`INTERCEPTION`|Boolean|An interception is credited.|Gridiron football|
+|`KICKOFF`|Boolean|A kickoff occurs, regardless of the outcome.|Gridiron football|
+|`LEFT`|Boolean|A pass or rush to the left occurs.|Gridiron football|
+|`MIDDLE`|Boolean|A pass or rush to the middle occurs.|Gridiron football|
+|`PASS_ATTEMPT`|Boolean|A pass attempt is credited, regardless of the outcome. This includes completed passes, incomplete passes, and interceptions.|Gridiron football|
+|`POSTSEASON`|Boolean|The play occurs in a postseason game.|Gridiron football|
+|`PRESEASON`|Boolean|The play occurs in a preseason game.|Gridiron football|
+|`PUNT`|Boolean|A punt occurs, regardless of the outcome. Includes blocked punts.|Gridiron football|
+|`RED_ZONE`|Boolean|The play begins in the red zone.|Gridiron football|
+|`REGULAR_SEASON`|Boolean|The game in which the play occurs is a regular season game.|Gridiron football|
+|`RIGHT`|Boolean|The play is a pass or rush to the right.|Gridiron football|
+|`RUSH_ATTEMPT`|Boolean|A rush attempt is credited, regardless of the outcome.|Gridiron football|
+|`SACK`|Boolean|A sack is credited.|Gridiron football|
+|`SAFETY`|Boolean|A safety is credited.|Gridiron football|
+|`SCORING`|Boolean|The play is a scoring play.|Gridiron football|
+|`SOLO_TACKLE`|Boolean|A solo tackle is credited.|Gridiron football|
+|`TOUCHDOWN`|Boolean|A touchdown is credited.|Gridiron football|
+
+## FQL Functions
+
+The following table describes functions that can be used as an FQL clause.
+
+|Field|Description|Example|Sport|
+|---|---|---|---|
+|`player()`|Searches for plays in which the specified player was involved. This function accepts a player ID as an argument. You can get player IDs from the `/players` endpoint.|`player("KDX6bwS6QvXtkqoFMXaYwg")`|All|
+|`team()`|Searches for plays that a specific team took part in. This function accepts a team abbreviation as an argument. You can get team abbreviations from the `/teams` endpoint.|`team("USC")`|All|
+
+
+## Example Searches
+
+The following example searches demonstrate the use of FQL variables, functions, and operators for Pac-12 Football.
+
+----
+
+All plays in which Jordan Addison (`PLAYER("5uSebGZb8z9XVjf8UVYHWK")`) is involved.
+
+
+Query:
+`player("5uSebGZb8z9XVjf8UVYHWK")`
+
+cURL:
+```
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/play-search?filter.league.code=pac12football&filter.fql.query=player("5uSebGZb8z9XVjf8UVYHWK")' --header 'Authorization: token <API Authorization Token>'
+```
+
+----
+
+
+All plays in which Caleb Williams (`player("7fFZpv4oFiMsU34yzYjbp3")`) is involved and a touchdown is credited.
+
+Query:
+`player("7fFZpv4oFiMsU34yzYjbp3") and TOUCHDOWN`
+
+cURL:
+```
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/play-search?filter.league.code=pac12football&filter.fql.query=player("7fFZpv4oFiMsU34yzYjbp3")%20and%20TOUCHDOWN' --header 'Authorization: token <API Authorization Token>'
+```
+
+
+----
+
+All plays in which Jaydon Grant (`player("UReMEGgH2gcrNjiggKwAtg")`) is involved and a solo tackle is credited:
+
+Query:
+`player("UReMEGgH2gcrNjiggKwAtg") and SOLO_TACKLE`
+
+cURL:
+```c
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/play-search?filter.league.code=pac12football&filter.fql.query=player("UReMEGgH2gcrNjiggKwAtg")%20and%20SOLO_TACKLE' --header 'Authorization: token <API Authorization Token>'
+```
+
+
+----
+
+All plays in which an interception is credited:
+
+Query:
+`INTERCEPTION`
+
+cURL:
+```
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/play-search?filter.league.code=pac12football&filter.fql.query=INTERCEPTION' --header 'Authorization: token <API Authorization Token>'
+```
+
+----
+
+All plays in which Caleb Williams (`player("7fFZpv4oFiMsU34yzYjbp3")`) is involved and a rush or pass attempt occurs:
+
+Query:
+`player("7fFZpv4oFiMsU34yzYjbp3")) and (PASS_ATTEMPT or RUSH_ATTEMPT)`
+
+cURL:
+```
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/play-search?filter.league.code=pac12football&filter.fql.query=(player("7fFZpv4oFiMsU34yzYjbp3"))%20and%20(PASS_ATTEMPT or RUSH_ATTEMPT)' --header 'Authorization: token <API Authorization Token>'
+```
+
+----
+
+All plays in which Caleb Williams (`player("7fFZpv4oFiMsU34yzYjbp3")`) and Jordan Addison (`PLAYER("5uSebGZb8z9XVjf8UVYHWK")`) are involved and a touchdown is credited:
+
+Query:
+`player("7fFZpv4oFiMsU34yzYjbp3") and player("5uSebGZb8z9XVjf8UVYHWK") and TOUCHDOWN`
+
+cURL:
+```
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/play-search?filter.league.code=pac12football&filter.fql.query=player("7fFZpv4oFiMsU34yzYjbp3")%20and%20player("5uSebGZb8z9XVjf8UVYHWK")%20and%20TOUCHDOWN' --header 'Authorization: token <API Authorization Token>'
+```
+
+----
+
+All plays in the November 19, 2022 Stan @ Cal game (`GAME_ID="BUfWtTZXn1uniWjJNzhVuM"`) in which a rush greater than 10 yards occurs:
+
+Query:
+`GAME_ID="BUfWtTZXn1uniWjJNzhVuM" and RUSHING_YARDS>10`
+
+cURL:
+```
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/play-search?filter.league.code=pac12football&filter.fql.query=GAME_ID="BUfWtTZXn1uniWjJNzhVuM"%20and%20RUSHING_YARDS>10' --header 'Authorization: token <API Authorization Token>'
+```
+
+----
+
+All plays from week 7 games in which the situation is 3rd down with 10 yards to go:
+
+Query:
+`WEEK=7 and DOWN=3 and YARDS_TO_GO=10`
+
+cURL:
+```
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/play-search?filter.league.code=pac12football&filter.fql.query=WEEK=7%20and%20DOWN=3%20and%20YARDS_TO_GO=10' --header 'Authorization: token <API Authorization Token>'
+```
+
+----
+
+All plays from the 2022 regular season in which a passing touchdown is credited:
+
+Query:
+`REGULAR_SEASON and SEASON=2022 and PASS_ATTEMPT and TOUCHDOWN`
+
+cURL:
+```
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/play-search?filter.league.code=pac12football&filter.fql.query=REGULAR_SEASON%20and%20SEASON=2022%20and%20PASS_ATTEMPT%20and%20TOUCHDOWN' --header 'Authorization: token <API Authorization Token>'
+```
+
+----
+
+All scoring plays in the November 19, 2022 ORST @ ASU game (`GAME_ID="WCrh4GFerJpjEykCo6v9rU"`):
+
+Query:
+`GAME_ID="WCrh4GFerJpjEykCo6v9rU" and SCORING`
+
+cURL:
+```
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/play-search?filter.league.code=pac12football&filter.fql.query=GAME_ID="WCrh4GFerJpjEykCo6v9rU"%20and%20SCORING' --header 'Authorization: token <API Authorization Token>'
+```
+
+----
+
+All successful USC field goals greater than 10 yards:
+
+Query:
+`team("USC") and FIELD_GOAL_YARDS>10`
+
+cURL:
+```
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/play-search?filter.league.code=pac12football&filter.fql.query=team("USC")%20and%20FIELD_GOAL_YARDS>10' --header 'Authorization: token <API Authorization Token>'
+```
+
+----
+
+All plays in which Zach Charbonnet (`player("KDX6bwS6QvXtkqoFMXaYwg")`) is involved in a rushing touchdown of greater than 5 yards:
+
+Query:
+`player("KDX6bwS6QvXtkqoFMXaYwg") and RUSHING_YARDS>5 and TOUCHDOWN`
+
+cURL:
+```
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/play-search?filter.league.code=pac12football&filter.fql.query=player("KDX6bwS6QvXtkqoFMXaYwg")%20and%20RUSHING_YARDS>5%20and%20TOUCHDOWN' --header 'Authorization: token <API Authorization Token>'
+```
+
+----

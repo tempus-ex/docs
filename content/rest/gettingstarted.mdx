@@ -1,0 +1,241 @@
+---
+title: Getting Started
+---
+
+# Getting Started with the Fusion Feed REST API
+
+This guide provides a brief step-by-step tutorial to help you get started with Fusion Feed by demonstrating making a few simple queries to the Fusion Feed API.
+
+
+## Making Your First Calls to the Fusion Feed REST API
+
+Before you can make calls to Fusion Feed, you must [request an API Authorization Token](#request_api_key).
+
+When you have received your API Authorization Token, you are ready to make your first queries to the Fusion Feed REST API. This short guide demonstrates a series of simple requests you can use to get a play clip of a specific play.
+
+In this example, we will get an AV stream clip of Cameron Rising's 60 yard touchdown pass to Thomas Yassmin during the 2022 Pac-12 Championship Game between the Utah Utes and USC Trojans football teams that took place on December 3, 2022.
+
+We will accomplish this by completing the following steps.
+
+[Step 1](#get_team_id): Get the team ID of the Utah Utes football team from the Teams endpoint.<br/>
+[Step 2](#get_game_id): Get the game ID of the 2022 Pac-12 Championship Game from the Games endpoint.<br/>
+[Step 3](#get_play_id): Get the play ID of Cameron Rising's 60 yard touchdown pass to Thomas Yassmin from the the Plays endpoint.<br/>
+[Step 4](#get_clip): Get a list of AV stream clips of our chosen play from the AV Stream Clips endpoint.
+
+*Note: This guide uses cURL for each of its example requests.*
+
+
+<a name="get_team_id"></a>
+## Get a team ID
+
+*Objective: Get the team ID of the Utah Utes football team from the Teams endpoint.*
+
+The Teams endpoint is useful for getting a specific team or a list of teams in a league. You can filter the results by a season by providing the starting year of the season as an argument for the `filter.schedule.season.year` parameter.
+
+Use the following query to get a list of all Pac-12 Football teams for the 2022 Pac-12 Football season. Use your own API Authorization Token in place of `<API Authorization Token>`.
+
+```sh
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/teams?filter.league.code=pac12football&filter.schedule.season.year=2022' --header 'Authorization: token <API Authorization Token>'
+```
+
+For each team in the response, Fusion Feed provides a team name (`name`), team abbreviation (`abbreviation`), and the team ID (`id`) that you can use to identify the team throughout the API.
+
+We can find the Utah Utes in the list of teams returned by the API.
+
+```JSON
+{
+    "id": "84TSrh1R8dezyUrCptgDYr",
+    "name": "University of Utah",
+    "abbreviation": "UTAH"
+}
+```
+
+We will use the team ID (`84TSrh1R8dezyUrCptgDYr`) in the next step to filter the list of games in the 2022 Pac-12 season.
+
+*Note: You can see the complete documentation for the Teams endpoint in the [Fusion Feed API Reference](/tag/Fusion-Feed-REST-API-Reference).*
+
+
+
+<a name="get_game_id"></a>
+## Get a game ID
+
+*Objective: Get the game ID for the Pac-12 Championship game from the Teams endpoint.*
+
+The Games endpoint is useful for getting a list of games for a league. The `filter.team_ids` parameter is an optional parameter that we can use to filter results to Utah games. In the previous step, we used the Teams endpoint to get the Utah Utes team ID. We will use this ID (`84TSrh1R8dezyUrCptgDYr`) to query the Games endpoint to get a list of Utah Utes games.
+
+We can further filter the results by providing an argument for other parameters. In this case, we know the date of the game we want to find, so we can provide the year, month, and day as filters.
+
+Use the following query to find the game. Use your own API Authorization Token in place of `<API Authorization Token>`.
+
+```sh
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/games?filter.league.code=pac12football&filter.team.id=84TSrh1R8dezyUrCptgDYr&filter.schedule.time.on.date.year=2022&filter.schedule.time.on.date.month=12&filter.schedule.time.on.date.day=3' --header 'Authorization: token <API Authorization Token>'
+```
+
+Fusion Feed returns the following game information in its response.
+
+```JSON
+{
+  "data": [
+    {
+      "id": "N9eGvr3tox4Av9pJMpj7bb",
+      "on": "2022-12-03T00:00:00Z",
+      "start": "2022-12-03T01:00:00Z",
+      "league": "Pac12Football",
+      "teams": {
+        "away_team_id": "84TSrh1R8dezyUrCptgDYr",
+        "away_team": "UTAH",
+        "home_team_id": "VvnRaBnqmhBzdo5TeTFuPp",
+        "home_team": "USC"
+      },
+      "season": {
+        "start_year": 2022,
+        "end_year": 2023
+      },
+      "round": {
+        "type": "TYPE_UNSPECIFIED",
+        "number": 1
+      },
+      "stage": {
+        "type": "TYPE_POST"
+      }
+    }
+  ]
+}
+```
+
+In the next step, we will use the game ID (`N9eGvr3tox4Av9pJMpj7bb`) to fetch a list of all the plays that occur in this game.
+
+*Note: You can see the complete documentation for the Games endpoint in the [Fusion Feed API Reference](/tag/Fusion-Feed-REST-API-Reference).*
+
+<a name="get_play_id"></a>
+## Get a play ID
+
+*Objective: Get the play ID of Cameron Rising's 60 yard touchdown pass to Thomas Yassmin from the Plays endpoint.*
+
+The Plays endpoint is useful for getting a list of plays that occur in a game. Each play object provides a description of the play and other details such as the time that the play occurs, the team that possesses the ball, the down and distance, and the result of the play.
+
+We can use the game ID found in the previous step to query the Plays endpoint and filter results to the relevant game. Use your own API Authorization Token in place of `<API Authorization Token>`.
+
+```sh
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/plays?filter.league.code=pac12football&filter.game_id=N9eGvr3tox4Av9pJMpj7bb' --header 'Authorization: token <API Authorization Token>'
+```
+
+The API provides a list of plays that occur in the game. You can find Cameron Rising's 60 yard touchdown pass to Thomas Yassmin in the list.
+
+```JSON
+{
+    "type": "TYPE_GRIDIRON_FOOTBALL_PLAY",
+    "gridiron_football_play": {
+        "id": "S8M1PjbCfQZWLXb1Qe534e",
+        "game_id": "N9eGvr3tox4Av9pJMpj7bb",
+        "approach_line_of_scrimmage": "2022-12-03T04:16:36.572Z",
+        "started_at": "2022-12-03T04:16:55.957Z",
+        "ended_at": "2022-12-03T04:16:59.994Z",
+        "description": "#7 C.Rising pass complete deep left to #87 T.Yassmin for 60 yards to the USC00 TOUCHDOWN, clock 10:08, 1ST DOWN",
+        "situation": {
+            "down": 1,
+            "distance": 10,
+            "line_of_scrimmage": {
+                "team": "FOOTBALL_TEAM_DESIGNATION_AWAY",
+                "number": 40
+            },
+            "possession_team": {
+                "abbreviation": "FOOTBALL_TEAM_DESIGNATION_AWAY"
+            }
+        },
+        "result": {
+            "is_scoring": true
+        },
+        "game_state": {
+            "quarter": 4,
+            "drive_number": 21
+        },
+        "pac12football": {}
+    }
+}
+```
+
+The `id` field provides an ID that you can use to identify this play throughout the API. In the next step, we will use the play ID (`S8M1PjbCfQZWLXb1Qe534e`) to fetch a list of all AV streams available for this play.
+
+You can also get the play ID using an FQL query at the Play Search endpoint. FQL and the Play Search endpoint provide much more powerful search functionality.
+
+```sh
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/play-search?filter.league.code=pac12football&filter.fql.query=GAME_ID="N9eGvr3tox4Av9pJMpj7bb"%20and%20player("FZhmXop8b56r6RBXL7jN2Z")%20and%20player("JD7oaHWMaP74ZcGGXrMwwE")%20and%20TOUCHDOWN' --header 'Authorization: token <API Authorization Token>'
+```
+
+See [Fusion Query Language](#fql) for more information.
+
+*Note: You can see the complete documentation for the Plays endpoint in the [Fusion Feed API Reference](/tag/Fusion-Feed-REST-API-Reference).*
+
+<a name="get_clip"></a>
+## Get an AV Stream Clip URL
+
+*Objective: Get the HLS stream URL of Cameron Rising's 60 yard touchdown pass to Thomas Yassmin from the AV Stream Clips endpoint.*
+
+Now that we have the game ID and the play ID, we can query the AV Stream Clips endpoint to find available streams of the play.
+
+To query the AV Stream Clips endpoint, you must provide the game ID as a path parameter. Our game ID is `N9eGvr3tox4Av9pJMpj7bb`, so the path becomes `/N9eGvr3tox4Av9pJMpj7bb/av-stream-clips/`.
+
+The play ID (`S8M1PjbCfQZWLXb1Qe534e`) is provided as an argument for the `play_id` query parameter.
+
+Use the following query, which includes these two IDs, to get a list of AV Stream Clips of the play.
+
+```sh
+curl --request GET 'https://feed.fusion.tempus-ex.com/v2/N9eGvr3tox4Av9pJMpj7bb/av-stream-clips?filter.league.code=pac12football&filter.play_id=S8M1PjbCfQZWLXb1Qe534e' --header 'Authorization: token <API Authorization Token>'
+```
+
+The API provides a list of clips from all available camera angles. The following example AV Stream Clip demonstrates the information the API provides for each clip.
+
+```JSON
+{
+      "stream": {
+        "id": "AnOGITtlj5q1-sXIlq0elLWoRuTa",
+        "expires_at": "2023-03-08T22:10:59Z",
+        "name": "UTAH @ USC",
+        "content_descriptor": "Program",
+        "hls_manifest_url": "",
+        "fusion_cam": {}
+      },
+      "hls_manifest_url": "/v2/av-streams/BA~AvH8cyiLSJiayNnrH1WhatTCJYzH~CGIE3MN8lL8JlkJaqzehq-ZMOf93/vod-playlist.m3u8?allow_interlaced=true&d=4.037s&exp=1678831859&sig=-VmsYT9Finrb8T_GGGDFv7tsSkSeAfhQ1ML2kHj6jA8&t=2022-12-03T04%3A16%3A55.957Z",
+      "play": {
+        "type": "TYPE_GRIDIRON_FOOTBALL_PLAY",
+        "gridiron_football_play": {
+          "id": "S8M1PjbCfQZWLXb1Qe534e",
+          "game_id": "N9eGvr3tox4Av9pJMpj7bb",
+          "description": "#7 C.Rising pass complete deep left to #87 T.Yassmin for 60 yards to the USC00 TOUCHDOWN, clock 10:08, 1ST DOWN",
+          "approach_line_of_scrimmage": "2022-12-03T04:16:36.572Z",
+          "started_at": "2022-12-03T04:16:55.957Z",
+          "ended_at": "2022-12-03T04:16:59.994Z",
+          "situation": {
+            "down": 1,
+            "distance": 10,
+            "line_of_scrimmage": {
+              "team": "UTAH",
+              "team_id": "84TSrh1R8dezyUrCptgDYr",
+              "number": 40
+            },
+            "possession_team": {
+              "team": "UTAH",
+              "team_id": "84TSrh1R8dezyUrCptgDYr"
+            }
+          },
+          "result": {
+            "is_scoring": true
+          },
+          "attributes": {
+            "pass_attempt": true,
+            "incomplete_pass": true
+          },
+          "game_state": {
+            "quarter": 4,
+            "drive_number": 21
+          }
+        }
+      },
+      "download_url": "/v2/av-streams/BA~AvH8cyiLSJiayNnrH1WhatTCJYzH~CGIE3MN8lL8JlkJaqzehq-ZMOf93/download.mp4?d=4.037s&exp=1678313459&f=true&sig=-qXGSQU6YVwh44CNvvpZ-PTZTpGKR_yjjMtQ26NydQI&t=2022-12-03T04%3A16%3A55.957Z"
+    }
+```
+
+The `stream.name` field indicates the camera angle of the clip. The HLS manifest URL and download URL for the clip are provided in the `hls_manifest_url` and `download_url` fields, respectively. You can download the AV clip or stream it using your preferred HLS player for your application.
+
+*Note: You can see the complete documentation for the AV Stream Clips endpoint in the [Fusion Feed API Reference](/tag/Fusion-Feed-REST-API-Reference).*

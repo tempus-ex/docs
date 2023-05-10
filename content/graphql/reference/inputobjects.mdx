@@ -1,0 +1,1056 @@
+---
+title: Input Objects
+---
+
+<a name="avstreamisolatedplayersubjectinputtype"></a>
+
+## AVStreamIsolatedPlayerSubjectInputType
+
+NEEDS DESCRIPTION
+
+
+| Field | Type | Description |
+|-------|------|-------------|
+| jerseyNumber | [String](graphqlobjects#string) | The player's jersey number. |
+| team | [FootballTeamDesignation](graphqlobjects#footballteamdesignation) | The player's team. |
+
+
+<a name="avstreamisolatedsubjectinputtype"></a>
+
+## AVStreamIsolatedSubjectInputType
+
+NEEDS DESCRIPTION
+
+
+| Field | Type | Description |
+|-------|------|-------------|
+| player | [AVStreamIsolatedPlayerSubjectInputType](graphqlobjects#avstreamisolatedplayersubjectinputtype) | NEEDS DESCRIPTION |
+
+
+<a name="fqlvariableinput"></a>
+
+## FQLVariableInput
+
+NEEDS DESCRIPTION
+
+
+| Field | Type | Description |
+|-------|------|-------------|
+| array | [List](graphqlobjects#list) | NEEDS DESCRIPTION |
+| name | [String](graphqlobjects#string) | The variable name. You must prefix it with a dollar sign in your query to reference it. |
+| number | [Float](graphqlobjects#float) | NEEDS DESCRIPTION |
+| object | [List](graphqlobjects#list) | NEEDS DESCRIPTION |
+| string | [String](graphqlobjects#string) | NEEDS DESCRIPTION |
+
+
+<a name="fqlvariableobjectpropertyinput"></a>
+
+## FQLVariableObjectPropertyInput
+
+NEEDS DESCRIPTION
+
+
+| Field | Type | Description |
+|-------|------|-------------|
+| array | [List](graphqlobjects#list) | NEEDS DESCRIPTION |
+| name | [String](graphqlobjects#string) | The property name. You must prefix it with a dollar sign in your query to reference it. |
+| number | [Float](graphqlobjects#float) | NEEDS DESCRIPTION |
+| object | [List](graphqlobjects#list) | NEEDS DESCRIPTION |
+| string | [String](graphqlobjects#string) | NEEDS DESCRIPTION |
+
+
+<a name="fqlvariablevalueinput"></a>
+
+## FQLVariableValueInput
+
+NEEDS DESCRIPTION
+
+
+| Field | Type | Description |
+|-------|------|-------------|
+| array | [List](graphqlobjects#list) | NEEDS DESCRIPTION |
+| number | [Float](graphqlobjects#float) | NEEDS DESCRIPTION |
+| object | [List](graphqlobjects#list) | NEEDS DESCRIPTION |
+| string | [String](graphqlobjects#string) | NEEDS DESCRIPTION |
+
+
+<a name="footballgamepredicateinput"></a>
+
+## FootballGamePredicateInput
+
+FQL predicates can be used to create complex search expressions. The functions and variables available in this type of predicate are described below.
+
+# Examples
+
+```
+SEASON = 2020
+```
+
+```
+SEASON = 2020 and REGULAR_SEASON and WEEK = 5
+```
+
+```
+SEASON = 2020 and REGULAR_SEASON and team("ATL")
+```
+
+```
+SEASON = 2020 and REGULAR_SEASON and team("HOME") has ABBREVIATION = "ATL"
+```
+
+# Functions
+
+## opponent
+
+Takes a team's abbreviation and returns a team object for their opponent. "HOME" and "AWAY" may also be used in place of a club code.
+
+Return Type: object
+
+### ABBREVIATION
+
+The team's common abbreviation.
+
+Type: string
+
+### SCORE
+
+The team's score.
+
+Type: number
+
+## team
+
+Takes a team's abbreviation and returns a team object. "HOME" and "AWAY" may also be used in place of a club code.
+
+Return Type: object
+
+### ABBREVIATION
+
+The team's common abbreviation.
+
+Type: string
+
+### SCORE
+
+The team's score.
+
+Type: number
+
+# Variables
+
+## COMPLETE
+
+## GSIS_GAME_KEY
+
+Type: number
+
+## HALFTIME
+
+## ID
+
+The Fusion Feed V2 game ID.
+
+Type: string
+
+## PLAYING
+
+## POSTSEASON
+
+## PREGAME
+
+## PRESEASON
+
+## PRO_BOWL
+
+## REGULAR_SEASON
+
+## SEASON
+
+Type: number
+
+## SUSPENDED
+
+## WEEK
+
+The week number of the game, beginning with 1 for the week of the first preseason game, 1 for the week of the first regular game, and 1 for the week of the first postseason game, and 1 for one-offs like the Pro Bowl.
+
+Type: number
+
+
+| Field | Type | Description |
+|-------|------|-------------|
+| expression | [String](graphqlobjects#string) | An FQL expression. |
+| variables | [List](graphqlobjects#list) | NEEDS DESCRIPTION |
+
+
+<a name="footballplaypredicateinput"></a>
+
+## FootballPlayPredicateInput
+
+FQL predicates can be used to create complex search expressions. The functions and variables available in this type of predicate are described below.
+
+# Examples
+
+```
+player("LAR", 16) has STAT_COUNT > 0
+```
+
+```
+player("00-0033106") has PASSING_YARDS > 10
+```
+
+```
+team("LAR") has TOUCHDOWN
+```
+
+```
+QUARTER = 4 and GAME_CLOCK < 45
+```
+
+```
+PENALTIES with FOUL_CODE = "NZI" or FOUL_CODE = "DOF"
+```
+
+# Functions
+
+## opponent
+
+Takes a team's abbreviation and returns a team object for their opponent. "HOME" and "AWAY" or "OFFENSE" and "DEFENSE" may also be used in place of a club code.
+
+Return Type: object
+
+### ABBREVIATION
+
+The team's common abbreviation.
+
+### ASSISTED_TACKLE
+
+True when an assisted tackle is made.
+
+### BLOCKED
+
+True when a kick (field goal, punt, or extra point attempt) is blocked.
+
+### FAILED_EXTRA_POINT
+
+True when an extra point attempt is failed, including blocked extra point attempts.
+
+### FAILED_TWO_POINT_PASS
+
+True when a failed two point pass attempt is made.
+
+### FAILED_TWO_POINT_RUSH
+
+True when a failed two point rush attempt is made.
+
+### FIELD_GOAL_ATTEMPT
+
+True when a field goal attempt is credited regardless of whether the attempt was successful.
+
+### FIELD_GOAL_YARDS
+
+The length of a successful field goal attempt.
+
+### FIRST_DOWN_BY_PASSING
+
+True when a first down is gained due to a pass.
+
+### FIRST_DOWN_BY_PENALTY
+
+True when a first down is gained due to a penalty.
+
+### FIRST_DOWN_BY_RUSHING
+
+True when a first down is gained due to a rush.
+
+### FORCED_OPPONENT_FUMBLE
+
+True when a player forced another player to fumble.
+
+### FUMBLE_FORCED
+
+True when a player fumbled the ball due to force by another player.
+
+### FUMBLE_NOT_FORCED
+
+True when a player fumbled the ball not due to force by another player.
+
+### GOOD_EXTRA_POINT
+
+True when a successful extra point attempt is made.
+
+### GOOD_TWO_POINT_PASS
+
+True when a successful two point pass attempt is made.
+
+### GOOD_TWO_POINT_RUSH
+
+True when a successful two point rush attempt is made.
+
+### HALF_SACK
+
+True when a half-sack is credited.
+
+### INCOMPLETE_PASS
+
+True when an incomplete pass is thrown.
+
+### INTERCEPTION
+
+True when an interception is credited.
+
+### INTERCEPTION_YARDS
+
+The interception yards gained on the play.
+
+### KICKING_YARDS
+
+The kicking yardage of the play.
+
+### KICKOFF
+
+True if there was a kickoff, regardless of the outcome.
+
+### PASSING_YARDS
+
+The passing yards gained on the play.
+
+### PASS_ATTEMPT
+
+True if there was a pass attempt, regardless of the outcome (even if it was intercepted or incomplete).
+
+### PASS_RECEPTION_YARDS
+
+The pass reception yards gained on the play.
+
+### PENALTY_YARDS
+
+The penalty yardage of the play.
+
+### PUNT
+
+True if there was a punt, regardless of the outcome (even if it was blocked).
+
+### PUNTING_YARDS
+
+The punt yardage of the play.
+
+### RUSHING_YARDS
+
+The rushing yards gained on the play.
+
+### RUSH_ATTEMPT
+
+True if there was a rush attempt, regardless of the outcome.
+
+### SACK
+
+True when a sack is credited.
+
+### SACK_YARDS
+
+The sack yards gained on the play. This is a negative number.
+
+### SAFETY
+
+True when a safety is credited.
+
+### SOLO_TACKLE
+
+True when a solo tackle is made.
+
+### STAT_COUNT
+
+The number of stats credited for the play.
+
+### TACKLE_ASSIST
+
+True when a tackle assist is made.
+
+### TOUCHDOWN
+
+True when a touchdown is credited.
+
+## player
+
+Takes a player's id or a team abbreviation and jersey number and returns a player object. "HOME" and "AWAY" or "OFFENSE" and "DEFENSE" may also be used in place of a club code.
+
+Return Type: object
+
+### ASSISTED_TACKLE
+
+True when an assisted tackle is made.
+
+### BLOCKED
+
+True when a kick (field goal, punt, or extra point attempt) is blocked.
+
+### FAILED_EXTRA_POINT
+
+True when an extra point attempt is failed, including blocked extra point attempts.
+
+### FAILED_TWO_POINT_PASS
+
+True when a failed two point pass attempt is made.
+
+### FAILED_TWO_POINT_RUSH
+
+True when a failed two point rush attempt is made.
+
+### FIELD_GOAL_ATTEMPT
+
+True when a field goal attempt is credited regardless of whether the attempt was successful.
+
+### FIELD_GOAL_YARDS
+
+The length of a successful field goal attempt.
+
+### FIRST_DOWN_BY_PASSING
+
+True when a first down is gained due to a pass.
+
+### FIRST_DOWN_BY_PENALTY
+
+True when a first down is gained due to a penalty.
+
+### FIRST_DOWN_BY_RUSHING
+
+True when a first down is gained due to a rush.
+
+### FORCED_OPPONENT_FUMBLE
+
+True when a player forced another player to fumble.
+
+### FUMBLE_FORCED
+
+True when a player fumbled the ball due to force by another player.
+
+### FUMBLE_NOT_FORCED
+
+True when a player fumbled the ball not due to force by another player.
+
+### GOOD_EXTRA_POINT
+
+True when a successful extra point attempt is made.
+
+### GOOD_TWO_POINT_PASS
+
+True when a successful two point pass attempt is made.
+
+### GOOD_TWO_POINT_RUSH
+
+True when a successful two point rush attempt is made.
+
+### HALF_SACK
+
+True when a half-sack is credited.
+
+### INCOMPLETE_PASS
+
+True when an incomplete pass is thrown.
+
+### INTERCEPTION
+
+True when an interception is credited.
+
+### INTERCEPTION_YARDS
+
+The interception yards gained on the play.
+
+### KICKING_YARDS
+
+The kicking yardage of the play.
+
+### KICKOFF
+
+True if there was a kickoff, regardless of the outcome.
+
+### PASSING_YARDS
+
+The passing yards gained on the play.
+
+### PASS_ATTEMPT
+
+True if there was a pass attempt, regardless of the outcome (even if it was intercepted or incomplete).
+
+### PASS_RECEPTION_YARDS
+
+The pass reception yards gained on the play.
+
+### PENALTY_YARDS
+
+The penalty yardage of the play.
+
+### PUNT
+
+True if there was a punt, regardless of the outcome (even if it was blocked).
+
+### PUNTING_YARDS
+
+The punt yardage of the play.
+
+### RUSHING_YARDS
+
+The rushing yards gained on the play.
+
+### RUSH_ATTEMPT
+
+True if there was a rush attempt, regardless of the outcome.
+
+### SACK
+
+True when a sack is credited.
+
+### SACK_YARDS
+
+The sack yards gained on the play. This is a negative number.
+
+### SAFETY
+
+True when a safety is credited.
+
+### SOLO_TACKLE
+
+True when a solo tackle is made.
+
+### STAT_COUNT
+
+The number of stats credited for the play.
+
+### TACKLE_ASSIST
+
+True when a tackle assist is made.
+
+### TOUCHDOWN
+
+True when a touchdown is credited.
+
+## team
+
+Takes a team's abbreviation and returns a team object. "HOME" and "AWAY" or "OFFENSE" and "DEFENSE" may also be used in place of a club code.
+
+Return Type: object
+
+### ABBREVIATION
+
+The team's common abbreviation.
+
+### ASSISTED_TACKLE
+
+True when an assisted tackle is made.
+
+### BLOCKED
+
+True when a kick (field goal, punt, or extra point attempt) is blocked.
+
+### FAILED_EXTRA_POINT
+
+True when an extra point attempt is failed, including blocked extra point attempts.
+
+### FAILED_TWO_POINT_PASS
+
+True when a failed two point pass attempt is made.
+
+### FAILED_TWO_POINT_RUSH
+
+True when a failed two point rush attempt is made.
+
+### FIELD_GOAL_ATTEMPT
+
+True when a field goal attempt is credited regardless of whether the attempt was successful.
+
+### FIELD_GOAL_YARDS
+
+The length of a successful field goal attempt.
+
+### FIRST_DOWN_BY_PASSING
+
+True when a first down is gained due to a pass.
+
+### FIRST_DOWN_BY_PENALTY
+
+True when a first down is gained due to a penalty.
+
+### FIRST_DOWN_BY_RUSHING
+
+True when a first down is gained due to a rush.
+
+### FORCED_OPPONENT_FUMBLE
+
+True when a player forced another player to fumble.
+
+### FUMBLE_FORCED
+
+True when a player fumbled the ball due to force by another player.
+
+### FUMBLE_NOT_FORCED
+
+True when a player fumbled the ball not due to force by another player.
+
+### GOOD_EXTRA_POINT
+
+True when a successful extra point attempt is made.
+
+### GOOD_TWO_POINT_PASS
+
+True when a successful two point pass attempt is made.
+
+### GOOD_TWO_POINT_RUSH
+
+True when a successful two point rush attempt is made.
+
+### HALF_SACK
+
+True when a half-sack is credited.
+
+### INCOMPLETE_PASS
+
+True when an incomplete pass is thrown.
+
+### INTERCEPTION
+
+True when an interception is credited.
+
+### INTERCEPTION_YARDS
+
+The interception yards gained on the play.
+
+### KICKING_YARDS
+
+The kicking yardage of the play.
+
+### KICKOFF
+
+True if there was a kickoff, regardless of the outcome.
+
+### PASSING_YARDS
+
+The passing yards gained on the play.
+
+### PASS_ATTEMPT
+
+True if there was a pass attempt, regardless of the outcome (even if it was intercepted or incomplete).
+
+### PASS_RECEPTION_YARDS
+
+The pass reception yards gained on the play.
+
+### PENALTY_YARDS
+
+The penalty yardage of the play.
+
+### PUNT
+
+True if there was a punt, regardless of the outcome (even if it was blocked).
+
+### PUNTING_YARDS
+
+The punt yardage of the play.
+
+### RUSHING_YARDS
+
+The rushing yards gained on the play.
+
+### RUSH_ATTEMPT
+
+True if there was a rush attempt, regardless of the outcome.
+
+### SACK
+
+True when a sack is credited.
+
+### SACK_YARDS
+
+The sack yards gained on the play. This is a negative number.
+
+### SAFETY
+
+True when a safety is credited.
+
+### SOLO_TACKLE
+
+True when a solo tackle is made.
+
+### STAT_COUNT
+
+The number of stats credited for the play.
+
+### TACKLE_ASSIST
+
+True when a tackle assist is made.
+
+### TOUCHDOWN
+
+True when a touchdown is credited.
+
+# Variables
+
+## ASSISTED_TACKLE
+
+True when an assisted tackle is made.
+
+## BLOCKED
+
+True when a kick (field goal, punt, or extra point attempt) is blocked.
+
+## DOWN
+
+## FAILED_EXTRA_POINT
+
+True when an extra point attempt is failed, including blocked extra point attempts.
+
+## FAILED_TWO_POINT_PASS
+
+True when a failed two point pass attempt is made.
+
+## FAILED_TWO_POINT_RUSH
+
+True when a failed two point rush attempt is made.
+
+## FIELD_GOAL_ATTEMPT
+
+True when a field goal attempt is credited regardless of whether the attempt was successful.
+
+## FIELD_GOAL_YARDS
+
+The length of a successful field goal attempt.
+
+## FIRST_DOWN_BY_PASSING
+
+True when a first down is gained due to a pass.
+
+## FIRST_DOWN_BY_PENALTY
+
+True when a first down is gained due to a penalty.
+
+## FIRST_DOWN_BY_RUSHING
+
+True when a first down is gained due to a rush.
+
+## FORCED_OPPONENT_FUMBLE
+
+True when a player forced another player to fumble.
+
+## FUMBLE_FORCED
+
+True when a player fumbled the ball due to force by another player.
+
+## FUMBLE_NOT_FORCED
+
+True when a player fumbled the ball not due to force by another player.
+
+## GAME_CLOCK
+
+The amount of time left on the game clock, in seconds.
+
+## GAME_ID
+
+The Fusion Feed V2 game ID.
+
+## GOOD_EXTRA_POINT
+
+True when a successful extra point attempt is made.
+
+## GOOD_TWO_POINT_PASS
+
+True when a successful two point pass attempt is made.
+
+## GOOD_TWO_POINT_RUSH
+
+True when a successful two point rush attempt is made.
+
+## GSIS_GAME_KEY
+
+## GSIS_PLAY_ID
+
+## HALF_SACK
+
+True when a half-sack is credited.
+
+## INCOMPLETE_PASS
+
+True when an incomplete pass is thrown.
+
+## INJURIES
+
+The details of injuries on a play.
+
+## INTERCEPTION
+
+True when an interception is credited.
+
+## INTERCEPTION_YARDS
+
+The interception yards gained on the play.
+
+## KICKING_YARDS
+
+The kicking yardage of the play.
+
+## KICKOFF
+
+True if there was a kickoff, regardless of the outcome.
+
+## LEFT
+
+True if the play is a pass or rush to the left.
+
+## MIDDLE
+
+True if the play is a pass or rush to the middle.
+
+## PASSING_YARDS
+
+The passing yards gained on the play.
+
+## PASS_ATTEMPT
+
+True if there was a pass attempt, regardless of the outcome (even if it was intercepted or incomplete).
+
+## PASS_RECEPTION_YARDS
+
+The pass reception yards gained on the play.
+
+## PENALTIES
+
+The details of penalties on a play. This includes declined penalties.
+
+Type: array
+
+Element Properties:
+
+### FOUL_CODE
+
+The penalty code. This is one of:
+
+* BAT: illegal bat
+* BLI: illegal blindside block
+* CHB: chop block
+* CLP: clipping
+* DH: defensive holding
+* DOD: defensive delay of game
+* DOF: defensive offside
+* DOG: delay of game
+* DOK: delay of kickoff
+* DPI: defensive pass interference
+* DSQ: disqualification
+* DTM: defensive too many men on field
+* ENC: encroachment
+* FCI: fair catch interference
+* FMM: facemask
+* FST: false start
+* HC: horse collar
+* IBW: illegal block above the waist
+* ICB: illegal crackback
+* ICT: illegal contact
+* ICU: illegal cut
+* IDK: ineligible downfield kick
+* IDP: ineligible downfield pass
+* IDT: illegal double team block
+* IFC: invalid fair catch signal
+* IFH: illegal forward handoff
+* IFP: illegal forward pass
+* ILF: illegal formation
+* ILH: illegal use of hands
+* ILM: illegal motion
+* ILS: illegal substitution
+* ING: intentional grounding
+* IPB: illegal peel back
+* ISH: illegal shift
+* ITK: illegal touch kick
+* ITP: illegal touch pass
+* KCI: kick catch interference
+* KIK: illegal kick/kicking loose ball
+* KOB: kickoff out of bounds
+* LBL: low block
+* LEA: leaping
+* LEV: leverage
+* NZI: neutral zone infraction
+* OFK: offside on free kick
+* OH: offensive holding
+* OOF: offensive offside
+* OPI: offensive pass interference
+* OTM: offensive too many men on field
+* POK: player out of bounds on kick
+* RNK: running into the kicker
+* RPS: roughing the passer
+* RRK: roughing the kicker
+* TAU: taunting
+* TRP: tripping
+* UNR: unnecessary roughness
+* UNS: unsportsmanlike conduct
+* UOH: use of helmet
+* WED: illegal wedge
+
+### PLAYER
+
+Type: object
+
+#### JERSEY_NUMBER
+
+### STATUS
+
+The penalty status. This is ACCEPTED, DECLINED, or OFFSETTING.
+
+### TEAM_ABBREVIATION
+
+The team's common abbreviation.
+
+## PENALTY_YARDS
+
+The penalty yardage of the play.
+
+## POSSESSION_TEAM_ABBREVIATION
+
+The abbreviation of the team with possession at the start of the play.
+
+## POSTSEASON
+
+## PRESEASON
+
+## PRO_BOWL
+
+## PUNT
+
+True if there was a punt, regardless of the outcome (even if it was blocked).
+
+## PUNTING_YARDS
+
+The punt yardage of the play.
+
+## QUARTER
+
+## RED_ZONE
+
+True if the play begins in the red zone.
+
+## REGULAR_SEASON
+
+## RIGHT
+
+True if the play is a pass or rush to the right.
+
+## RUSHING_YARDS
+
+The rushing yards gained on the play.
+
+## RUSH_ATTEMPT
+
+True if there was a rush attempt, regardless of the outcome.
+
+## SACK
+
+True when a sack is credited.
+
+## SACK_YARDS
+
+The sack yards gained on the play. This is a negative number.
+
+## SAFETY
+
+True when a safety is credited.
+
+## SCORING
+
+True if the play is a scoring play.
+
+## SEASON
+
+## SOLO_TACKLE
+
+True when a solo tackle is made.
+
+## STAT_COUNT
+
+The number of stats credited for the play.
+
+## TACKLE_ASSIST
+
+True when a tackle assist is made.
+
+## TOUCHDOWN
+
+True when a touchdown is credited.
+
+## WEEK
+
+The week number of the game, beginning with 1 for the week of the first preseason game, 1 for the week of the first regular game, and 1 for the week of the first postseason game, and 1 for one-offs like the Pro Bowl.
+
+## YARDS_TO_GO
+
+## YARD_LINE_NUMBER
+
+The number of the play's statistical yard line.
+
+## YARD_LINE_TEAM_ABBREVIATION
+
+The abbreviation of the play's statistical yard line team.
+
+
+| Field | Type | Description |
+|-------|------|-------------|
+| expression | [String](graphqlobjects#string) | NEEDS DESCRIPTION |
+| variables | [List](graphqlobjects#list) | NEEDS DESCRIPTION |
+
+
+<a name="soccermatchpredicateinput"></a>
+
+## SoccerMatchPredicateInput
+
+FQL predicates can be used to create complex search expressions. The functions and variables available in this type of predicate are described below.
+
+# Examples
+
+```
+SEASON = 2020
+```
+
+```
+SEASON = 2020 and team("POR")
+```
+
+```
+SEASON = 2020 and team("HOME") has ABBREVIATION = "POR"
+```
+
+# Functions
+
+## opponent
+
+Takes a team's abbreviation and returns a team object for their opponent. "HOME" and "AWAY" may also be used in place of an abbreviation.
+
+Return Type: object
+
+### ABBREVIATION
+
+The team's common abbreviation.
+
+Type: string
+
+## team
+
+Takes a team's abbreviation and returns a team object. "HOME" and "AWAY" may also be used in place of an abbreviation.
+
+Return Type: object
+
+### ABBREVIATION
+
+The team's common abbreviation.
+
+Type: string
+
+# Variables
+
+## OPTA_ID
+
+Type: number
+
+## SEASON
+
+Type: number
+
+
+| Field | Type | Description |
+|-------|------|-------------|
+| expression | [String](graphqlobjects#string) | NEEDS DESCRIPTION |
+| variables | [List](graphqlobjects#list) | NEEDS DESCRIPTION |

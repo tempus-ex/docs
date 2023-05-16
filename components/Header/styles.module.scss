@@ -1,0 +1,18 @@
+@use '../../styles/spacing';
+
+.header {
+    padding: spacing("md");
+    border-bottom: 1px solid var(--border-color);
+}
+
+.logo {
+    height: spacing("lg");
+    margin-right: spacing("sm");
+    width: spacing("lg");
+}
+
+.home-link {
+    align-items: center;
+    color: inherit;
+    display: flex;
+}

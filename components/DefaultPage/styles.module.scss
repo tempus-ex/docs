@@ -1,0 +1,38 @@
+@use '../../styles/spacing';
+
+.middle {
+  display: flex;
+  flex-direction: row;
+}
+
+.toc-link {
+    color: var(--link-color);
+    display: block;
+
+    &:hover {
+        color: var(--link-hover-color);
+        background-color: var(--link-background-color);
+    }
+
+    &__current {
+        font-weight: 'bold';
+    }
+
+    &__nested {
+        padding-left: spacing("lg");
+    }
+
+    &__top {
+        padding-left: spacing("lg");
+    }
+}
+
+.toc-top {
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: spacing("md");
+    padding: spacing("md");
+}
+
+.title {
+    color: var(--title-color);
+}

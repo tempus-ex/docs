@@ -13,7 +13,7 @@ export interface GraphQL {
     version: 'v1' | 'v2';
 }
 
-export interface HttpRequest {
+export interface REST {
     method: 'GET' | 'POST';
     url: string;
     body?: string;
@@ -24,7 +24,7 @@ export interface Content {
     source: MDXRemoteSerializeResult;
     path: string;
     graphql: GraphQL[];
-    httpRequests: HttpRequest[];
+    rest: REST[];
     links: Set<string>;
 }
 

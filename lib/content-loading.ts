@@ -1,6 +1,5 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import rehypeHighlight from 'rehype-highlight';
 import remarkCodeExtra from 'remark-code-extra';
@@ -9,7 +8,7 @@ import remarkGfm from 'remark-gfm';
 import { visit } from 'unist-util-visit';
 import type { Root } from 'mdast';
 
-import { canonicalContentPath, Content, Frontmatter, GraphQL, TableOfContents, TableOfContentsPage } from './content';
+import { canonicalContentPath, Content, Frontmatter, GraphQL, REST, TableOfContents, TableOfContentsPage } from './content';
 
 async function* walk(dir: string): AsyncGenerator<string> {
     for await (const d of await fs.opendir(dir)) {
@@ -38,7 +37,7 @@ export async function getAllContent(): Promise<Map<string, Content>> {
         const contentPathBase = isIndex ? contentPath : contentPath.slice(0, contentPath.lastIndexOf('/'));
 
         const graphql: GraphQL[] = [];
-        const httpRequests: HttpRequest[] = [];
+        const rest: REST[] = [];
         const links = new Set<string>();
 
         const markdownLinkPlugin = () => {
@@ -61,11 +60,6 @@ export async function getAllContent(): Promise<Map<string, Content>> {
                     remarkGfm,
                     [remarkCodeExtra, {
                         transform: (node: MDASTCode) => {
-                            if (node.lang === 'http') {
-                                // TODO: parse value, append to httpRequests
-                                return null;
-                            }
-
                             if (node.lang === 'gql' || node.lang === 'graphql') {
                                 if (node.meta !== 'v1' && node.meta !== 'v2') {
                                     throw new Error('GraphQL code must be marked as V1 or V2.');
@@ -86,6 +80,17 @@ export async function getAllContent(): Promise<Map<string, Content>> {
                                 };
                             }
 
+                            const req = node.value.split(' ');
+                            if (req[0] !== 'GET' && req[0] !== 'POST') {
+                                throw new Error("Only GET and POST requests are supported.");
+                            }
+                            rest.push(
+                                {
+                                    method: req[0],
+                                    url: req[1],
+                                }
+                            );
+
                             return null;
                         },
                     }],
@@ -99,6 +104,7 @@ export async function getAllContent(): Promise<Map<string, Content>> {
         ret.set(contentPath, {
             frontmatter: source.frontmatter as unknown as Frontmatter,
             graphql,
+            rest,
             links,
             source,
             path: contentPath,

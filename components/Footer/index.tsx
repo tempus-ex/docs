@@ -1,13 +1,19 @@
 import Link from "next/link";
 import styles from "./styles.module.scss";
 import clsx from "clsx";
+import Image from "next/image";
+
+import github from "../../public/images/github.svg";
+import twitter from "../../public/images/twitter.svg";
 
 export const Footer = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles["footer__inner"]}>
         <h3 className={styles["footer__title"]}>Fusion Feed API</h3>
-        <div className={clsx([styles["footer__section"], styles["footer__links"]])}>
+        <div
+          className={clsx([styles["footer__section"], styles["footer__links"]])}
+        >
           <h6 className={styles["footer__section-header"]}>About Us</h6>
           <Link
             className={styles["footer__section-link"]}
@@ -28,7 +34,12 @@ export const Footer = () => {
             Careers
           </Link>
         </div>
-        <div className={clsx([styles["footer__section"], styles["footer__contact"]])}>
+        <div
+          className={clsx([
+            styles["footer__section"],
+            styles["footer__contact"],
+          ])}
+        >
           <h6 className={styles["footer__section-header"]}>Contact Us</h6>
           <p className={styles["footer__section-address"]}>
             635 Brannan St
@@ -36,12 +47,38 @@ export const Footer = () => {
             San Francisco, CA 94107
           </p>
           <Link
-            className={styles["footer__section-link"]}
+            className={styles["footer__section-email"]}
             href="mailto:contact@tempus-ex.com"
           >
             contact@tempus-ex.com
           </Link>
-          <div></div>
+          <div className={styles["footer__section-social"]}>
+            <Link
+              className={styles["footer__section-social-link"]}
+              href={"https://github.com/tempus-ex"}
+              target="blank"
+            >
+              <Image
+                src={github}
+                width={24}
+                height={24}
+                alt={"GitHub repository link"}
+              />
+            </Link>
+
+            <Link
+              className={styles["footer__section-social-link"]}
+              href={"https://twitter.com/TempusExMachina"}
+              target="blank"
+            >
+              <Image
+                src={twitter}
+                width={24}
+                height={24}
+                alt={"Tempus ex official Twitter account"}
+              />
+            </Link>
+          </div>
         </div>
       </div>
       <p className={styles["footer__patent"]}>

@@ -66,18 +66,35 @@
       margin-bottom: spacing("md");
       color: #dddfe1;
 
-      &:active {
-        color: #fff;
-      }
-
       &:hover {
         color: darken(#dddfe1, 10%);
+      }
+    }
+
+    &-email {
+      margin-bottom: spacing("md");
+      color: #00b2e3;
+
+      &:hover {
+        color: darken(#00b2e3, 10%);
       }
     }
 
     &-address {
       margin: 0;
       margin-bottom: spacing("md");
+    }
+
+    &-social {
+      display: flex;
+      flex-direction: row;
+
+      &-link {
+        margin-right: spacing("lg");
+        &:hover {
+          opacity: 85%;
+        }
+      }
     }
   }
 

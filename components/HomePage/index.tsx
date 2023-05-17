@@ -64,7 +64,7 @@ export const HomePage = (props: Props) => {
                 <title>Tempus Ex Documentation</title>
             </Head>
             <Header />
-            <main>
+            <main className={styles.main}>
                 <Container className={styles.wrapper}>
                     <SimpleGrid
                         mt={60}

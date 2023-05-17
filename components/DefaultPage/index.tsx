@@ -27,7 +27,7 @@ export const DefaultPage = (props: Props) => {
         <title>{frontmatter?.title}</title>
       </Head>
       <Header />
-      <div className={styles.middle}>
+      <main className={styles.middle}>
         <Navbar width={{ sm: 300 }}>
           <Navbar.Section className={styles["toc-top"]}>
             <Link href={toc.path}>
@@ -69,7 +69,7 @@ export const DefaultPage = (props: Props) => {
             <MDXRemote {...props.source} />
           </Container>
         </main>
-      </div>
+      </main>
       <Footer />
     </>
   );

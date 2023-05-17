@@ -1,8 +1,9 @@
 @use '../../styles/spacing' as *;
 
-.middle {
+.main {
   display: flex;
   flex-direction: row;
+  flex-grow: 1;
 }
 
 .toc-link {

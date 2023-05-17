@@ -1,8 +1,97 @@
-@use '../../styles/spacing' as *;
+@use "../../styles/breakpoints" as *;
+@use "../../styles/spacing" as *;
 
 .footer {
-    height: spacing("xl");
-    padding: spacing("md");
-    margin-top: spacing("md");
-    text-align: 'right';
+  width: 100%;
+  background-color: #111;
+  padding: spacing("xl") spacing("md") spacing("lg") spacing("md");
+  padding-top: spacing("xl");
+  color: #dddfe1;
+
+  @include above-breakpoint("sm") {
+    padding: spacing("xl") spacing("xl") spacing("lg") spacing("xl");
+  }
+
+  @include above-breakpoint("xl") {
+    padding: spacing("xl") 0 spacing("lg") 0;
+  }
+
+  &__title {
+    margin: 0;
+
+    @include above-breakpoint("md") {
+      flex-grow: 1;
+      max-width: 430px;
+    }
+  }
+
+  &__inner {
+    margin: 0;
+    max-width: breakpoint("xl");
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    @include above-breakpoint("md") {
+      margin: 0 auto;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: center;
+    }
+  }
+
+  &__links {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    flex-grow: 1;
+    width: 100%;
+    margin-top: spacing("xl");
+
+    @include above-breakpoint("md") {
+      width: inherit;
+      margin-top: 0;
+    }
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-grow: 1;
+    margin-right: spacing("md");
+
+    &-header {
+      margin: 0;
+      margin-top: spacing("sm");
+      margin-bottom: spacing("md");
+    }
+
+    &-link {
+      margin-bottom: spacing("md");
+      color: #dddfe1;
+
+      &:active {
+        color: #fff;
+      }
+
+      &:hover {
+        color: darken(#dddfe1, 10%);
+      }
+    }
+
+    &-address {
+      color: #dddfe1;
+    }
+  }
+
+  &__patent {
+    font-size: 0.777rem;
+    text-align: center;
+    margin: spacing("md") auto;
+    color: #9e9e9e;
+  }
 }

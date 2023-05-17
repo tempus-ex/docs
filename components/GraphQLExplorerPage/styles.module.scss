@@ -1,0 +1,6 @@
+@use '../../styles/spacing';
+
+.main {
+    border-bottom: 1px solid var(--border-color);
+    min-height: 100vh;
+}

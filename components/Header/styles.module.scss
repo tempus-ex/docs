@@ -1,18 +1,37 @@
-@use '../../styles/spacing';
+@use "../../styles/breakpoints" as *;
+@use "../../styles/spacing" as *;
 
 .header {
-    padding: spacing("md");
-    border-bottom: 1px solid var(--border-color);
-}
+  box-shadow: 0 4px 8px 0 rgba(96, 97, 112, 0.16),
+    0 0 2px 0 rgba(40, 41, 61, 0.04);
+  padding: spacing("sm");
 
-.logo {
-    height: spacing("lg");
-    margin-right: spacing("sm");
-    width: spacing("lg");
-}
+  @include above-breakpoint("xl") {
+    padding: 0;
+  }
 
-.home-link {
-    align-items: center;
-    color: inherit;
+  &__inner {
+    margin: 0;
+    max-width: breakpoint("xl");
     display: flex;
+
+    @include above-breakpoint("xl") {
+      margin: 0 auto;
+    }
+  }
+
+  &__link {
+    position: relative;
+  }
+
+  &__logo {
+    height: 52px;
+    @include above-breakpoint("md") {
+      margin-left: spacing("xl");
+    }
+
+    @include above-breakpoint("xl") {
+      height: 78px;
+    }
+  }
 }

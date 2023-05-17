@@ -1,8 +1,107 @@
-@use '../../styles/spacing';
+@use "../../styles/breakpoints" as *;
+@use "../../styles/spacing" as *;
 
 .footer {
-    height: spacing("xl");
-    padding: spacing("md");
-    margin-top: spacing("md");
-    text-align: 'right';
+  width: 100%;
+  background-color: #111;
+  padding: spacing("xl") spacing("md") spacing("lg") spacing("md");
+  padding-top: spacing("xl");
+  color: #dddfe1;
+
+  @include above-breakpoint("sm") {
+    padding: spacing("xl") spacing("xl") spacing("lg") spacing("xl");
+  }
+
+  @include above-breakpoint("xl") {
+    padding: spacing("xl") 0 spacing("lg") 0;
+  }
+
+  &__title {
+    margin: 0;
+    grid-area: title;
+  }
+
+  &__inner {
+    margin: 0;
+    max-width: breakpoint("xl");
+    display: grid;
+    grid-template-areas:
+      "title title"
+      "links contact";
+    row-gap: spacing("xl");
+    column-gap: spacing("lg");
+
+    @include above-breakpoint("md") {
+      margin: 0 auto;
+    }
+
+    @include above-breakpoint("xl") {
+      grid-template-areas: "title links contact";
+      row-gap: 0;
+    }
+  }
+
+  &__links {
+    grid-area: links;
+  }
+
+  &__contact {
+    grid-area: contact;
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-right: spacing("md");
+
+    &-header {
+      margin: 0;
+      margin-top: spacing("sm");
+      margin-bottom: spacing("md");
+    }
+
+    &-link {
+      margin-bottom: spacing("md");
+      color: #dddfe1;
+
+      &:hover {
+        color: darken(#dddfe1, 10%);
+      }
+    }
+
+    &-email {
+      margin-bottom: spacing("md");
+      color: #00b2e3;
+
+      &:hover {
+        color: darken(#00b2e3, 10%);
+      }
+    }
+
+    &-address {
+      margin: 0;
+      margin-bottom: spacing("md");
+    }
+
+    &-social {
+      display: flex;
+      flex-direction: row;
+
+      &-link {
+        margin-right: spacing("lg");
+        &:hover {
+          opacity: 85%;
+        }
+      }
+    }
+  }
+
+  &__patent {
+    font-size: 0.777rem;
+    text-align: center;
+    margin: spacing("md") auto;
+    color: #9e9e9e;
+  }
 }

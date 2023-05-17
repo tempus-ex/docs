@@ -1,6 +1,9 @@
-import { GraphQLExplorerPage, Props } from '../../../components/GraphQLExplorerPage';
-import { withAuth } from '../../../lib/auth';
-import { getAllContent } from '../../../lib/content-loading';
+import {
+  GraphQLExplorerPage,
+  Props,
+} from "../../../components/GraphQLExplorerPage";
+import { withAuth } from "../../../lib/auth";
+import { getAllContent } from "../../../lib/content-loading";
 
 export default GraphQLExplorerPage;
 
@@ -11,9 +14,9 @@ export const getServerSideProps = withAuth<{}, Props>(async function ({ params }
         return { notFound: true };
     }
 
-    return {
-        props: {
-            source: content.source,
-        },
-    };
+  return {
+    props: {
+      source: content.source,
+    },
+  };
 });

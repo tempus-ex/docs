@@ -1,0 +1,8 @@
+@use '../../styles/spacing';
+
+.footer {
+    height: spacing("xl");
+    padding: spacing("md");
+    margin-top: spacing("md");
+    text-align: 'right';
+}

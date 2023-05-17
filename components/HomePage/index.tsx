@@ -1,8 +1,6 @@
 import {
-    createStyles,
     ThemeIcon,
     Text,
-    Title,
     Container,
     SimpleGrid,
     useMantineTheme,
@@ -10,8 +8,10 @@ import {
 import Head from 'next/head';
 import Link from 'next/link';
 
-import { Footer } from './Footer';
-import { Header } from './Header';
+import { Footer } from '../Footer';
+import { Header } from '../Header';
+
+import styles from './styles.module.scss';
 
 interface ProductChildProps {
     path: string;
@@ -29,13 +29,6 @@ interface ProductProps {
 export interface Props {
     products: ProductProps[];
 }
-
-const useStyles = createStyles((theme) => ({
-    wrapper: {
-        paddingTop: theme.spacing.xl * 4,
-        paddingBottom: theme.spacing.xl * 4,
-    },
-}));
 
 export function Product(props: ProductProps) {
     const theme = useMantineTheme();
@@ -64,7 +57,6 @@ export function Product(props: ProductProps) {
 }
 
 export const HomePage = (props: Props) => {
-    const { classes, theme } = useStyles();
 
     return (
         <>
@@ -73,11 +65,11 @@ export const HomePage = (props: Props) => {
             </Head>
             <Header />
             <main>
-                <Container className={classes.wrapper}>
+                <Container className={styles.wrapper}>
                     <SimpleGrid
                         mt={60}
                         cols={3}
-                        spacing={theme.spacing.xl * 2}
+                        spacing={64}
                         breakpoints={[
                             { maxWidth: 980, cols: 2, spacing: 'xl' },
                             { maxWidth: 755, cols: 1, spacing: 'xl' },

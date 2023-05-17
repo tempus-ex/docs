@@ -1,0 +1,10 @@
+@use '../../styles/spacing';
+
+.alert {
+    margin-bottom: spacing("md"),
+}
+
+.wrapper {
+    padding-top: calc(spacing("xl") * 4);
+    padding-bottom: calc(spacing("xl") * 4);
+}

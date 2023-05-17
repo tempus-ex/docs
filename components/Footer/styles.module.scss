@@ -18,42 +18,35 @@
 
   &__title {
     margin: 0;
-
-    @include above-breakpoint("md") {
-      flex-grow: 1;
-      max-width: 430px;
-    }
+    grid-area: title;
   }
 
   &__inner {
     margin: 0;
     max-width: breakpoint("xl");
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
+    display: grid;
+    grid-template-areas:
+      "title title"
+      "links contact";
+    row-gap: spacing("xl");
+    column-gap: spacing("lg");
 
     @include above-breakpoint("md") {
       margin: 0 auto;
-      flex-direction: row;
-      align-items: flex-start;
-      justify-content: center;
+    }
+
+    @include above-breakpoint("xl") {
+      grid-template-areas: "title links contact";
+      row-gap: 0;
     }
   }
 
   &__links {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-evenly;
-    flex-grow: 1;
-    width: 100%;
-    margin-top: spacing("xl");
+    grid-area: links;
+  }
 
-    @include above-breakpoint("md") {
-      width: inherit;
-      margin-top: 0;
-    }
+  &__contact {
+    grid-area: contact;
   }
 
   &__section {
@@ -61,7 +54,6 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    flex-grow: 1;
     margin-right: spacing("md");
 
     &-header {

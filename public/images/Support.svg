@@ -1,0 +1,13 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M38.504 97.233C17.94 85.361 10.895 59.067 22.767 38.503 34.64 17.94 60.933 10.896 81.497 22.768M38.503 97.233l-9.061 1.696m9.06-1.696-2.561-9.56m2.562 9.56c20.563 11.872 46.857 4.826 58.729-15.737s4.826-46.857-15.737-58.729m0 0 9.061-1.696m-9.06 1.696 2.561 9.56" stroke="#5B6771" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="85" cy="93" r="23.5" stroke="#5B6771"/>
+    <circle cx="84" cy="92" r="24" fill="#FDFDFD"/>
+    <circle cx="82" cy="90" r="24" fill="#00B2E3"/>
+    <circle cx="82" cy="82" r="6.2" stroke="#FDFDFD" stroke-width="3.6"/>
+    <path d="M94 104v-5.122c0-3.637-3.212-6.435-6.837-6.134C85.397 92.89 83.556 93 82 93s-3.397-.11-5.163-.256C73.212 92.444 70 95.24 70 98.878V104" stroke="#FDFDFD" stroke-width="3.6" stroke-linecap="round"/>
+    <circle cx="37" cy="30" r="23.5" stroke="#5B6771"/>
+    <circle cx="36" cy="29" r="24" fill="#FDFDFD"/>
+    <circle cx="34" cy="27" r="24" fill="#00B2E3"/>
+    <circle cx="34" cy="19" r="6.2" stroke="#FDFDFD" stroke-width="3.6"/>
+    <path d="M46 41v-5.122c0-3.637-3.212-6.435-6.837-6.134C37.397 29.89 35.556 30 34 30s-3.397-.11-5.163-.256C25.212 29.444 22 32.24 22 35.878V41" stroke="#FDFDFD" stroke-width="3.6" stroke-linecap="round"/>
+</svg>

@@ -9,7 +9,7 @@
 }
 
 .header {
-  margin: spacing("xl") spacing("xl") spacing("lg") spacing("xl");
+  margin: spacing("xl") spacing("xl") 0 spacing("xl");
   width: 100%;
   max-width: breakpoint("xl");
   @include above-breakpoint("xl") {
@@ -22,8 +22,8 @@
   border-image: 16
     repeating-linear-gradient(
       -45deg,
-      #eff0f1 0,
-      #eff0f1 1rem,
+      var(--border-color) 0,
+      var(--border-color) 1rem,
       transparent 0,
       transparent 2rem
     );
@@ -50,9 +50,9 @@
 
 .product {
   display: block;
-  border-left: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: -16px 16px 0 rgba(0, 0, 0, 0.1);
+  border-left: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: -16px 16px 0 var(--border-color);
   padding: spacing("lg");
   margin-bottom: spacing("xl");
 
@@ -65,7 +65,6 @@
   }
 
   &__blurb {
-    max-width: 586px;
   }
 
   &__link {

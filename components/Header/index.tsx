@@ -10,7 +10,7 @@ export const Header = () => {
           <img
             alt="Tempus Ex"
             className={styles["header__logo"]}
-            src={"images/FusionFeedLogo.svg"}
+            src={"/images/FusionFeedLogo.svg"}
           />
         </Link>
       </div>

@@ -60,16 +60,16 @@ describe('rest', () => {
         const allContent = await getAllContent();
         for (const content of Array.from(allContent.values())) {
             for (const rest of content.rest) {
-                const reqURL = new URL(publicRuntimeConfig.fusionFeedUrl+rest.url);
+                const reqURL = new URL(publicRuntimeConfig.fusionFeedUrl + rest.url);
                 const parts = reqURL.pathname.split('/');
                 const version = parts[1];
                 const path = '/' + parts.slice(2).join('/');
 
                 expect(version, `Invalid version in REST request "${rest.url}"`).toMatch(/v[12]/);
 
-				let schema = v2;
+                let schema = v2;
                 if (version === 'v1') {
-					schema = v1;
+                    schema = v1;
                 }
 
                 let found = false;
@@ -81,25 +81,25 @@ describe('rest', () => {
                         if (rest.method === 'POST') {
                             schema = pathSchema.post;
                         }
-						
-						// check to see that request contains all required parameters
-						for (const param of schema.parameters) {
-							if (param.in === 'query' && param.required && !reqURL.searchParams.has(param.name)) {
-								throw new Error(`Missing required parameter ${param.name} in REST request "${rest.url}"`);
-							}
-						}
 
-						// check to see that request contains no unknown parameters
-						for (const param of Array.from(reqURL.searchParams)) {
-							if (!schema.parameters.find(p => p.name === param[0])) {
-								throw new Error(`Unknown parameter ${param[0]} in REST request "${rest.url}"`);
-							}
-						}
+                        // check to see that request contains all required parameters
+                        for (const param of schema.parameters) {
+                            if (param.in === 'query' && param.required && !reqURL.searchParams.has(param.name)) {
+                                throw new Error(`Missing required parameter ${param.name} in REST request "${rest.url}"`);
+                            }
+                        }
+
+                        // check to see that request contains no unknown parameters
+                        for (const param of Array.from(reqURL.searchParams)) {
+                            if (!schema.parameters.find(p => p.name === param[0])) {
+                                throw new Error(`Unknown parameter ${param[0]} in REST request "${rest.url}"`);
+                            }
+                        }
 
                         break;
                     }
                 }
-				expect(found, `Invalid path in REST request "${rest.url}"`).toBeTruthy();
+                expect(found, `Invalid path in REST request "${rest.url}"`).toBeTruthy();
             }
         }
     });

@@ -62,9 +62,12 @@
   }
 
   &__title {
+    margin-bottom: spacing("lg");
+    font-style: italic;
   }
 
   &__blurb {
+    margin-bottom: spacing("xl");
   }
 
   &__link {

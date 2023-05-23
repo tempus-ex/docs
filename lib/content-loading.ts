@@ -8,6 +8,9 @@ import remarkGfm from 'remark-gfm';
 import { visit } from 'unist-util-visit';
 import type { Root } from 'mdast';
 
+import { lowlight } from 'lowlight/lib/core.js';
+import http from 'highlight.js/lib/languages/http';
+
 import { canonicalContentPath, Content, Frontmatter, GraphQL, REST, TableOfContents, TableOfContentsPage } from './content';
 
 async function* walk(dir: string): AsyncGenerator<string> {
@@ -37,8 +40,10 @@ export async function getAllContent(): Promise<Map<string, Content>> {
         const contentPathBase = isIndex ? contentPath : contentPath.slice(0, contentPath.lastIndexOf('/'));
 
         const graphql: GraphQL[] = [];
-        const rest: REST[] = [];
         const links = new Set<string>();
+
+        lowlight.registerLanguage('http', http);
+        const rest: REST[] = [];
 
         const markdownLinkPlugin = () => {
             return (tree: Root) => {
@@ -78,18 +83,21 @@ export async function getAllContent(): Promise<Map<string, Content>> {
                                         value: `This GraphQL query can be executed against /${version}/graphql`,
                                     }],
                                 };
-                            }
-
-                            const req = node.value.split(' ');
-                            if (req[0] !== 'GET' && req[0] !== 'POST') {
-                                throw new Error("Only GET and POST requests are supported.");
-                            }
-                            rest.push(
-                                {
-                                    method: req[0],
-                                    url: req[1],
+                            } else if (node.lang === 'http' || node.lang === 'https') {
+                                const value = node.value;
+                                const req = value.split('\n')[0].split(' ');
+                                const body = value.split('\n').slice(1).join('\n').replace(/\n/g, '');
+                                if (req[0] !== 'GET' && req[0] !== 'POST') {
+                                    throw new Error("Only GET and POST requests are supported.");
                                 }
-                            );
+                                rest.push(
+                                    {
+                                        method: req[0],
+                                        url: req[1],
+                                        body: body,
+                                    }
+                                );
+                            }
 
                             return null;
                         },

@@ -63,7 +63,7 @@ describe('rest', () => {
                 const reqURL = new URL(publicRuntimeConfig.fusionFeedUrl + rest.url);
                 const parts = reqURL.pathname.split('/');
                 const version = parts[1];
-                const path = '/' + parts.slice(2).join('/');
+                const path = decodeURI('/' + parts.slice(2).join('/'));
 
                 expect(version, `Invalid version in REST request "${rest.url}"`).toMatch(/v[12]/);
 
@@ -93,6 +93,15 @@ describe('rest', () => {
                         for (const param of Array.from(reqURL.searchParams)) {
                             if (!schema.parameters.find(p => p.name === param[0])) {
                                 throw new Error(`Unknown parameter ${param[0]} in REST request "${rest.url}"`);
+                            }
+                        }
+
+                        // check that the body is valid JSON
+                        if (rest.body) {
+                            try {
+                                let json = JSON.parse(rest.body);
+                            } catch (e) {
+                                throw new Error(`Invalid JSON body in REST request "${rest.url}": ${e}`);
                             }
                         }
 

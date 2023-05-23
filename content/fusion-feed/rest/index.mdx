@@ -2,8 +2,23 @@
 title: REST API
 ---
 
-Example query:
+# Example REST API Calls
 
-```
+## All NFL Games
+
+```http
 GET /v2/games?filter.league.code=NFL
+```
+
+## Video MP4 Transcode
+
+```http
+POST /v2/av-streams/{streamId}/transcode.mp4
+{
+  "encoding": {
+    "audio": {
+      "copy": true
+    }
+  }
+}
 ```

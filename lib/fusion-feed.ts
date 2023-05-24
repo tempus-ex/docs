@@ -40,3 +40,38 @@ export async function getGraphQLSchema(version: 'v1' | 'v2', authorization: stri
     }
     return buildClientSchema(result.data);
 }
+
+export interface RESTPathParameter {
+    type: string;
+    description: string;
+    name: string;
+    in: string;
+    required: boolean;
+}
+
+export interface RESTPath {
+    get: {
+        parameters: RESTPathParameter[];
+    }
+    post: {
+        parameters: RESTPathParameter[];
+    }
+}
+
+export interface RESTSchema {
+    paths: Record<string, RESTPath>;
+}
+
+export async function getRESTSchema(version: 'v1' | 'v2', authorization: string): Promise<RESTSchema> {
+    const url = `${publicRuntimeConfig.fusionFeedUrl}/${version}/openapi.json`;
+    const resp = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': authorization,
+        },
+    });
+    if (resp.status !== 200) {
+        throw new Error(`Unexpected Fusion Feed response code: ${resp.status}`);
+    }
+    return await resp.json();
+}

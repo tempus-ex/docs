@@ -41,6 +41,18 @@ query Foo($id: Id!) {
 
 This will allow the example to be automatically validated by tests and gain additional UI functionality.
 
+### REST Examples
+
+To include a GraphQL example in the documentation, you can use a standard Markdown code block like so:
+
+````markdown
+```http
+GET /v2/games?filter.league.code=NFL
+```
+````
+
+This will allow the example to be automatically validated by tests and gain additional UI functionality.
+
 ## Testing
 
 To run the tests, use `npm run test`.

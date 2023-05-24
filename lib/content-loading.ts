@@ -1,6 +1,5 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import rehypeHighlight from 'rehype-highlight';
 import remarkCodeExtra from 'remark-code-extra';
@@ -9,7 +8,10 @@ import remarkGfm from 'remark-gfm';
 import { visit } from 'unist-util-visit';
 import type { Root } from 'mdast';
 
-import { canonicalContentPath, Content, Frontmatter, GraphQL, TableOfContents, TableOfContentsPage } from './content';
+import { lowlight } from 'lowlight/lib/core.js';
+import http from 'highlight.js/lib/languages/http';
+
+import { canonicalContentPath, Content, Frontmatter, GraphQL, REST, TableOfContents, TableOfContentsPage } from './content';
 
 async function* walk(dir: string): AsyncGenerator<string> {
     for await (const d of await fs.opendir(dir)) {
@@ -40,6 +42,9 @@ export async function getAllContent(): Promise<Map<string, Content>> {
         const graphql: GraphQL[] = [];
         const links = new Set<string>();
 
+        lowlight.registerLanguage('http', http);
+        const rest: REST[] = [];
+
         const markdownLinkPlugin = () => {
             return (tree: Root) => {
                 visit(tree, (node) => {
@@ -60,26 +65,41 @@ export async function getAllContent(): Promise<Map<string, Content>> {
                     remarkGfm,
                     [remarkCodeExtra, {
                         transform: (node: MDASTCode) => {
-                            if (node.lang !== 'gql' && node.lang !== 'graphql') {
-                                return null;
-                            }
-                            if (node.meta !== 'v1' && node.meta !== 'v2') {
-                                throw new Error('GraphQL code must be marked as V1 or V2.');
+                            if (node.lang === 'gql' || node.lang === 'graphql') {
+                                if (node.meta !== 'v1' && node.meta !== 'v2') {
+                                    throw new Error('GraphQL code must be marked as V1 or V2.');
+                                }
+
+                                const version = node.meta;
+                                graphql.push({
+                                    document: node.value,
+                                    version,
+                                });
+
+                                return {
+                                    after: [{
+                                        type: 'text',
+                                        // TODO: Add a "run" button? Or example output?
+                                        value: `This GraphQL query can be executed against /${version}/graphql`,
+                                    }],
+                                };
+                            } else if (node.lang === 'http' || node.lang === 'https') {
+                                const value = node.value;
+                                const req = value.split('\n')[0].split(' ');
+                                const body = value.split('\n').slice(1).join('\n').replace(/\n/g, '');
+                                if (req[0] !== 'GET' && req[0] !== 'POST') {
+                                    throw new Error("Only GET and POST requests are supported.");
+                                }
+                                rest.push(
+                                    {
+                                        method: req[0],
+                                        url: req[1],
+                                        body: body,
+                                    }
+                                );
                             }
 
-                            const version = node.meta;
-                            graphql.push({
-                                document: node.value,
-                                version,
-                            });
-
-                            return {
-                                after: [{
-                                    type: 'text',
-                                    // TODO: Add a "run" button? Or example output?
-                                    value: `This GraphQL query can be executed against /${version}/graphql`,
-                                }],
-                            };
+                            return null;
                         },
                     }],
                     [markdownLinkPlugin, {}]
@@ -92,6 +112,7 @@ export async function getAllContent(): Promise<Map<string, Content>> {
         ret.set(contentPath, {
             frontmatter: source.frontmatter as unknown as Frontmatter,
             graphql,
+            rest,
             links,
             source,
             path: contentPath,

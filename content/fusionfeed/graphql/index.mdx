@@ -1,0 +1,44 @@
+---
+title: GraphQL
+children:
+  - executing-queries
+  - concepts
+  - video
+  - explorer
+---
+# GraphQL
+
+The preferred method of accessing FusionFeed is through its [GraphQL](https://graphql.org) API. GraphQL provides makes it possible to efficiently access all the data you need while minimizing round trips to FusionFeed.
+
+For example, to fetch the 2022 regular season games for the Pac-12 and the abbreviations for their teams, you can use the following query:
+
+```gql v2
+{
+  ncaa {
+    football(conference: PAC12) {
+      schedule(season: 2022, type: REGULAR) {
+        games {
+          id
+          week
+          awayTeamEdge {
+            node {
+              abbreviation
+            }
+          }
+          homeTeamEdge {
+            node {
+              abbreviation
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+# Next Steps
+
+- [Learn more about GraphQL.](https://graphql.org/learn/)
+- [Executing Queries](executing-queries)
+- [GraphQL Explorer](explorer)

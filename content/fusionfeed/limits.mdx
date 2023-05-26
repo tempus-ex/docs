@@ -1,0 +1,12 @@
+---
+title: Limits
+---
+# Limits
+
+In order to ensure a high quality of service, limits such as rate limits and allowlists may be placed on your access.
+
+When your limits are reached, the API will respond with an approriate error. Depending on the context and type of limit, this may be an HTTP 429 "Too Many Requests" error or it may be a GraphQL error. In either case, when errors are encountered, clients should implement exponential backoff in hopes of eventually finding an acceptable rate.
+
+For HTTP requests, you can quantify the consumption of the applicable rate limits via the `txm-limit-consumption` response header.
+
+If you believe your limits are too low and would like to have them increased, please contact [support](/support).

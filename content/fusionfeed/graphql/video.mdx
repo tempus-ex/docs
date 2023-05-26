@@ -1,0 +1,72 @@
+---
+title: Video
+---
+# Video
+
+## HLS Streams
+
+Video is made available primarily via HLS. You can get the available streams and their HLS manifest URLs via GraphQL:
+
+```graphql v2
+query VideoStreamExample {
+  node(id: "CA~MjAyMS9SRUcvMS81ODUwMw") {
+    ... on NFLGame {
+      avStreamsConnection(first: 100) {
+        edges {
+          node {
+            id
+            name
+            hlsManifestURL
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+The HLS playlists include precise timestamps via `#EXT-X-PROGRAM-DATE-TIME`. This can be used to synchronize data with video.
+
+### Clips
+
+Times and durations can be given to the `hlsManifestURL` field to get a URL for a clip:
+
+```graphql v2
+query VideoClipExample {
+  node(id: "CA~MjAyMS9SRUcvMS81ODUwMw") {
+    ... on NFLGame {
+      avStreamsConnection(first: 100) {
+        edges {
+          node {
+            id
+            name
+            hlsManifestURL(time: "2021-09-10T00:24:10Z", durationSeconds: 30)
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Downloads
+
+Download URLs for video can be obtained in the same way as HLS URLs:
+
+```graphql v2
+query VideoDownloadExample {
+  node(id: "CA~MjAyMS9SRUcvMS81ODUwMw") {
+    ... on NFLGame {
+      avStreamsConnection(first: 100) {
+        edges {
+          node {
+            id
+            name
+            downloadURL(time: "2021-09-10T00:24:10Z", durationSeconds: 30)
+          }
+        }
+      }
+    }
+  }
+}
+```

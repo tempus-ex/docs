@@ -30,7 +30,7 @@ export async function getGraphQLSchema(version: 'v1' | 'v2', authorization: stri
         body: getIntrospectionQuery(),
     });
     if (resp.status !== 200) {
-        throw new Error(`Unexpected Fusion Feed response code: ${resp.status}`);
+        throw new Error(`Unexpected response code: ${resp.status}`);
     }
     const result = await resp.json() as unknown as ExecutionResult<IntrospectionQuery>;
     if (result.errors && result.errors.length > 0) {
@@ -71,7 +71,7 @@ export async function getRESTSchema(version: 'v1' | 'v2', authorization: string)
         },
     });
     if (resp.status !== 200) {
-        throw new Error(`Unexpected Fusion Feed response code: ${resp.status}`);
+        throw new Error(`Unexpected response code: ${resp.status}`);
     }
     return await resp.json();
 }

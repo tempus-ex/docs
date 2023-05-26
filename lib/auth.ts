@@ -1,7 +1,7 @@
 import type { GetServerSidePropsContext, GetServerSidePropsResult, PreviewData } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 
-import { validateFusionFeedToken } from './fusion-feed';
+import { validateFusionFeedToken } from './fusionfeed';
 
 export function withAuth<Params, Props>(
     f: (ctx: GetServerSidePropsContext<Params & ParsedUrlQuery>) => Promise<GetServerSidePropsResult<Props>>

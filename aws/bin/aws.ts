@@ -1,10 +1,18 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { AwsStack } from '../lib/docs-stack';
+import { DocsStack } from '../lib/docs-stack';
 
 const app = new cdk.App();
-new AwsStack(app, 'AwsStack', {
+new DocsStack(app, 'DocsStack', {
+  env: {
+    account: '189912143729',
+    region: 'us-east-1',
+  },
+  domainName: 'tempus-ex.com',
+  subDomainName: 'docs',
+  // certificateArn: 'arn:aws:acm:us-east-1:189912143729:certificate/217bc40a-88c9-437b-adb7-394bca6d31f1'
+  certificateArn: 'arn:aws:acm:us-east-1:189912143729:certificate/217bc40a-88c9-437b-adb7-394bca6d31f1'
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */

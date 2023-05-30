@@ -74,3 +74,38 @@
   text-decoration: none;
   margin-left: spacing("sm");
 }
+
+.footer {
+  width: 100%;
+  background-color: #111;
+  padding: spacing("lg") spacing("md") spacing("lg") spacing("md");
+  padding-top: spacing("xl");
+  color: #dddfe1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__links {
+    width: 100%;
+    max-width: breakpoint("xs");
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  &__link {
+    font-weight: 700;
+    color: #dddfe1;
+
+    &:hover {
+      color: darken(#dddfe1, 10%);
+    }
+  }
+
+  &__patent {
+    font-size: 0.777rem;
+    text-align: center;
+    margin: spacing("md") auto;
+    color: #9e9e9e;
+  }
+}

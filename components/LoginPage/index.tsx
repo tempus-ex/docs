@@ -5,10 +5,10 @@ import clsx from "clsx";
 import Link from "next/link";
 import Image from "next/image";
 
-import { Footer } from "../Footer";
 import { validateFusionFeedToken } from "../../lib/fusion-feed";
 import LogoBlack from "../../public/images/logo-black.svg";
 import styles from "./styles.module.scss";
+import { LoginFooter } from "./LoginFooter";
 
 export const LoginPage = () => {
   const [isBusy, setIsBusy] = useState(false);
@@ -86,7 +86,7 @@ export const LoginPage = () => {
           </p>
         </div>
       </main>
-      <Footer />
+      <LoginFooter />
     </>
   );
 };

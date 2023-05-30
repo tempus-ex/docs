@@ -23,6 +23,10 @@
 
 .key-input {
   margin-bottom: spacing("lg");
+  border-radius: 16px;
+  border: solid 2px #bcc1c5;
+  padding: spacing("md");
+  font-size: 1rem;
 }
 
 .wrapper {
@@ -40,6 +44,8 @@
 
 .form {
   margin-bottom: spacing("lg");
+  display: flex;
+  flex-direction: column;
 }
 
 .button {
@@ -49,7 +55,6 @@
   color: #fff;
   border-style: none;
   cursor: pointer;
-  font-family: "Barlow Semi Condensed", sans-serif;
   font-size: 1rem;
 }
 

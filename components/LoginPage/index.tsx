@@ -58,7 +58,8 @@ export const LoginPage = () => {
             }}
             className={styles.form}
           >
-            <PasswordInput
+            <input
+            type="password"
               disabled={isBusy}
               className={styles['key-input']}
               onChange={(e) => setToken(e.currentTarget.value)}

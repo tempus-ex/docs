@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { Alert, PasswordInput } from "@mantine/core";
+import { Alert } from "@mantine/core";
 import Head from "next/head";
+import clsx from "clsx";
+import Link from "next/link";
+import Image from "next/image";
 
 import { Footer } from "../Footer";
-import { Header } from "../Header";
 import { validateFusionFeedToken } from "../../lib/fusion-feed";
-
+import LogoBlack from "../../public/images/logo-black.svg";
 import styles from "./styles.module.scss";
-import Link from "next/link";
 
 export const LoginPage = () => {
   const [isBusy, setIsBusy] = useState(false);
@@ -42,8 +43,8 @@ export const LoginPage = () => {
       <Head>
         <title>Tempus Ex Documentation</title>
       </Head>
-      <Header />
       <main className={styles.main}>
+        <Image className={styles.logo} src={LogoBlack} height="84" width="205" alt="FusionFeed logo"></Image>
         <div className={styles.wrapper}>
           <h4 className={styles.title}>Sign In</h4>
           {errorMessage && (
@@ -61,7 +62,10 @@ export const LoginPage = () => {
             <input
             type="password"
               disabled={isBusy}
-              className={styles['key-input']}
+              className={clsx({
+                [styles['key-input']]: true,
+                [styles['key-input--error']]: errorMessage
+              })}
               onChange={(e) => setToken(e.currentTarget.value)}
               placeholder="Enter your API Key"
               value={token}

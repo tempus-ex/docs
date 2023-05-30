@@ -11,8 +11,14 @@
   padding: spacing("md");
 }
 
+.logo {
+  margin: spacing("xl") auto;
+}
+
 .alert {
   margin-bottom: spacing("md");
+  background-color: #fdeaf2;
+  font-weight: 700;
 }
 
 .title {
@@ -27,11 +33,16 @@
   border: solid 2px #bcc1c5;
   padding: spacing("md");
   font-size: 1rem;
+
+  &--error {
+    background-color: #fdeaf2;
+    border-color: #ed2e7e;
+  }
 }
 
 .wrapper {
   background-color: var(--background-color);
-  margin: calc(spacing("lg") * 2) spacing("md") calc(spacing("xl") * 4);
+  margin: 0 spacing("md") calc(spacing("xl") * 4);
   border-left: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
   box-shadow: -20px 20px 2px 0 rgba(0, 0, 0, 0.15),

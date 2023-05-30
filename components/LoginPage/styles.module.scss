@@ -1,10 +1,60 @@
-@use '../../styles/spacing' as *;
+@use "../../styles/breakpoints" as *;
+@use "../../styles/spacing" as *;
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: rgb(0, 178, 227);
+  padding: spacing("md");
+}
 
 .alert {
-    margin-bottom: spacing("md"),
+  margin-bottom: spacing("md");
+}
+
+.title {
+  font-style: italic;
+  margin: 0;
+  margin-bottom: spacing("md");
+}
+
+.key-input {
+  margin-bottom: spacing("lg");
 }
 
 .wrapper {
-    padding-top: calc(spacing("xl") * 4);
-    padding-bottom: calc(spacing("xl") * 4);
+  background-color: var(--background-color);
+  margin: calc(spacing("lg") * 2) spacing("md") calc(spacing("xl") * 4);
+  border-left: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: -20px 20px 2px 0 rgba(0, 0, 0, 0.15),
+    inset 2px -2px 0 0 rgba(0, 0, 0, 0.05);
+  padding: spacing("lg");
+  text-align: center;
+  width: breakpoint("sm");
+  max-width: 100%;
+}
+
+.form {
+  margin-bottom: spacing("lg");
+}
+
+.button {
+  background-color: #006bef;
+  border-radius: 4px;
+  padding: spacing("md");
+  color: #fff;
+  border-style: none;
+  cursor: pointer;
+  font-family: "Barlow Semi Condensed", sans-serif;
+  font-size: 1rem;
+}
+
+.contact__link {
+  color: #006bef;
+  text-decoration: none;
+  margin-left: spacing("sm");
 }

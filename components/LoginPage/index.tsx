@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, Container, PasswordInput } from "@mantine/core";
+import { Alert, PasswordInput } from "@mantine/core";
 import Head from "next/head";
 
 import { Footer } from "../Footer";
@@ -7,6 +7,7 @@ import { Header } from "../Header";
 import { validateFusionFeedToken } from "../../lib/fusion-feed";
 
 import styles from "./styles.module.scss";
+import Link from "next/link";
 
 export const LoginPage = () => {
   const [isBusy, setIsBusy] = useState(false);
@@ -42,8 +43,9 @@ export const LoginPage = () => {
         <title>Tempus Ex Documentation</title>
       </Head>
       <Header />
-      <main>
-        <Container className={styles.wrapper}>
+      <main className={styles.main}>
+        <div className={styles.wrapper}>
+          <h4 className={styles.title}>Sign In</h4>
           {errorMessage && (
             <Alert className={styles.alert} color="red">
               {errorMessage}
@@ -54,15 +56,30 @@ export const LoginPage = () => {
               e.preventDefault();
               login();
             }}
+            className={styles.form}
           >
             <PasswordInput
               disabled={isBusy}
+              className={styles['key-input']}
               onChange={(e) => setToken(e.currentTarget.value)}
-              placeholder="Fusion Feed Token"
+              placeholder="Enter your API Key"
               value={token}
             />
+
+            <button type="submit" className={styles.button}>
+              Sign In
+            </button>
           </form>
-        </Container>
+          <p className={styles["contact"]}>
+            We&apos;d love to help you get started with our API!
+            <Link
+              className={styles["contact__link"]}
+              href={`contact@tempus-ex.com`}
+            >
+              Contact Us
+            </Link>
+          </p>
+        </div>
       </main>
       <Footer />
     </>

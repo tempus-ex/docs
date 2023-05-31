@@ -16,9 +16,11 @@ export class DocsStack extends cdk.Stack {
 
     // defines an AWS Lambda resource
     const hello = new lambda.Function(this, 'HelloHandler', {
-      runtime: lambda.Runtime.NODEJS_14_X,    // execution environment
+      // runtime: lambda.Runtime.NODEJS_14_X,    // execution environment
+      runtime: lambda.Runtime.FROM_IMAGE,    // execution environment
       // code: lambda.Code.fromAsset('lambda'),  // code loaded from "lambda" directory
-      code: lambda.Code.fromAsset('../.next'),  // code loaded from "lambda" directory
+      // code: lambda.Code.fromAsset('../.next'),  // code loaded from "lambda" directory
+      code: lambda.Code.fromDockerBuild("../.."),  // code loaded from "lambda" directory
       handler: 'hello.handler'                // file is "hello", function is "handler"
     });
 

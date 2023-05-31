@@ -1,6 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigw from 'aws-cdk-lib/aws-apigateway';
+import * as path from 'path';
 
 interface DocsProps extends cdk.StackProps {
   domainName: string
@@ -15,14 +16,21 @@ export class DocsStack extends cdk.Stack {
     super(scope, id, props);
 
     // defines an AWS Lambda resource
-    const hello = new lambda.Function(this, 'HelloHandler', {
-      // runtime: lambda.Runtime.NODEJS_14_X,    // execution environment
-      runtime: lambda.Runtime.FROM_IMAGE,    // execution environment
-      // code: lambda.Code.fromAsset('lambda'),  // code loaded from "lambda" directory
-      // code: lambda.Code.fromAsset('../.next'),  // code loaded from "lambda" directory
-      code: lambda.Code.fromDockerBuild("../.."),  // code loaded from "lambda" directory
-      handler: 'hello.handler'                // file is "hello", function is "handler"
+    // const hello = new lambda.Function(this, 'HelloHandler', {
+    //   // runtime: lambda.Runtime.NODEJS_14_X,    // execution environment
+    //   runtime: lambda.Runtime.FROM_IMAGE,    // execution environment
+    //   // code: lambda.Code.fromAsset('lambda'),  // code loaded from "lambda" directory
+    //   // code: lambda.Code.fromAsset('../.next'),  // code loaded from "lambda" directory
+    //   // code: lambda.Code.fromDockerBuild(".."),  // code loaded from "lambda" directory
+    //   code: lambda.Code.fromDockerBuild("..", {imagePath: "/app"}),  // code loaded from "lambda" directory
+    //   // handler: 'hello.handler'                // file is "hello", function is "handler"
+    //   handler: lambda.Handler.FROM_IMAGE                // file is "hello", function is "handler"
+    // });
+
+    const hello = new lambda.DockerImageFunction(this, 'HelloHandler', {
+      code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../..')),
     });
+
 
     // defines an API Gateway REST API resource backed by our "hello" function.
     new apigw.LambdaRestApi(this, 'Endpoint', {

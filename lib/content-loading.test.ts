@@ -1,7 +1,7 @@
 import { parse, validate } from 'graphql';
 import getConfig from 'next/config';
 import { getAllContent } from './content-loading';
-import { getGraphQLSchema, getRESTSchema } from './fusion-feed';
+import { getGraphQLSchema, getRESTSchema } from './fusionfeed';
 
 const { publicRuntimeConfig } = getConfig();
 

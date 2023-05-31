@@ -6,7 +6,7 @@ export default GraphQLExplorerPage;
 
 export const getServerSideProps = withAuth<{}, Props>(async function ({ params }) {
     const allContent = await getAllContent();
-    const content = allContent.get(`/fusion-feed/graphql/explorer`);
+    const content = allContent.get(`/fusionfeed/graphql/explorer`);
     if (!content) {
         return { notFound: true };
     }

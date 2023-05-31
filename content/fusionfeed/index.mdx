@@ -1,0 +1,28 @@
+---
+title: FusionFeed
+children:
+  - authentication
+  - limits
+  - fql
+  - graphql
+  - rest
+---
+# Overview
+
+FusionFeed aggregates data and media from several sources, bringing it together under one API.
+
+It can provide many types of data, including the following:
+
+* **Schedules** – The time of past and upcoming events.
+* **Rosters** – Team rosters on a game-by-game basis.
+* **Official Stats** – Official stats are available the moment the stats crew submits them, typically at the end of each play.
+* **Telemetry** – Low level tracking data is available for players, officials, balls, and objects.
+* **Video** – Live video feeds and VODs are made available for cable-suspended cameras, network cameras, "dirty" program feeds, and our own cameras.
+* **Automated Stats** – Our ML algorithms analyze real-time data from the game to produce low latency statistics, such as the yardage gained for a play while it's still ongoing. It can also provide details that entry crews don't provide, such as precise times and locations of play events (e.g. the time the ball was thrown).
+* **FusionCams** – Our cameras capture everything, even off-the-field. We can use this to create virtual cameras that follow one or more specific players on-demand. For example, if you want a video feed that isolates HOME #10 throughout the game, even when on the sideline, Fusion Feed can provide it.
+
+## Versioning
+
+All API endpoints are prefixed with a major version number. The current major API version is V2. Thus all of the current APIs are prefixed with <code>{config.fusionFeedUrl}/v2/</code>.
+
+Tempus Ex is committed to never making breaking changes for any given major version number. However, Tempus Ex will from time to time deprecate APIs. When this happens, those deprecated APIs will continue to work, but it is highly recommended that you upgrade to the suggested alternatives as soon as possible.

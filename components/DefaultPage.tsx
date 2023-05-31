@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, createStyles, Navbar, Title } from '@mantine/core';
+import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
@@ -8,6 +9,8 @@ import { Footer } from './Footer';
 import { Header } from './Header';
 
 import { TableOfContents } from '../lib/content';
+
+const { publicRuntimeConfig } = getConfig();
 
 export interface Props {
     path: string;
@@ -52,6 +55,10 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
+const scope = {
+    config: publicRuntimeConfig,
+};
+
 export const DefaultPage = (props: Props) => {
     const { classes } = useStyles();
 
@@ -84,7 +91,7 @@ export const DefaultPage = (props: Props) => {
                 </Navbar>
                 <main>
                     <Container>
-                        <MDXRemote {...props.source} />
+                        <MDXRemote {...props.source} scope={scope} />
                     </Container>
                 </main>
             </div>

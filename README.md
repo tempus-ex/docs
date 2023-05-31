@@ -27,7 +27,7 @@ For most pages, all that's needed is to add an MDX file to the content directory
 
 ### GraphQL Examples
 
-To include a GraphQL example in the documentation, you can use a standard Markdown code block, but you must include a Fusion Feed version in the metadata like so:
+To include a GraphQL example in the documentation, you can use a standard Markdown code block, but you must include a FusionFeed version in the metadata like so:
 
 ````markdown
 ```gql v2
@@ -57,7 +57,7 @@ This will allow the example to be automatically validated by tests and gain addi
 
 To run the tests, use `npm run test`.
 
-Some tests require interaction with Fusion Feed and will fail unless you define the `FUSION_FEED_AUTHORIZATION` environment variable with the value of the Authorization header to be used:
+Some tests require interaction with FusionFeed and will fail unless you define the `FUSION_FEED_AUTHORIZATION` environment variable with the value of the Authorization header to be used:
 
 ```bash
 FUSION_FEED_AUTHORIZATION="token $MY_FUSION_FEED_TOKEN" npm run test

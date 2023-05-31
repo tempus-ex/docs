@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "@graphiql/react";
 import { createGraphiQLFetcher, Fetcher } from "@graphiql/toolkit";
 import GraphiQL from "graphiql";
@@ -12,6 +12,7 @@ import "node_modules/graphiql/graphiql.css";
 
 import { Footer } from "../Footer";
 import { Header } from "../Header";
+import { useDocsTheme } from "../Theme";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -19,23 +20,16 @@ export interface Props {
   source: MDXRemoteSerializeResult;
 }
 
-const ThemeSetter = () => {
-  const { theme, setTheme } = useTheme();
-  const checkTheme = useCallback(() => {
-    if (theme !== "light") {
-      setTheme("light");
-    }
-  }, [theme, setTheme]);
-  useEffect(() => {
-    checkTheme();
-  }, [checkTheme]);
-  return null;
-};
-
-export const GraphQLExplorerPage = (props: Props) => {
+export const GraphQLExplorerPage = ({ source: { frontmatter } }: Props) => {
   const [fetcher, setFetcher] = useState<Fetcher | null>(null);
+  const { setTheme } = useTheme();
+  const { theme: docsTheme } = useDocsTheme();
 
-  const frontmatter = props.source.frontmatter;
+  useEffect(() => {
+    if (fetcher) {
+      setTheme(docsTheme);
+    }
+  }, [docsTheme, fetcher, setTheme]);
 
   useEffect(() => {
     const url = publicRuntimeConfig.fusionFeedUrl + "/v2/graphql";
@@ -57,12 +51,9 @@ export const GraphQLExplorerPage = (props: Props) => {
       </Head>
       <Header />
       <main className={styles.main}>
-        {fetcher && (
-          <>
-            <ThemeSetter />
-            <GraphiQL fetcher={fetcher} />
-          </>
-        )}
+        <div className={styles.wrapper}>
+          {fetcher && <GraphiQL fetcher={fetcher} />}
+        </div>
       </main>
       <Footer />
     </>

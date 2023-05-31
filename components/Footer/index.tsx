@@ -5,10 +5,17 @@ import Image from "next/image";
 
 import github from "../../public/images/github.svg";
 import twitter from "../../public/images/twitter.svg";
+import { useDocsTheme } from "../Theme";
 
 export const Footer = () => {
+  const { theme } = useDocsTheme();
   return (
-    <footer className={styles.footer}>
+    <footer
+      className={clsx({
+        [styles.footer]: true,
+        [styles["footer--dark-mode"]]: theme === "dark",
+      })}
+    >
       <div className={styles["footer__inner"]}>
         <h3 className={styles["footer__title"]}>Fusion Feed API</h3>
         <div

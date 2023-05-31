@@ -2,12 +2,14 @@ import { useState } from "react";
 import { Alert } from "@mantine/core";
 import Link from "next/link";
 import clsx from "clsx";
+import cookie from "js-cookie";
 
 import { validateFusionFeedToken } from "../../lib/fusion-feed";
 import styles from "./styles.module.scss";
 
 export const LoginForm = () => {
   const [isBusy, setIsBusy] = useState(false);
+  const [remember, setRemember] = useState(true);
   const [token, setToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -18,7 +20,9 @@ export const LoginForm = () => {
     validateFusionFeedToken(token)
       .then((ok) => {
         if (ok) {
-          document.cookie = "fftoken=" + token;
+          cookie.set("fftoken", token, {
+            expires: remember ? undefined : 1,
+          });
           const destination = new URLSearchParams(
             window.location.hash.slice(1)
           ).get("destination");
@@ -36,9 +40,9 @@ export const LoginForm = () => {
 
   return (
     <>
-      <h4 className={styles['form__title']}>Sign In</h4>
+      <h4 className={styles["form__title"]}>Sign In</h4>
       {errorMessage && (
-        <Alert className={styles['form__alert']} color="red">
+        <Alert className={styles["form__alert"]} color="red">
           {errorMessage}
         </Alert>
       )}
@@ -61,6 +65,17 @@ export const LoginForm = () => {
           placeholder="Enter your API Key"
           value={token}
         />
+
+        <label className={styles['form__remember']}>
+          <input
+            type="checkbox"
+            checked={remember}
+            onChange={(e) => {
+              setRemember(e.target.checked);
+            }}
+          />
+          {`Remember Me`}
+        </label>
 
         <button type="submit" className={styles.button}>
           Sign In

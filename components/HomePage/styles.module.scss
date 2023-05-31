@@ -10,10 +10,11 @@
 
 .header {
   margin: spacing("xl") spacing("xl") 0 spacing("xl");
-  width: 100%;
   max-width: breakpoint("xl");
   @include above-breakpoint("xl") {
+    width: breakpoint("xl");
     margin: spacing("xl") auto spacing("lg");
+    padding-left: spacing("xl");
   }
 }
 

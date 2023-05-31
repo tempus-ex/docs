@@ -56,7 +56,6 @@
   }
 
   &__key-input {
-    margin-bottom: spacing("lg");
     border-radius: 16px;
     border: solid 2px #bcc1c5;
     padding: spacing("md");
@@ -66,6 +65,12 @@
       background-color: #fdeaf2;
       border-color: #ed2e7e;
     }
+  }
+
+  &__remember {
+    width: 100%;
+    text-align: left;
+    margin: spacing("lg") 0;
   }
 
   &__contact-link {

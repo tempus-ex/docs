@@ -13,9 +13,10 @@ export const LoginFooter = () => {
         </Link>
         <Link
           className={styles["footer__link"]}
-          href="https://tempus-ex.com/"
+          href="./license-agreement.pdf"
+          target="blank"
         >
-          Terms & Privacy {/* TODO: get updated link */}
+          Terms & Privacy
         </Link>
         <Link
           className={styles["footer__link"]}

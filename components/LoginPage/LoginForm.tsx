@@ -96,7 +96,7 @@ export const LoginForm = ({ setLoginState }: LoginFormProps) => {
         We&apos;d love to help you get started with our API!
         <Link
           className={styles["form__contact-link"]}
-          href={`contact@tempus-ex.com`}
+          href={`mailto:contact@tempus-ex.com`}
         >
           Contact Us
         </Link>

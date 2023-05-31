@@ -1,9 +1,7 @@
 import clsx from "clsx";
 import cookie from "js-cookie";
 import { useRouter } from "next/router";
-
 import styles from "./styles.module.scss";
-import { useRef } from "react";
 
 export type LoginAgreementProps = {
   setLoginState: (formState: "login" | "agreement") => void;

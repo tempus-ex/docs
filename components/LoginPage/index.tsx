@@ -5,8 +5,11 @@ import LogoBlack from "../../public/images/logo-black.svg";
 import styles from "./styles.module.scss";
 import { LoginFooter } from "./LoginFooter";
 import { LoginForm } from "./LoginForm";
+import { useState } from "react";
+import { LoginAgreement } from "./LoginAgreement";
 
 export const LoginPage = () => {
+  const [loginState, setLoginState] = useState<'login' | 'agreement'>('login');
 
   return (
     <>
@@ -16,7 +19,8 @@ export const LoginPage = () => {
       <main className={styles.main}>
         <Image priority className={styles.logo} src={LogoBlack} height="84" width="205" alt="FusionFeed logo"></Image>
         <div className={styles.wrapper}>
-          <LoginForm />
+        {loginState === 'login' && <LoginForm setLoginState={setLoginState} />}
+        {loginState === 'agreement' && <LoginAgreement setLoginState={setLoginState} />}
         </div>
       </main>
       <LoginFooter />

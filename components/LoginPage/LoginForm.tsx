@@ -6,12 +6,18 @@ import cookie from "js-cookie";
 
 import { validateFusionFeedToken } from "../../lib/fusion-feed";
 import styles from "./styles.module.scss";
+import { useRouter } from "next/router";
 
-export const LoginForm = () => {
+export type LoginFormProps = {
+  setLoginState: (formState: "login" | "agreement") => void;
+};
+
+export const LoginForm = ({ setLoginState }: LoginFormProps) => {
   const [isBusy, setIsBusy] = useState(false);
   const [remember, setRemember] = useState(true);
   const [token, setToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
 
   const login = () => {
     setIsBusy(true);
@@ -23,10 +29,15 @@ export const LoginForm = () => {
           cookie.set("fftoken", token, {
             expires: remember ? undefined : 1,
           });
-          const destination = new URLSearchParams(
-            window.location.hash.slice(1)
-          ).get("destination");
-          window.location.href = destination || "/";
+          const agreement = cookie.get("ffagreement");
+          if (!agreement) {
+            setLoginState("agreement");
+          } else {
+            const destination = new URLSearchParams(
+              window.location.search
+            ).get("destination");
+            router.push(destination || "/");
+          }
         } else {
           setErrorMessage("Invalid token.");
           setIsBusy(false);
@@ -40,7 +51,7 @@ export const LoginForm = () => {
 
   return (
     <>
-      <h4 className={styles["form__title"]}>Sign In</h4>
+      <h4 className={styles["title"]}>Sign In</h4>
       {errorMessage && (
         <Alert className={styles["form__alert"]} color="red">
           {errorMessage}
@@ -66,7 +77,7 @@ export const LoginForm = () => {
           value={token}
         />
 
-        <label className={styles['form__remember']}>
+        <label className={styles["form__remember"]}>
           <input
             type="checkbox"
             checked={remember}

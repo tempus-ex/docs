@@ -3,6 +3,7 @@ import cookie from "js-cookie";
 import { useRouter } from "next/router";
 
 import styles from "./styles.module.scss";
+import { useRef } from "react";
 
 export type LoginAgreementProps = {
   setLoginState: (formState: "login" | "agreement") => void;
@@ -26,15 +27,16 @@ export const LoginAgreement = ({ setLoginState }: LoginAgreementProps) => {
 
   return (
     <>
-      <h4 className={styles["title"]}>
-        Fusion Feed API and SDK License Agreement
-      </h4>
+      <iframe
+        className={styles["agreement__iframe"]}
+        src={`./license-agreement.pdf#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0`}
+      ></iframe>
       <div className={styles["agreement__button-row"]}>
         <button
           onClick={declineAgreement}
           className={clsx({
             [styles["button--bordered"]]: true,
-            [styles["agreement__decline-button"]]: true
+            [styles["agreement__decline-button"]]: true,
           })}
         >
           Decline

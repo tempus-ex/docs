@@ -90,6 +90,15 @@
 }
 
 .agreement {
+  &__iframe {
+    border: 1px solid var(--border-color);
+    margin-bottom: spacing("lg");
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    min-height: 400px;
+  }
+
   &__button-row {
     width: 100%;
     display: flex;

@@ -10,10 +10,11 @@
 
 .header {
   margin: spacing("xl") spacing("xl") 0 spacing("xl");
-  width: 100%;
   max-width: breakpoint("xl");
   @include above-breakpoint("xl") {
+    width: breakpoint("xl");
     margin: spacing("xl") auto spacing("lg");
+    padding-left: spacing("xl");
   }
 }
 
@@ -50,9 +51,8 @@
 
 .product {
   display: block;
-  border-left: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
-  box-shadow: -16px 16px 0 var(--border-color);
+  box-shadow: -20px 20px 2px 0 rgba(0, 0, 0, 0.15),
+    inset 2px -2px 0 0 rgba(0, 0, 0, 0.05);
   padding: spacing("lg");
   margin-bottom: spacing("xl");
 
@@ -77,7 +77,6 @@
     color: #fff;
     border-style: none;
     cursor: pointer;
-    font-family: "Barlow Semi Condensed", sans-serif;
     font-size: 1rem;
   }
 }

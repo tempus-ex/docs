@@ -1,70 +1,29 @@
-import { useState } from "react";
-import { Alert, Container, PasswordInput } from "@mantine/core";
 import Head from "next/head";
+import Image from "next/image";
 
-import { Footer } from "../Footer";
-import { Header } from "../Header";
-import { validateFusionFeedToken } from "../../lib/fusion-feed";
-
+import LogoBlack from "../../public/images/logo-black.svg";
 import styles from "./styles.module.scss";
+import { LoginFooter } from "./LoginFooter";
+import { LoginForm } from "./LoginForm";
+import { useState } from "react";
+import { LoginAgreement } from "./LoginAgreement";
 
 export const LoginPage = () => {
-  const [isBusy, setIsBusy] = useState(false);
-  const [token, setToken] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const login = () => {
-    setIsBusy(true);
-    setErrorMessage("");
-
-    validateFusionFeedToken(token)
-      .then((ok) => {
-        if (ok) {
-          document.cookie = "fftoken=" + token;
-          const destination = new URLSearchParams(
-            window.location.hash.slice(1)
-          ).get("destination");
-          window.location.href = destination || "/";
-        } else {
-          setErrorMessage("Invalid token.");
-          setIsBusy(false);
-        }
-      })
-      .catch((e) => {
-        setErrorMessage("An unexpected error occurred: " + e.message);
-        setIsBusy(false);
-      });
-  };
+  const [loginState, setLoginState] = useState<'login' | 'agreement'>('login');
 
   return (
     <>
       <Head>
         <title>Tempus Ex Documentation</title>
       </Head>
-      <Header />
-      <main>
-        <Container className={styles.wrapper}>
-          {errorMessage && (
-            <Alert className={styles.alert} color="red">
-              {errorMessage}
-            </Alert>
-          )}
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              login();
-            }}
-          >
-            <PasswordInput
-              disabled={isBusy}
-              onChange={(e) => setToken(e.currentTarget.value)}
-              placeholder="Fusion Feed Token"
-              value={token}
-            />
-          </form>
-        </Container>
+      <main className={styles.main}>
+        <Image priority className={styles.logo} src={LogoBlack} height="84" width="205" alt="FusionFeed logo"></Image>
+        <div className={styles.wrapper}>
+        {loginState === 'login' && <LoginForm setLoginState={setLoginState} />}
+        {loginState === 'agreement' && <LoginAgreement setLoginState={setLoginState} />}
+        </div>
       </main>
-      <Footer />
+      <LoginFooter />
     </>
   );
 };

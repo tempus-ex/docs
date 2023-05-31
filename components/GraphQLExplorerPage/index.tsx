@@ -3,6 +3,7 @@ import { useTheme } from "@graphiql/react";
 import { createGraphiQLFetcher, Fetcher } from "@graphiql/toolkit";
 import GraphiQL from "graphiql";
 import getConfig from "next/config";
+import cookie from "js-cookie";
 import Head from "next/head";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 
@@ -38,10 +39,7 @@ export const GraphQLExplorerPage = (props: Props) => {
 
   useEffect(() => {
     const url = publicRuntimeConfig.fusionFeedUrl + "/v2/graphql";
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("fftoken="))
-      ?.split("=")[1];
+    const token = cookie.get("fftoken");
     setFetcher(() =>
       createGraphiQLFetcher({
         headers: {

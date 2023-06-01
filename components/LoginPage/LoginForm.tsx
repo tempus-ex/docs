@@ -4,7 +4,7 @@ import Link from "next/link";
 import clsx from "clsx";
 import cookie from "js-cookie";
 
-import { validateFusionFeedToken } from "../../lib/fusion-feed";
+import { validateFusionFeedToken } from "../../lib/fusionfeed";
 import styles from "./styles.module.scss";
 import { useRouter } from "next/router";
 

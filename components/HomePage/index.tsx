@@ -48,7 +48,7 @@ export const HomePage = () => {
             blurb={
               "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse mollis tincidunt leo, eget vehicula mi consequat id. Cras sed velit fringilla, maximus dolor in, gravida felis. Proin viverra nibh eu posuere eleifend. Proin tempor condimentum fermentum. Duis suscipit molestie mi, sed euismod nisi dictum sed. Donec sed nibh ullamcorper, viverra sapien in, consectetur ligula. Nulla nisi velit, pulvinar vitae neque at, scelerisque ultricies tellus. Duis in posuere dolor. Aenean fringilla pretium nisl in pellentesque. Cras dignissim ipsum eget justo facilisis, at bibendum felis lacinia."
             }
-            link={'./fusion-feed/rest'}
+            link={'./fusionfeed/rest'}
             linkLabel="View Documentation"
           />
           <Product
@@ -57,7 +57,7 @@ export const HomePage = () => {
             blurb={
               "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse mollis tincidunt leo, eget vehicula mi consequat id. Cras sed velit fringilla, maximus dolor in, gravida felis. Proin viverra nibh eu posuere eleifend. Proin tempor condimentum fermentum. Duis suscipit molestie mi, sed euismod nisi dictum sed. Donec sed nibh ullamcorper, viverra sapien in, consectetur ligula. Nulla nisi velit, pulvinar vitae neque at, scelerisque ultricies tellus. Duis in posuere dolor. Aenean fringilla pretium nisl in pellentesque. Cras dignissim ipsum eget justo facilisis, at bibendum felis lacinia."
             }
-            link={'./fusion-feed/graphql'}
+            link={'./fusionfeed/graphql'}
             linkLabel="View Documentation"
           />
         </div>

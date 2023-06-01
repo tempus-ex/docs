@@ -6,8 +6,8 @@ import { DocsStack } from '../lib/docs-stack';
 const app = new cdk.App();
 new DocsStack(app, 'DocsStack', {
   env: {
-    // account: '189912143729',
-    account: '992150767891',
+    account: '189912143729',
+    // account: '992150767891',
     region: 'us-east-1',
   },
   domainName: 'tempus-ex.com',

@@ -1,6 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigw from 'aws-cdk-lib/aws-apigateway';
+import * as certificatemanager from 'aws-cdk-lib/aws-certificatemanager';
 import * as path from 'path';
 
 interface DocsProps extends cdk.StackProps {
@@ -12,8 +13,10 @@ interface DocsProps extends cdk.StackProps {
 
 
 export class DocsStack extends cdk.Stack {
-  constructor(scope: cdk.App, id: string, props?: DocsProps) {
+  constructor(scope: cdk.App, id: string, props: DocsProps) {
     super(scope, id, props);
+    const {domainName, subDomainName, certificateArn} = props;
+    const fullSubdomain = [subDomainName, domainName].join(".");
 
     // defines an AWS Lambda resource
     // const hello = new lambda.Function(this, 'HelloHandler', {
@@ -27,15 +30,25 @@ export class DocsStack extends cdk.Stack {
     //   handler: lambda.Handler.FROM_IMAGE                // file is "hello", function is "handler"
     // });
 
+    const domainCert = certificatemanager.Certificate.fromCertificateArn(this, 'DomainCert', certificateArn);
+
     const hello = new lambda.DockerImageFunction(this, 'HelloHandler', {
       code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../..')),
     });
 
 
     // defines an API Gateway REST API resource backed by our "hello" function.
-    new apigw.LambdaRestApi(this, 'Endpoint', {
-      handler: hello
+    const api = new apigw.LambdaRestApi(this, 'Endpoint', {
+      handler: hello,
+      proxy: false,
+      domainName: {
+        domainName: fullSubdomain,
+        certificate: domainCert,
+      },
     });
+
+    const login = api.root.addResource('login');
+    login.addMethod('GET');   
 
   }
 }

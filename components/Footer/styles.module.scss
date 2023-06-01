@@ -7,6 +7,12 @@
   padding: spacing("xl") spacing("md") spacing("lg") spacing("md");
   padding-top: spacing("xl");
   color: #dddfe1;
+  border-top: 1px solid rgba(0,0,0,0);
+
+  &--dark-mode {
+    @extend .footer;
+    border-top: 1px solid var(--border-color);
+  }
 
   @include above-breakpoint("sm") {
     padding: spacing("xl") spacing("xl") spacing("lg") spacing("xl");

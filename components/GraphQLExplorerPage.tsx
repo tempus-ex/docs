@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTheme } from '@graphiql/react';
 import { createGraphiQLFetcher, Fetcher } from '@graphiql/toolkit';
-import { createStyles, Container } from '@mantine/core';
+import { createStyles } from '@mantine/core';
 import GraphiQL from 'graphiql';
 import getConfig from 'next/config';
 import Head from 'next/head';

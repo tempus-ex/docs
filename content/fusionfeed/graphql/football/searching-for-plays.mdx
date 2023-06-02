@@ -1,0 +1,22 @@
+---
+title: Searching for Plays
+---
+# Searching for Plays
+
+The `playsConnection` API provides powerful search functionality using [FQL](../../fql):
+
+```gql v2
+{
+  nfl {
+    playsConnection(first: 10, predicate: {
+      expression: """SEASON = 2020 and team("ATL") has TOUCHDOWN"""
+    }) {
+      edges {
+        node {
+          description
+        }
+      }
+    }
+  }
+}
+```

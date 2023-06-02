@@ -29,13 +29,23 @@ export interface Content {
 }
 
 export function canonicalContentPath(p: string): string {
-    if (!p.startsWith('/')) {
-        p = '/' + p;
+    const parts = p.split('/');
+    if (parts.length === 0 || parts[0] !== '') {
+        parts.unshift('');
     }
-    if (p.length > 1 && p.endsWith('/')) {
-        p = p.slice(0, p.length - 1);
+    for (let i = 1; i < parts.length; i++) {
+        if (parts[i] === '.') {
+            parts.splice(i, 1);
+            i--;
+        } else if (parts[i] === '..') {
+            parts.splice(i - 1, 2);
+            i -= 2;
+        }
     }
-    return p;
+    if (parts[parts.length - 1] === '') {
+        parts.pop();
+    }
+    return parts.join('/');
 }
 
 export interface TableOfContentsPage {

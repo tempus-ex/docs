@@ -26,6 +26,9 @@ const useStyles = createStyles((theme) => ({
     tocNestedLink: {
         paddingLeft: `${2 * theme.spacing.md}px`,
     },
+    tocTwiceNestedLink: {
+        paddingLeft: `${3 * theme.spacing.md}px`,
+    },
     tocTopLink: {
         paddingLeft: `${theme.spacing.md}px`,
     },
@@ -83,7 +86,12 @@ export const DefaultPage = (props: Props) => {
                             <React.Fragment key={p.path}>
                                 <Link className={`${p.path === props.path ? classes.tocLinkCurrent : classes.tocLink} ${classes.tocTopLink}`} href={p.path}>{p.title}</Link>
                                 {p.children?.map((p) => (
-                                    <Link className={`${p.path === props.path ? classes.tocLinkCurrent : classes.tocLink} ${classes.tocNestedLink}`} href={p.path} key={p.path}>{p.title}</Link>
+                                    <>
+                                        <Link className={`${p.path === props.path ? classes.tocLinkCurrent : classes.tocLink} ${classes.tocNestedLink}`} href={p.path} key={p.path}>{p.title}</Link>
+                                        {p.children?.map((p) => (
+                                            <Link className={`${p.path === props.path ? classes.tocLinkCurrent : classes.tocLink} ${classes.tocTwiceNestedLink}`} href={p.path} key={p.path}>{p.title}</Link>
+                                        ))}
+                                    </>
                                 ))}
                             </React.Fragment>
                         ))}

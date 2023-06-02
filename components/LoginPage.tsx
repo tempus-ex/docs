@@ -27,7 +27,6 @@ export const LoginPage = () => {
     const login = () => {
         setIsBusy(true);
         setErrorMessage('');
-
         validateFusionFeedToken(token)
             .then((ok) => {
                 if (ok) {

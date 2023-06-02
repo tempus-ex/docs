@@ -1,3 +1,4 @@
+import * as path from 'path';
 import * as cdk from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
@@ -5,7 +6,7 @@ import * as certificatemanager from 'aws-cdk-lib/aws-certificatemanager';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import { Distribution } from 'aws-cdk-lib/aws-cloudfront';
-import * as path from 'path';
+import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 
 interface DocsProps extends cdk.StackProps {
   domainName: string
@@ -44,42 +45,48 @@ export class DocsStack extends cdk.Stack {
     // defines an API Gateway REST API resource backed by our "hello" function.
     const api = new apigateway.LambdaRestApi(this, 'DocsEndpoint', {
       handler: docsHandler,
-      proxy: false,
-      domainName: {
-        domainName: fullSubdomain,
-        certificate: domainCert,
-      },
+      // proxy: false,
+      // domainName: {
+      //   domainName: fullSubdomain,
+      //   certificate: domainCert,
+      // },
     });
 
-    const login = api.root.addResource('login');
-    login.addMethod('GET');   
-    // const root = api.root.addResource('');
+    // const login = api.root.addResource('login');
+    // login.addMethod('GET');   
+    // const root = api.root.addResource('/');
     // root.addMethod('GET');   
 
 
-    const apiDomainName = apigateway.DomainName.fromDomainNameAttributes(this, 'DocsDomain', {
-      domainName: fullSubdomain,
-      domainNameAliasHostedZoneId: 'Z01264622EAQBCH25W57L',
-      domainNameAliasTarget: 'prod',
-    });
+    // const apiDomainName = apigateway.DomainName.fromDomainNameAttributes(this, 'DocsDomain', {
+    //   domainName: fullSubdomain,
+    //   domainNameAliasHostedZoneId: 'Z01264622EAQBCH25W57L',
+    //   domainNameAliasTarget: 'prod',
+    // });
     
-    new apigateway.BasePathMapping(this, 'BasePathMapping', {
-      domainName: apiDomainName,
-      restApi: api,
-    });
+    // new apigateway.BasePathMapping(this, 'BasePathMapping', {
+    //   domainName: apiDomainName,
+    //   restApi: api,
+    // });
 
-    // const distribution = new Distribution(this, 'DocsDistribution', {
-    //   domainNames: [`${subDomainName}.${domainName}`],
-    //   certificate: domainCert,
-    //   defaultBehavior: {
-    //     // viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-    //     origin: ,
-    //   },
-    // })
+    const distribution = new Distribution(this, 'DocsDistribution', {
+      domainNames: [`${subDomainName}.${domainName}`],
+      certificate: domainCert,
+      defaultBehavior: {
+        // viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        origin: new origins.RestApiOrigin(api),
+      },
+    })
 
-    // const zone = route53.HostedZone.fromLookup(this, "zone", {
-    //   domainName,
-    // })
+    const zone = route53.HostedZone.fromLookup(this, "zone", {
+      domainName,
+    })
+
+    new route53.ARecord(this, 'a-record', {
+      recordName: subDomainName,
+      zone,
+      target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(distribution))
+    })
 
     // new route53.ARecord(this, 'a-record', {
     //   recordName: subDomainName,

@@ -20,7 +20,7 @@ export const LoginFooter = () => {
         </Link>
         <Link
           className={styles["footer__link"]}
-          href="mailto:contact@tempus-ex.com"
+          href="mailto:support@tempus-ex.com"
         >
           Contact
         </Link>

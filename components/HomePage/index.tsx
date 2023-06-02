@@ -70,7 +70,7 @@ export const HomePage = () => {
               "Ask a Question"
             }
             blurb={"If you require any further assistance, please do not hesitate to contact us. Our team of experts is always available to help in any way we can. We would be more than happy to assist you with any questions or concerns you may have."}
-            link={"mailto:contact@tempus-ex.com"}
+            link={"mailto:support@tempus-ex.com"}
             linkLabel={"Contact Us"}
           />
         </div>

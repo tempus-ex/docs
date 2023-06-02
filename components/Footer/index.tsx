@@ -55,9 +55,9 @@ export const Footer = () => {
           </p>
           <Link
             className={styles["footer__section-email"]}
-            href="mailto:contact@tempus-ex.com"
+            href="mailto:support@tempus-ex.com"
           >
-            contact@tempus-ex.com
+            support@tempus-ex.com
           </Link>
           <div className={styles["footer__section-social"]}>
             <Link

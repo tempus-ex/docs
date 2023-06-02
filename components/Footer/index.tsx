@@ -28,12 +28,13 @@ export const Footer = () => {
           >
             Tempus ex Home
           </Link>
-          <Link
+          {/*TODO need an About link */}
+          {/* <Link
             className={styles["footer__section-link"]}
             href="https://tempus-ex.com/"
           >
             About
-          </Link>
+          </Link> */}
           <Link
             className={styles["footer__section-link"]}
             href="https://tempus-ex.com/careers"

@@ -27,7 +27,7 @@ export const DefaultPage = (props: Props) => {
         <title>{frontmatter?.title}</title>
       </Head>
       <Header />
-      <main className={styles.middle}>
+      <main className={styles.main}>
         <Navbar width={{ sm: 300 }}>
           <Navbar.Section className={styles["toc-top"]}>
             <Link href={toc.path}>

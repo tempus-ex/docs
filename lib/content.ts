@@ -42,8 +42,11 @@ export function canonicalContentPath(p: string): string {
             i -= 2;
         }
     }
-    if (parts[parts.length - 1] === '') {
+    if (parts.length > 0 && parts[parts.length - 1] === '') {
         parts.pop();
+    }
+    if (parts.length < 2) {
+        return '/';
     }
     return parts.join('/');
 }

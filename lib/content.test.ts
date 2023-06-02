@@ -9,6 +9,10 @@ describe('canonicalContentPath', () => {
         expect(canonicalContentPath('/foo/')).toBe('/foo');
     });
 
+    it('works for root', async () => {
+        expect(canonicalContentPath('/')).toBe('/');
+    });
+
     it('removes dots', async () => {
         expect(canonicalContentPath('/foo/./bar')).toBe('/foo/bar');
     });

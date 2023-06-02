@@ -1,4 +1,4 @@
-@use '../../styles/spacing' as *;
+@use "../../styles/spacing" as *;
 
 .main {
   display: flex;
@@ -6,34 +6,49 @@
   flex-grow: 1;
 }
 
-.toc-link {
-    color: var(--link-color);
-    display: block;
-
-    &:hover {
-        color: var(--link-hover-color);
-        background-color: var(--link-background-color);
-    }
-
-    &__current {
-        font-weight: 'bold';
-    }
-
-    &__nested {
-        padding-left: spacing("lg");
-    }
-
-    &__top {
-        padding-left: spacing("lg");
-    }
-}
-
-.toc-top {
+.navbar {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border-color);
+  &__top {
     border-bottom: 1px solid var(--border-color);
     margin-bottom: spacing("md");
     padding: spacing("md");
-}
+  }
 
-.title {
+  &__pages {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: spacing("md");
+  }
+
+  &__title {
+    margin: 0;
     color: var(--title-color);
+  }
+
+  &__link {
+    color: var(--link-color);
+    text-decoration: none;
+    margin-right: spacing("md");
+
+    &:hover {
+      color: var(--link-color-hover);
+      background-color: var(--link-background-hover);
+    }
+
+    &--current {
+      font-weight: bold;
+    }
+
+    &--toplevel {
+      padding-left: 0;
+    }
+
+    &--nested {
+      padding-left: spacing("lg");
+    }
+  }
 }

@@ -1,0 +1,25 @@
+@use "../../styles/breakpoints" as *;
+@use "../../styles/spacing" as *;
+
+.main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.wrapper {
+  margin: spacing("xl") auto;
+  width: 100%;
+  max-width: breakpoint("xl");
+  min-height: 50vh;
+  > * {
+    background-color: rgba(0, 0, 0, 0) !important;
+  }
+}
+
+.swagger {
+  &__button {
+    padding: spacing("sm") spacing("md");
+  }
+}

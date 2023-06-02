@@ -27,13 +27,13 @@ export const Header = () => {
           />
         </Link>
         {/**TODO:  This dark mode toggle is for testing only. Remove before deploy */}
-        <label>
+        {/* <label>
           Dark Mode
           <input
             type="checkbox"
             onChange={(e) => toggleDarkMode(e.target.checked)}
           />
-        </label>
+        </label> */}
       </div>
     </header>
   );

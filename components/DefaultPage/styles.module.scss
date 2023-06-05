@@ -14,7 +14,6 @@
 
   &__top {
     border-bottom: 1px solid var(--border-color);
-    margin-bottom: spacing("md");
     padding: spacing("md");
   }
 
@@ -27,8 +26,10 @@
   &__section {
     display: flex;
     flex-direction: column;
+
     &--active {
       border-bottom: 1px solid var(--border-color);
+      position: relative;
     }
 
     &:last-of-type {
@@ -62,6 +63,21 @@
       font-weight: bold;
       padding-left: spacing("lg");
       border-bottom: 1px solid var(--border-color);
+      text-transform: uppercase;
+    }
+
+    &--has-children {
+      &::before {
+        content: url("../../public/images/Navbar-arrow.svg");
+        display: inline-block;
+        width: spacing("md");
+        height: 100%;
+        margin-right: spacing("sm");
+      }
+
+      &.navbar__link--active::before {
+        transform: rotate(90deg);
+      }
     }
 
     &--nested {

@@ -11,6 +11,7 @@
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--border-color);
+
   &__top {
     border-bottom: 1px solid var(--border-color);
     margin-bottom: spacing("md");
@@ -21,7 +22,19 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding: spacing("md");
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    &--active {
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    &:last-of-type {
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: spacing("xl");
+    }
   }
 
   &__title {
@@ -32,23 +45,27 @@
   &__link {
     color: var(--link-color);
     text-decoration: none;
-    margin-right: spacing("md");
+    padding: spacing("md");
 
     &:hover {
       color: var(--link-color-hover);
       background-color: var(--link-background-hover);
     }
 
-    &--current {
+    &--active {
       font-weight: bold;
+      background-color: var(--link-background-hover);
+      border-right: 3px solid var(--text-color);
     }
 
     &--toplevel {
-      padding-left: 0;
+      font-weight: bold;
+      padding-left: spacing("lg");
+      border-bottom: 1px solid var(--border-color);
     }
 
     &--nested {
-      padding-left: spacing("lg");
+      padding-left: spacing("xl");
     }
   }
 }

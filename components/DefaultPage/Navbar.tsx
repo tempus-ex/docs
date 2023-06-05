@@ -19,11 +19,19 @@ export const NavBar = ({ toc, path }: NavBarProps) => {
       </div>
       <div className={styles["navbar__pages"]}>
         {toc.pages.map((page) => (
-          <React.Fragment key={page.path}>
+          <section
+            className={clsx({
+              [styles["navbar__section"]]: true,
+              [styles["navbar__section--active"]]: page.children
+                ?.map((child) => child.path)
+                .includes(path),
+            })}
+            key={page.path}
+          >
             <Link
               className={clsx({
                 [styles["navbar__link"]]: true,
-                [styles["navbar__link--current"]]: page.path === path,
+                [styles["navbar__link--active"]]: page.path === path,
                 [styles["navbar__link--toplevel"]]: true,
               })}
               href={page.path}
@@ -34,7 +42,7 @@ export const NavBar = ({ toc, path }: NavBarProps) => {
               <Link
                 className={clsx({
                   [styles["navbar__link"]]: true,
-                  [styles["navbar__link--current"]]: page.path === path,
+                  [styles["navbar__link--active"]]: page.path === path,
                   [styles["navbar__link--nested"]]: true,
                 })}
                 href={page.path}
@@ -43,7 +51,7 @@ export const NavBar = ({ toc, path }: NavBarProps) => {
                 {page.title}
               </Link>
             ))}
-          </React.Fragment>
+          </section>
         ))}
       </div>
     </div>

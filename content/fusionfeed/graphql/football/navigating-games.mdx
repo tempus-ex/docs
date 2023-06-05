@@ -1,0 +1,104 @@
+---
+title: Navigating Games
+---
+# Navigating Games
+
+## Schedules
+
+There are two common ways of navigating games. The first is to use the `schedule` API. For example:
+
+```gql v2
+{
+  nfl {
+    schedule(season: 2022, type: REGULAR) {
+      games {
+        id
+        time
+        week
+      }
+    }
+  }
+}
+```
+
+The `schedule` field isn't part of the `FootballOrganization` interface since the arguments differ slightly by league. However, you can still re-use the same fragment for the results like so:
+
+```gql v2
+{
+  nfl {
+    schedule(season: 2022, type: REGULAR) {
+      games {
+        ...game
+      }
+    }
+  }
+  ncaa {
+    football(conference: PAC12) {
+      schedule(season: 2022, type: REGULAR) {
+        games {
+          ...game
+        }
+      }
+    }
+  }
+}
+
+fragment game on FootballGame {
+  id
+  awayTeamEdge {
+    node {
+      abbreviation
+    }
+  }
+  homeTeamEdge {
+    node {
+      abbreviation
+    }
+  }
+}
+```
+
+## Search
+
+The other common way of navigating games is via the `gamesConnection` API, which provides powerful search functionality using [FQL](../../fql):
+
+```gql v2
+{
+  nfl {
+    gamesConnection(first: 10, predicate: {
+      expression: """SEASON = 2020 and team("ATL") has SCORE > 30"""
+    }) {
+      edges {
+        node {
+          id
+          time
+        }
+      }
+    }
+  }
+}
+```
+
+## Node Lookup
+
+Football games implement the `Node` interface, so games found via the above methods can be looked up directly by id:
+
+```gql v2
+{
+  node(id: "CA~MjAyMi9SRUcvOC81ODk0OA") {
+    ... on NFLGame {
+      id
+      homeTeamEdge {
+        node {
+          name
+        }
+      }
+      awayTeamEdge {
+        node {
+          name
+        }
+      }
+    }
+  }
+}
+```

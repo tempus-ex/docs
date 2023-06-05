@@ -5,7 +5,7 @@ title: Video Preview Images
 
 Preview images (suitable for thumbnails) can be obtained via the `/v2/av-streams/{streamId}/preview.jpg` endpoint.
 
-If you'd like an image for a particular time, you can specify an RFC-3339 time via the `t` parameter.
+If you'd like an image for a particular time, you can specify an RFC-3339 time via the `t` parameter. The preview will be generated from a point in time close to `t`.
 
 Images can be scaled down server-side to a size optimal for thumbnails. To scale the image down, you can specify dimensions via the `fit` or `fill` parameter. For example, `fit=200x200` will cause the returned image to be scaled down until it can fit within a 200 by 200 pixel square.
 

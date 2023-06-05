@@ -25,6 +25,7 @@
   &__title {
     margin: 0;
     grid-area: title;
+    color: #dddfe1 !important;
   }
 
   &__inner {
@@ -66,6 +67,7 @@
       margin: 0;
       margin-top: spacing("sm");
       margin-bottom: spacing("md");
+      color: #dddfe1;
     }
 
     &-link {

@@ -11,9 +11,9 @@
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--border-color);
+  padding-bottom: spacing("xl");
 
   &__top {
-    border-bottom: 1px solid var(--border-color);
     padding: spacing("md");
   }
 
@@ -21,19 +21,9 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-  }
 
-  &__section {
-    display: flex;
-    flex-direction: column;
-
-    &--active {
-      border-bottom: 1px solid var(--border-color);
-      position: relative;
-    }
-
-    &:last-of-type {
-      margin-bottom: spacing("xl");
+    &:last-child {
+      border-bottom: none;
     }
   }
 
@@ -85,7 +75,7 @@
     &--level-0 {
       font-weight: bold;
       padding-left: spacing("lg");
-      border-bottom: 1px solid var(--border-color);
+      border-top: 1px solid var(--border-color);
       text-transform: uppercase;
     }
 

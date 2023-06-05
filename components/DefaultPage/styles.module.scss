@@ -99,6 +99,14 @@
   max-width: breakpoint("lg");
   padding: spacing("lg");
 
+  a {
+    color: var(--link-color);
+
+    &:hover {
+      color: var(--link-color-hover);
+    }
+  }
+
   h1 {
     font-size: 4rem;
   }

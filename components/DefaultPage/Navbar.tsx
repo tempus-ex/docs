@@ -42,8 +42,6 @@ const NavbarPage = ({ page, path, level }: NavbarPageProps) => {
   const childIsActive =
     page.children && page.children.reduce(checkRecursiveActive, false);
 
-  console.log(page.path, path, pageIsActive, childIsActive);
-
   return (
     <div className={styles["navbar__page"]}>
       <Link
@@ -75,11 +73,26 @@ const NavbarPage = ({ page, path, level }: NavbarPageProps) => {
 };
 
 export const NavBar = ({ toc, path }: NavBarProps) => {
+
+  const recursiveTitle = (acc: string | null, page: TableOfContentsPage): string | null => {
+    if (page.path === path) {
+      return page.title;
+    } else if (page.children && page.children.length > 0) {
+      const childTitle = page.children.reduce(recursiveTitle, null);
+      if (childTitle) {
+        return page.title;
+      }
+    }
+    return acc;
+  };
+
+  const topLevelTitle = toc.pages.reduce(recursiveTitle, null);
+
   return (
     <div className={styles["navbar"]}>
       <div className={styles["navbar__top"]}>
         <Link href={toc.path}>
-          <h3 className={styles["navbar__title"]}>{toc.title}</h3>
+          <h4 className={styles["navbar__title"]}>{topLevelTitle || toc.title}</h4>
         </Link>
       </div>
       <div className={styles["navbar__pages"]}>

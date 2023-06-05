@@ -42,6 +42,11 @@
     color: var(--title-color);
   }
 
+  &__page {
+    display: flex;
+    flex-direction: column;
+  }
+
   &__link {
     color: var(--link-color);
     text-decoration: none;
@@ -53,19 +58,14 @@
     }
 
     &--active {
+      color: var(--text-color);
       font-weight: bold;
       background-color: var(--link-background-hover);
       border-right: 3px solid var(--text-color);
     }
 
-    &--toplevel {
-      font-weight: bold;
-      padding-left: spacing("lg");
-      border-bottom: 1px solid var(--border-color);
-      text-transform: uppercase;
-    }
-
     &--has-children {
+      font-weight: bold;
       &::before {
         content: url("../../public/images/Navbar-arrow.svg");
         display: inline-block;
@@ -82,12 +82,19 @@
       }
     }
 
-    &--level-one {
-      padding-left: calc(spacing("lg"));
+    &--level-0 {
+      font-weight: bold;
+      padding-left: spacing("lg");
+      border-bottom: 1px solid var(--border-color);
+      text-transform: uppercase;
     }
 
-    &--level-two {
-      padding-left: calc(spacing("lg") * 1.5);
+    &--level-1 {
+      padding-left: calc(spacing("lg") * 2);
+    }
+
+    &--level-2 {
+      padding-left: calc(spacing("lg") * 3);
     }
   }
 }

@@ -14,66 +14,63 @@ type NavbarSectionProps = {
   path: string;
 };
 
-const NavbarSection = ({ page, path }: NavbarSectionProps) => {
-  const hasChildren = page.children && page.children.length > 0;
-  const flatChildren =
-    page.children?.flatMap((child) => [child, ...(child.children || [])]) ?? [];
-  const activeSection =
-    page.path === path ||
-    flatChildren.map((child) => child.path).includes(path);
+type NavbarPageProps = {
+  page: TableOfContentsPage;
+  path: string;
+  level: number;
+};
+
+const NavbarPage = ({ page, path, level }: NavbarPageProps) => {
+  const checkRecursiveActive = (
+    acc: boolean,
+    child: TableOfContentsPage
+  ): boolean => {
+    if (acc) {
+      return true;
+    }
+    else if (child.path === path) {
+      return true;
+    }
+    else if (child.children && child.children.length > 0) {
+      return child.children.reduce(checkRecursiveActive, false);
+    }
+    return acc;
+  };
+
+  const hasChildren = (page.children?.length || 0) > 0;
+  const pageIsActive = page.path === path;
+  const childIsActive =
+    page.children && page.children.reduce(checkRecursiveActive, false);
+
+  console.log(page.path, path, pageIsActive, childIsActive);
 
   return (
-    <section
-      className={clsx({
-        [styles["navbar__section"]]: true,
-        [styles["navbar__section--active"]]: activeSection,
-      })}
-      key={page.path}
-    >
+    <div className={styles["navbar__page"]}>
       <Link
         className={clsx({
           [styles["navbar__link"]]: true,
-          [styles["navbar__link--active"]]: page.path === path,
-          [styles["navbar__link--toplevel"]]: true,
+          [styles["navbar__link--active"]]: pageIsActive,
           [styles["navbar__link--has-children"]]: hasChildren,
           [styles["navbar__link--active-children"]]:
-            hasChildren && activeSection,
+            hasChildren && (pageIsActive || childIsActive),
+          [styles["navbar__link--level-0"]]: level === 0,
+          [styles["navbar__link--level-1"]]: level === 1,
+          [styles["navbar__link--level-2"]]: level === 2,
         })}
         href={page.path}
       >
         {page.title}
       </Link>
-      {activeSection &&
-        page.children?.map((childPage) => (
-          <>
-            <Link
-              className={clsx({
-                [styles["navbar__link"]]: true,
-                [styles["navbar__link--active"]]: childPage.path === path,
-                [styles["navbar__link--level-one"]]: true,
-              })}
-              href={childPage.path}
-              key={childPage.path}
-            >
-              {childPage.title}
-            </Link>
-            {childPage.children?.map((grandchildPage) => (
-              <Link
-                className={clsx({
-                  [styles["navbar__link"]]: true,
-                  [styles["navbar__link--active"]]:
-                    grandchildPage.path === path,
-                  [styles["navbar__link--level-two"]]: true,
-                })}
-                href={grandchildPage.path}
-                key={grandchildPage.path}
-              >
-                {grandchildPage.title}
-              </Link>
-            ))}
-          </>
+      {(pageIsActive || childIsActive) &&
+        page.children?.map((child) => (
+          <NavbarPage
+            key={child.path}
+            page={child}
+            path={path}
+            level={level + 1}
+          />
         ))}
-    </section>
+    </div>
   );
 };
 
@@ -87,7 +84,7 @@ export const NavBar = ({ toc, path }: NavBarProps) => {
       </div>
       <div className={styles["navbar__pages"]}>
         {toc.pages.map((page) => (
-          <NavbarSection key={page.path} page={page} path={path} />
+          <NavbarPage key={page.path} page={page} path={path} level={0} />
         ))}
       </div>
     </div>

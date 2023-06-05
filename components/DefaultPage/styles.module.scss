@@ -82,8 +82,12 @@
       }
     }
 
-    &--nested {
-      padding-left: spacing("xl");
+    &--level-one {
+      padding-left: calc(spacing("lg"));
+    }
+
+    &--level-two {
+      padding-left: calc(spacing("lg") * 1.5);
     }
   }
 }

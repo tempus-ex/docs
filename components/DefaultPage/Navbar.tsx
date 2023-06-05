@@ -15,9 +15,12 @@ type NavbarSectionProps = {
 };
 
 const NavbarSection = ({ page, path }: NavbarSectionProps) => {
+  const hasChildren = page.children && page.children.length > 0;
+  const flatChildren =
+    page.children?.flatMap((child) => [child, ...(child.children || [])]) ?? [];
   const activeSection =
     page.path === path ||
-    page.children?.map((child) => child.path).includes(path);
+    flatChildren.map((child) => child.path).includes(path);
 
   return (
     <section
@@ -32,27 +35,43 @@ const NavbarSection = ({ page, path }: NavbarSectionProps) => {
           [styles["navbar__link"]]: true,
           [styles["navbar__link--active"]]: page.path === path,
           [styles["navbar__link--toplevel"]]: true,
-          [styles["navbar__link--has-children"]]:
-            page.children && page.children.length > 0,
-          [styles["navbar__link--active-children"]]: activeSection
+          [styles["navbar__link--has-children"]]: hasChildren,
+          [styles["navbar__link--active-children"]]:
+            hasChildren && activeSection,
         })}
         href={page.path}
       >
         {page.title}
       </Link>
       {activeSection &&
-        page.children?.map((page) => (
-          <Link
-            className={clsx({
-              [styles["navbar__link"]]: true,
-              [styles["navbar__link--active"]]: page.path === path,
-              [styles["navbar__link--nested"]]: true,
-            })}
-            href={page.path}
-            key={page.path}
-          >
-            {page.title}
-          </Link>
+        page.children?.map((childPage) => (
+          <>
+            <Link
+              className={clsx({
+                [styles["navbar__link"]]: true,
+                [styles["navbar__link--active"]]: childPage.path === path,
+                [styles["navbar__link--level-one"]]: true,
+              })}
+              href={childPage.path}
+              key={childPage.path}
+            >
+              {childPage.title}
+            </Link>
+            {childPage.children?.map((grandchildPage) => (
+              <Link
+                className={clsx({
+                  [styles["navbar__link"]]: true,
+                  [styles["navbar__link--active"]]:
+                    grandchildPage.path === path,
+                  [styles["navbar__link--level-two"]]: true,
+                })}
+                href={grandchildPage.path}
+                key={grandchildPage.path}
+              >
+                {grandchildPage.title}
+              </Link>
+            ))}
+          </>
         ))}
     </section>
   );

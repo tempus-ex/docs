@@ -5,10 +5,6 @@ const nextConfig = {
     },
     reactStrictMode: true,
     output: 'standalone',
-    compiler: {
-        removeConsole: false,
-      },
-      productionBrowserSourceMaps: true,
 };
 
 module.exports = nextConfig;

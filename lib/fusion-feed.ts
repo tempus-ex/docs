@@ -4,7 +4,6 @@ import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 
 export async function validateFusionFeedToken(token: string): Promise<boolean> {
-    console.log('token: ', token);
     if (!token) {
         return false;
     }
@@ -17,7 +16,6 @@ export async function validateFusionFeedToken(token: string): Promise<boolean> {
         },
         body: '{__typename}',
     });
-    console.log('resp: ', resp);
     return resp.status === 200;
 }
 

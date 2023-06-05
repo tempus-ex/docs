@@ -74,8 +74,11 @@
         height: 100%;
         margin-right: spacing("sm");
       }
+    }
 
-      &.navbar__link--active::before {
+    &--active-children {
+      @extend .navbar__link--has-children;
+      &::before {
         transform: rotate(90deg);
       }
     }

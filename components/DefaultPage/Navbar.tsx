@@ -34,6 +34,7 @@ const NavbarSection = ({ page, path }: NavbarSectionProps) => {
           [styles["navbar__link--toplevel"]]: true,
           [styles["navbar__link--has-children"]]:
             page.children && page.children.length > 0,
+          [styles["navbar__link--active-children"]]: activeSection
         })}
         href={page.path}
       >

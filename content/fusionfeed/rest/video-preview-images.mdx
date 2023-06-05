@@ -1,0 +1,22 @@
+---
+title: Video Preview Images
+---
+# Video Preview Images
+
+Preview images (suitable for thumbnails) can be obtained via the `/v2/av-streams/{streamId}/preview.jpg` endpoint.
+
+If you'd like an image for a particular time, you can specify an RFC-3339 time via the `t` parameter. The preview will be generated from a point in time close to `t`.
+
+Images can be scaled down server-side to a size optimal for thumbnails. To scale the image down, you can specify dimensions via the `fit` or `fill` parameter. For example, `fit=200x200` will cause the returned image to be scaled down until it can fit within a 200 by 200 pixel square.
+
+This endpoint requires authentication, so web apps cannot directly use it in the `src` attribute for an HTML `img` tag. Instead, web apps must fetch the image and use it via [data URI](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs).
+
+For example, this request:
+
+```
+GET /v2/av-streams/BA~Ag-NUeoMbH8zwMzB8iLxSEVMbcHZ~CJ5byArXySDWly_GOiXnDr7KFtOD/preview.jpg?fit=640x360&t=2021-09-10T00:24:10Z
+```
+
+Produces this image:
+
+![Preview](/images/rest/video-preview-example.jpg)

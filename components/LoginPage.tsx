@@ -5,7 +5,7 @@ import Head from 'next/head';
 import { Footer } from './Footer';
 import { Header } from './Header';
 
-import { validateFusionFeedToken } from '../lib/fusion-feed';
+import { validateFusionFeedToken } from '../lib/fusionfeed';
 
 const useStyles = createStyles((theme) => ({
     alert: {
@@ -62,7 +62,7 @@ export const LoginPage = () => {
                         <PasswordInput
                             disabled={isBusy}
                             onChange={(e) => setToken(e.currentTarget.value)}
-                            placeholder="Fusion Feed Token"
+                            placeholder="FusionFeed Token"
                             value={token}
                         />
                     </form>

@@ -1,0 +1,79 @@
+---
+title: Enumerating Teams
+---
+# Enumerating Teams
+
+Teams can be enumerated via the `FootballOrganization`'s `teamsConnection` field:
+
+```gql v2
+{
+  nfl {
+    ...footballOrg
+  }
+  ncaa {
+    football(conference: PAC12) {
+      ...footballOrg
+    }
+  }
+}
+
+# The same fragment can be re-used for both NFL and NCAA.
+fragment footballOrg on FootballOrganization {
+  teamsConnection(first: 100) {
+    edges {
+      node {
+        name
+      }
+    }
+  }
+}
+```
+
+There may be situations where you need team data that isn't universally applicable to all football organizations. For example, if you need the team club codes as defined by the NFL's Game Statistics and Information System, you won't find them on the `FootballOrganization` directly.
+
+One way of accessing organization-specific data points is via the direct approach:
+
+```gql v2
+{
+  nfl {
+    teamsConnection(first: 100) {
+      edges {
+        node {
+          name
+          gsisClubCode
+        }
+      }
+    }
+  }
+}
+```
+
+Or you can use an [inline fragment](https://graphql.org/learn/queries/#inline-fragments) to maximize code re-use:
+
+```gql v2
+{
+  nfl {
+    ...footballOrg
+  }
+  ncaa {
+    football(conference: PAC12) {
+      ...footballOrg
+    }
+  }
+}
+
+# The same fragment can be re-used for both NFL and NCAA.
+fragment footballOrg on FootballOrganization {
+  teamsConnection(first: 100) {
+    edges {
+      node {
+        name
+        # You can access league-specific fields with an inline fragment.
+        ... on NFLTeam {
+          gsisClubCode
+        }
+      }
+    }
+  }
+}
+```

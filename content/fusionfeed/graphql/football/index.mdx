@@ -1,0 +1,30 @@
+---
+title: Football
+children:
+  - enumerating-teams
+  - navigating-games
+  - searching-for-plays
+---
+# Football
+
+In FusionFeed, gridiron football is simply referred to as "football". For association football, see [Soccer](../soccer).
+
+FusionFeed provides full coverage for all NFL games and partial coverage for NCAA games. GraphQL interfaces are leveraged heavily to allow queries to be used for both leagues with little or no modification. At the highest level, data is obtained from the `FootballOrganization` interface, for which implementions can be obtained via the top level `nfl` and `ncaa` fields:
+
+```gql v2
+{
+  nfl {
+    ...footballOrg
+  }
+  ncaa {
+    football(conference: PAC12) {
+      ...footballOrg
+    }
+  }
+}
+
+# The same fragment can be re-used for both NFL and NCAA.
+fragment footballOrg on FootballOrganization {
+  currentSeason
+}
+```

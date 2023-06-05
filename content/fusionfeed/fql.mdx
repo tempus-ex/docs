@@ -1,0 +1,183 @@
+---
+title: FQL
+---
+# FQL
+
+FQL (Fusion Query Language) is used by some APIs to enable powerful search functionality. For example, you can use it to filter plays for a game:
+
+```graphql v2
+query FQLExample {
+  nfl {
+    playsConnection(first: 500, predicate: {
+      expression: """team("NYJ") has TOUCHDOWN""",
+    }) {
+      edges {
+        node {
+          quarter
+          time
+          description
+        }
+      }
+    }
+  }
+}
+```
+
+The language itself is not football-specific. The things you can query and the attributes you query them by are all context-dependent. For each API where you can use FQL, there is additional reference specific to that API.
+
+## Syntax
+
+Predicates are simply values that evaluate to 1 or 0.
+
+### *Value*
+
+A value is one of the following:
+
+* *Number*
+* *String*
+* *Variable*
+* *UnaryOperator* *Value*
+* *Value* *BinaryOperator* *Value*
+* *FunctionCall*
+* (*Value*)
+
+### *Number*
+
+A positive integer or floating point number.
+
+Examples:
+
+```
+1
+```
+
+```
+1.0
+```
+
+```
+1e10
+```
+
+### *String*
+
+A quoted string. Backslashed escape sequences can be used for control or unicode characters.
+
+```
+"foo"
+```
+
+```
+"say \"hello\""
+```
+
+```
+"hello\nnew line"
+```
+
+```
+"unicode \u1234"
+```
+
+### *Variable*
+
+Variables can be read anywhere in the query. By convention, user-defined variables are prefixed with a dollar sign (`$`) and system-defined variables are typically uppercased strings such as `PASSING_YARDS`.
+
+```
+player($id) has PASSING_YARDS > 0
+```
+
+In this example, `$id` is a user-defined variable and `PASSING_YARDS` is a system-defined variable.
+
+### *UnaryOperator*
+
+You can use the `-` unary operator to negate a value:
+
+```
+-1
+```
+
+You can use the `!` unary operator to invert a value (coercing it to a 1.0 or 0.0 in the process):
+
+```
+!FOO
+```
+
+### *BinaryOperator*
+
+The following binary operators have the usual behavior and precedence:
+
+* `*`
+* `/`
+* `+`
+* `-`
+* `<=`
+* `<`
+* `>=`
+* `>`
+* `=`
+* `!=`
+* `and`
+* `or`
+
+FQL has no boolean type, so the comparison operators all either evaluate to 1 or 0. This means you can do something like the following:
+
+```
+team("PIT") has (PASSING_YARDS > 0) + (RUSHING_YARDS > 0) + (PENALTY_YARDS > 0) >= 2
+```
+
+#### The "has" Operator
+
+The `has` operator can be used to reference properties of objects:
+
+```
+team("PIT") has RUSHING_YARDS > 0
+```
+
+This operator brings new variables into scope on the right side. The right side has access to variables for all of the properties of the object on the left side. The "has" operator binds tightly to its left side, but loosely to its right:
+
+```
+team("BUF") has RUSHING_YARDS > 0 and PASSING_YARDS > 0 and team("PIT") has RUSHING_YARDS > 0 and PASSING_YARDS > 0
+```
+
+This is equivalent to:
+
+```
+team("BUF") has RUSHING_YARDS > 0 and PASSING_YARDS > 0 and (team("PIT") has RUSHING_YARDS > 0 and PASSING_YARDS > 0)
+```
+
+#### The "with" Operator
+
+The `with` operator can be used to filter arrays:
+
+```
+team("PIT") has PENALTIES with YARDS > 5
+```
+
+As with the "has" operator, this brings new variables into scope on the right side. The right side has access to variables for all of the properties of the objects in the array on the left side. The "with" operator also binds tightly to its left side, but loosely to its right:
+
+```
+team("BUF") has PENALTIES with PLAYERS with POSITION = "QB"
+```
+
+This is equivalent to:
+
+```
+team("BUF") has PENALTIES with (PLAYERS with POSITION = "QB")
+```
+
+Note that all of these examples leverage the fact that arrays are implicitly convertible to numbers based on their length. So you could also do something like this:
+
+```
+team("PIT") has (PENALTIES with YARDS > 5) > 1
+```
+
+### *FunctionCall*
+
+The system provides functions for some operations, such as retrieving team information. These are written in classic C style:
+
+```
+team("PIT") has RUSHING_YARDS > 0
+```
+
+In this example, `team` is a function.

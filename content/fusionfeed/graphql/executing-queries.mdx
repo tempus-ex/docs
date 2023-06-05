@@ -1,0 +1,76 @@
+---
+title: Executing Queries
+---
+# Executing Queries
+
+GraphQL is transport-agnostic, meaning the spec does not define the protocol used to send queries to the server. However, FusionFeed supports all of the transport mechanisms commonly used by popular frameworks such as [Apollo](https://www.apollographql.com).
+
+## HTTP
+
+HTTP is by far the most common choice for executing GraphQL queries as it's easy to use and performs quite well due to its ability to leverage traditional CDN optimization techniques. This is the transport mechanism that we recommend for most applications.
+
+FusionFeed's GraphQL endpoint is <code>{config.fusionFeedUrl}/v2/graphql</code>.
+
+You can use GET requests with `query`, `variables`, or `operationName` parameters:
+
+```http
+GET /v2/graphql?query={service{version}}
+```
+
+You can use POST requests with `query`, `variables`, or `operationName` parameters encoded as JSON:
+
+```http
+POST /v2/graphql
+Content-Type: application/json
+
+{
+    "query": "{service{version}}"
+}
+```
+
+Or you can use POST requests with the query document as the request body:
+
+```http
+POST /v2/graphql
+Content-Type: application/graphql
+
+{
+    service {
+        version
+    }
+}
+```
+
+See [Serving over HTTP](https://graphql.org/learn/serving-over-http/) for details.
+
+### Persisted Queries
+
+FusionFeed supports persisted queries [as implemented by Apollo](https://www.apollographql.com/docs/apollo-server/performance/apq/). Persisted queries allow clients to minimize their request sizes by sending only a hash of their query to the server instead of the full query document.
+
+## WebSocket
+
+FusionFeed provides some APIs which allow data to be pushed from the server via GraphQL subscription.
+
+GraphQL subscriptions cannot be used with normal HTTP requests, so WebSockets must be used for them. There are two supported protocols for WebSockets:
+
+- [graphql-ws](https://github.com/enisdenjo/graphql-ws), which is the latest and recommended protocol.
+- [subscriptions-transport-ws](https://github.com/apollographql/subscriptions-transport-ws), which has been deprecated by the maintainer in favor of graphql-ws.
+
+FusionFeed's GraphQL endpoint for WebSockets is <code>{config.fusionFeedUrl}/v2/graphql-ws</code>. All of the above protocols are supported by it and can be negotiated via the `Sec-WebSocket-Protocol` HTTP header.
+
+Web browsers don't support explicitly setting headers on WebSockets, so to authenticate WebSocket connections, you must send your credentials via the "connection init" parameters of the negotiated protocol:
+
+```json
+{
+    "authorization": "token MY_API_KEY"
+}
+```
+
+## Recommended Frameworks
+
+GraphQL requests can be made just like traditional REST requests. You can submit them as JSON HTTP requests and get JSON responses back. However, we recommend interacting with FusionFeed using a GraphQL client framework for more advanced functionality such as intelligent state management and compile-time request validation. Our favorites are:
+
+- [Apollo for React](https://www.apollographql.com/docs/react/)
+- [Apollo for iOS](https://www.apollographql.com/docs/ios)
+- [Apollo for Kotlin](https://www.apollographql.com/docs/kotlin)
+

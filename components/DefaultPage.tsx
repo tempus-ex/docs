@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, createStyles, Navbar, Title } from '@mantine/core';
+import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
@@ -8,6 +9,8 @@ import { Footer } from './Footer';
 import { Header } from './Header';
 
 import { TableOfContents } from '../lib/content';
+
+const { publicRuntimeConfig } = getConfig();
 
 export interface Props {
     path: string;
@@ -22,6 +25,9 @@ const useStyles = createStyles((theme) => ({
     },
     tocNestedLink: {
         paddingLeft: `${2 * theme.spacing.md}px`,
+    },
+    tocTwiceNestedLink: {
+        paddingLeft: `${3 * theme.spacing.md}px`,
     },
     tocTopLink: {
         paddingLeft: `${theme.spacing.md}px`,
@@ -52,6 +58,10 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
+const scope = {
+    config: publicRuntimeConfig,
+};
+
 export const DefaultPage = (props: Props) => {
     const { classes } = useStyles();
 
@@ -76,7 +86,12 @@ export const DefaultPage = (props: Props) => {
                             <React.Fragment key={p.path}>
                                 <Link className={`${p.path === props.path ? classes.tocLinkCurrent : classes.tocLink} ${classes.tocTopLink}`} href={p.path}>{p.title}</Link>
                                 {p.children?.map((p) => (
-                                    <Link className={`${p.path === props.path ? classes.tocLinkCurrent : classes.tocLink} ${classes.tocNestedLink}`} href={p.path} key={p.path}>{p.title}</Link>
+                                    <>
+                                        <Link className={`${p.path === props.path ? classes.tocLinkCurrent : classes.tocLink} ${classes.tocNestedLink}`} href={p.path} key={p.path}>{p.title}</Link>
+                                        {p.children?.map((p) => (
+                                            <Link className={`${p.path === props.path ? classes.tocLinkCurrent : classes.tocLink} ${classes.tocTwiceNestedLink}`} href={p.path} key={p.path}>{p.title}</Link>
+                                        ))}
+                                    </>
                                 ))}
                             </React.Fragment>
                         ))}
@@ -84,7 +99,7 @@ export const DefaultPage = (props: Props) => {
                 </Navbar>
                 <main>
                     <Container>
-                        <MDXRemote {...props.source} />
+                        <MDXRemote {...props.source} scope={scope} />
                     </Container>
                 </main>
             </div>

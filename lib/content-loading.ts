@@ -21,6 +21,40 @@ async function* walk(dir: string): AsyncGenerator<string> {
     }
 }
 
+interface ParsedHttpCodeBlock {
+    method: string,
+    url: string,
+    headers: Headers,
+    body?: string,
+}
+
+function parseHttpMarkdownCode(code: string): ParsedHttpCodeBlock {
+    const normalized = code.replace(/\r\n/g, '\n');
+    const firstLineEnd = normalized.includes('\n') ? normalized.indexOf('\n') : normalized.length;
+    const [method, url] = normalized.slice(0, firstLineEnd).split(' ').map((s) => s.trim());
+
+    let body = undefined;
+    const headers = new Headers();
+
+    const lines = normalized.slice(firstLineEnd + 1).split('\n');
+    for (let i = 0; i < lines.length; ++i) {
+        const line = lines[i];
+        if (!line.trim()) {
+            body = lines.slice(i + 1).join('\n').trim();
+            break;
+        }
+        const [key, value] = line.split(':').map((s) => s.trim());
+        headers.append(key, value);
+    }
+
+    return {
+        method,
+        url,
+        headers,
+        body,
+    };
+}
+
 // Returns a map where each key is a path, such as "/" or "/fusion-feed".
 export async function getAllContent(): Promise<Map<string, Content>> {
     const ret = new Map();
@@ -84,19 +118,42 @@ export async function getAllContent(): Promise<Map<string, Content>> {
                                     }],
                                 };
                             } else if (node.lang === 'http' || node.lang === 'https') {
-                                const value = node.value;
-                                const req = value.split('\n')[0].split(' ');
-                                const body = value.split('\n').slice(1).join('\n').replace(/\n/g, '');
-                                if (req[0] !== 'GET' && req[0] !== 'POST') {
+                                const { method, url, headers, body } = parseHttpMarkdownCode(node.value);
+
+                                const [path, params] = url.split('?');
+                                if (path === '/v1/graphql' || path === '/v2/graphql') {
+                                    // This is actually a GraphQL request.
+                                    const version = path === '/v1/graphql' ? 'v1' : 'v2';
+                                    if (method === 'GET') {
+                                        graphql.push({
+                                            document: new URLSearchParams(params).get('query') || '',
+                                            version,
+                                        });
+                                    } else if (headers.get('Content-Type') === 'application/json') {
+                                        graphql.push({
+                                            document: JSON.parse(body || '').query || '',
+                                            version,
+                                        });
+                                    } else if (headers.get('Content-Type') === 'application/graphql') {
+                                        graphql.push({
+                                            document: body || '',
+                                            version,
+                                        });
+                                    } else {
+                                        throw new Error('Invalid HTTP request for GraphQL v2.');
+                                    }
+                                    return null;
+                                }
+
+                                if (method !== 'GET' && method !== 'POST') {
                                     throw new Error("Only GET and POST requests are supported.");
                                 }
-                                rest.push(
-                                    {
-                                        method: req[0],
-                                        url: req[1],
-                                        body: body,
-                                    }
-                                );
+
+                                rest.push({
+                                    method,
+                                    url,
+                                    body: body,
+                                });
                             }
 
                             return null;

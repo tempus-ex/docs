@@ -1,0 +1,65 @@
+---
+title: Concepts
+---
+# Concepts
+
+## Nodes and Edges
+
+The FusionFeed GraphQL API design is centered around the concept of graphs. You will frequently encounter names referencing graph terminology such as "nodes" and "edges".
+
+The term "node" is used to refer to objects in the API such as games, teams, and players.
+
+The term "edge" is used to refer to the relationship between two nodes. For example, games often have a 1:2 relationship with teams. If drawn as a graph, that might look like this:
+
+<img height="360" src="/images/graphql/nodes-and-edges.png" />
+
+Now consider data points that are specific to a team within the context of a game. For example, consider the teams' scores. These team nodes may be connected to many different games, so the team's score for one game can't be placed on the team node. It would be possible to add `homeTeamScore` and `awayTeamScore` fields directly to the game itself; However, the best place for this data to live is on the game-team edge. In FusionFeed's GraphQL API, this looks like this:
+
+```graphql v2
+query NFLGameScores($id: ID!) {
+  node(id: $id) {
+    ... on NFLGame {
+      homeTeamEdge {
+        ...gameTeamEdge
+      }
+      awayTeamEdge {
+        ...gameTeamEdge
+      }
+    }
+  }
+}
+
+fragment gameTeamEdge on NFLGameTeamEdge {
+  score
+  node {
+    abbreviation
+  }
+}
+```
+
+## Connections and Pagination
+
+One-to-many relationships in FusionFeed's GraphQL API are represented as "Connections". Specifically, FusionFeed implements the [Relay GraphQL Cursor Specification](https://relay.dev/graphql/connections.htm).
+
+These fields can be identified by the "Connection" suffix in their name and allow for users to robustly paginate through large result sets.
+
+For example, to enumerate NFL games, 100 games at a time, you might use a query liks this:
+
+```graphql v2
+query EnumerateNFLGames($cursor: String) {
+  nfl {
+    gamesConnection(first: 100, after: $cursor) {
+      edges {
+        node {
+          id
+          time
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+}
+```

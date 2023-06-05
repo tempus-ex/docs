@@ -1,0 +1,55 @@
+---
+title: Navigating Games
+---
+# Navigating Games
+
+The primary means of navigating soccer games is via the top level `soccerMatchesConnection` field, which provides powerful search functionality using [FQL](../../fql):
+
+```gql v2
+{
+  soccerMatchesConnection(first: 10, predicate: {
+    expression: """team("CHE")"""
+  }) {
+    edges {
+      node {
+        id
+        time
+        homeTeamEdge {
+          node {
+            name
+          }
+        }
+        awayTeamEdge {
+          node {
+            name
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Soccer matches implement the `Node` interface, so matches found via search can be looked up directly by id:
+
+```gql v2
+{
+  node(id: "DA~KHc2aBCUu3Kkeeq1cV4EHq") {
+    ... on SoccerMatch {
+      time
+      homeTeamEdge {
+        node {
+          name
+        }
+      }
+      awayTeamEdge {
+        node {
+          name
+        }
+      }
+    }
+  }
+}
+```
+
+Matches returned by `soccerMatchesConnection` implement the `SoccerMatch` interface. As a best practice, we highly recommend using `SoccerMatch` in queries like these and avoiding referencing concrete match types such as `EPLMatch`.

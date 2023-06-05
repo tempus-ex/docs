@@ -1,3 +1,4 @@
+@use "../../styles/breakpoints" as *;
 @use "../../styles/spacing" as *;
 
 .main {
@@ -87,5 +88,36 @@
     &--level-2 {
       padding-left: calc(spacing("lg") * 3);
     }
+  }
+}
+
+.generated-content {
+  margin: spacing("xl") auto;
+  width: 100%;
+  max-width: breakpoint("lg");
+  padding: spacing("lg");
+
+  h1 {
+    font-size: 4rem;
+  }
+
+  h2 {
+    font-size: 3rem;
+  }
+
+  h3 {
+    font-size: 2rem;
+  }
+
+  pre {
+    display: inline-block;
+    border-radius: 4px;
+    padding: spacing("xs") spacing("sm");
+    margin-right: spacing("sm");
+    background-color: var(--code-background-color);
+
+    code {
+      background-color: transparent;
+    };
   }
 }

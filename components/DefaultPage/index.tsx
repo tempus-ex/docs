@@ -1,5 +1,4 @@
 import React from "react";
-import { Container } from "@mantine/core";
 import Head from "next/head";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 
@@ -28,9 +27,9 @@ export const DefaultPage = (props: Props) => {
       <Header />
       <main className={styles.main}>
           <NavBar toc={toc} path={props.path} />
-          <Container>
+          <div className={styles['generated-content']}>
             <MDXRemote {...props.source} />
-          </Container>
+          </div>
       </main>
       <Footer />
     </>

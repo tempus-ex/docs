@@ -19,8 +19,8 @@ body {
   --border-color: #dddfe1;
   --link-color: #767676;
   --link-color-hover: #111;
-  --link-background-color: #0ff;
   --link-background-hover: #ff0;
+  --code-background-color: #f1f1f1;
 
   &[data-darkmode] {
     --background-color: #111;
@@ -29,8 +29,8 @@ body {
     --border-color: #5b6771;
     --link-color: #9e9e9e;
     --link-color-hover: #111;
-    --link-background-color: #0ff;
     --link-background-hover: #ff0;
+    --code-background-color: #0e0e0e;
   }
 }
 
@@ -73,6 +73,10 @@ h5 {
 
 h6 {
   font-size: 1.25rem;
+}
+
+code, code > * {
+  font-family: 'Inconsolata', monospace;
 }
 
 #__next {

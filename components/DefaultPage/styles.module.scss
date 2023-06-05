@@ -40,13 +40,14 @@
   }
 
   &__link {
-    color: var(--link-color);
+    color: var(--text-color);
     text-decoration: none;
     padding: spacing("md");
 
     &:hover {
-      color: var(--link-color-hover);
+      color: var(--text-color);
       background-color: var(--link-background-hover);
+      border-right: 3px solid var(--text-color);
     }
 
     &--active {
@@ -58,6 +59,7 @@
 
     &--has-children {
       font-weight: bold;
+      text-transform: uppercase;
       &::before {
         content: url("../../public/images/Navbar-arrow.svg");
         display: inline-block;

@@ -50,18 +50,18 @@ export const HomePage = () => {
         <div className={styles.section}>
           {/*TODO add blurb copy*/}
           <Product
-            image={"./images/REST.svg"}
-            title="REST API"
-            blurb={""}
-            link={"./fusionfeed/rest"}
-            linkLabel="View Documentation"
-          />
-          {/*TODO add blurb copy*/}
-          <Product
             image={"./images/GraphQL.svg"}
             title="GraphQL API"
             blurb={""}
             link={"./fusionfeed/graphql"}
+            linkLabel="View Documentation"
+          />
+          {/*TODO add blurb copy*/}
+          <Product
+            image={"./images/REST.svg"}
+            title="REST API"
+            blurb={""}
+            link={"./fusionfeed/rest"}
             linkLabel="View Documentation"
           />
         </div>

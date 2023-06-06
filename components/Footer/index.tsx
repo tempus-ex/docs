@@ -17,7 +17,7 @@ export const Footer = () => {
       })}
     >
       <div className={styles["footer__inner"]}>
-        <h3 className={styles["footer__title"]}>Fusion Feed API</h3>
+        <h2 className={styles["footer__title"]}>Fusion Feed API</h2>
         <div
           className={clsx([styles["footer__section"], styles["footer__links"]])}
         >

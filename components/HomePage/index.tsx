@@ -46,7 +46,7 @@ export const HomePage = () => {
       </Head>
       <Header />
       <main className={styles.main}>
-        <h3 className={styles.header}>Documentation</h3>
+        <h2 className={styles.header}>Documentation</h2>
         <div className={styles.section}>
           {/*TODO add blurb copy*/}
           <Product
@@ -66,7 +66,7 @@ export const HomePage = () => {
           />
         </div>
         <Divider />
-        <h3 className={styles.header}>Support</h3>
+        <h2 className={styles.header}>Support</h2>
         <div className={styles.section}>
           <Product
             image={"./images/Support.svg"}

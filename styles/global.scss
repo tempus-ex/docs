@@ -17,21 +17,25 @@ body {
   --text-color: #333;
   --title-color: #111;
   --border-color: #dddfe1;
-  --link-color: #767676;
-  --link-color-hover: #111;
-  --link-background-color: #0ff;
+  --link-color: #006bef;
+  --link-color-hover: darken(#006bef, 10%);
   --link-background-hover: #ff0;
+  --code-background-color: #f1f1f1;
 
   &[data-darkmode] {
     --background-color: #111;
     --text-color: #ccc;
     --title-color: #eee;
     --border-color: #5b6771;
-    --link-color: #9e9e9e;
-    --link-color-hover: #111;
-    --link-background-color: #0ff;
+    --link-color: #006bef;
+    --link-color-hover: lighten(#006bef, 10%);
     --link-background-hover: #ff0;
+    --code-background-color: #0e0e0e;
   }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-transform: uppercase;
 }
 
 h1,
@@ -39,7 +43,6 @@ h2,
 h3 {
   font-style: italic;
   font-weight: 900;
-  text-transform: uppercase;
   color: var(--title-color);
 }
 
@@ -47,32 +50,35 @@ h4,
 h5,
 h6 {
   font-weight: 700;
-  text-transform: uppercase;
-  color: var(--title-color);
+  color: var(--text-color);
 }
 
 h1 {
-  font-size: 5rem;
-}
-
-h2 {
   font-size: 4rem;
 }
 
-h3 {
+h2 {
   font-size: 3rem;
 }
 
-h4 {
+h3 {
   font-size: 2rem;
 }
 
-h5 {
+h4 {
   font-size: 1.5rem;
 }
 
-h6 {
+h5 {
   font-size: 1.25rem;
+}
+
+h6 {
+  font-size: 1.125rem;
+}
+
+code, code > * {
+  font-family: 'Inconsolata', monospace;
 }
 
 #__next {

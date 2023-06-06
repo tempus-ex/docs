@@ -42,7 +42,6 @@ export const HomePage = () => {
             <main className={styles.main}>
                 <h2 className={styles.header}>Documentation</h2>
                 <div className={styles.section}>
-                    {/*TODO add blurb copy*/}
                     <Product
                         image={'./images/GraphQL.svg'}
                         title="GraphQL API"
@@ -50,7 +49,6 @@ export const HomePage = () => {
                         link={'./fusionfeed/graphql'}
                         linkLabel="View Documentation"
                     />
-                    {/*TODO add blurb copy*/}
                     <Product
                         image={'./images/REST.svg'}
                         title="REST API"

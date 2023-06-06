@@ -22,14 +22,6 @@ export const Header = () => {
                 <Link className={styles['header__link']} href="/">
                     <img alt="Tempus Ex" className={styles['header__logo']} src={'/images/FusionFeedLogo.svg'} />
                 </Link>
-                {/**TODO:  This dark mode toggle is for testing only. Remove before deploy */}
-                {/* <label>
-          Dark Mode
-          <input
-            type="checkbox"
-            onChange={(e) => toggleDarkMode(e.target.checked)}
-          />
-        </label> */}
             </div>
         </header>
     );

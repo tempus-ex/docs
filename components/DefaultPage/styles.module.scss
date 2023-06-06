@@ -96,7 +96,7 @@
 }
 
 .generated-content {
-  margin: 0 auto spacing("xl");
+  margin: spacing("xl") auto;
   padding: 0 spacing("lg");
   flex: 0 1 breakpoint("lg");
   min-width: 0;
@@ -107,6 +107,20 @@
     &:hover {
       color: var(--link-color-hover);
     }
+  }
+
+  h1,
+  h2,
+  h3 {
+    margin-top: spacing("lg");
+    margin-bottom: spacing("md");
+  }
+
+  h4,
+  h5,
+  h6 {
+    margin-top: spacing("lg");
+    margin-bottom: spacing("md");
   }
 
   pre {
@@ -121,6 +135,6 @@
 
     code {
       background-color: transparent;
-    };
+    }
   }
 }

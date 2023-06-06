@@ -28,7 +28,7 @@ describe('getAllContent', () => {
         }
         expect(count).toBeGreaterThan(0);
     });
-})
+});
 
 describe('graphql', () => {
     it('validates', async () => {
@@ -47,7 +47,7 @@ describe('graphql', () => {
             }
         }
     });
-})
+});
 
 describe('rest', () => {
     it('validates', async () => {
@@ -85,13 +85,15 @@ describe('rest', () => {
                         // check to see that request contains all required parameters
                         for (const param of schema.parameters) {
                             if (param.in === 'query' && param.required && !reqURL.searchParams.has(param.name)) {
-                                throw new Error(`Missing required parameter ${param.name} in REST request "${rest.url}"`);
+                                throw new Error(
+                                    `Missing required parameter ${param.name} in REST request "${rest.url}"`,
+                                );
                             }
                         }
 
                         // check to see that request contains no unknown parameters
                         for (const param of Array.from(reqURL.searchParams)) {
-                            if (!schema.parameters.find(p => p.name === param[0])) {
+                            if (!schema.parameters.find((p) => p.name === param[0])) {
                                 throw new Error(`Unknown parameter ${param[0]} in REST request "${rest.url}"`);
                             }
                         }
@@ -112,7 +114,7 @@ describe('rest', () => {
             }
         }
     });
-})
+});
 
 describe('links', () => {
     it('validate', async () => {
@@ -137,4 +139,4 @@ describe('links', () => {
             }
         }
     });
-})
+});

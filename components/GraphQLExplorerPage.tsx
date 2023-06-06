@@ -26,7 +26,7 @@ export interface Props {
 }
 
 const ThemeSetter = () => {
-    const {theme, setTheme} = useTheme();
+    const { theme, setTheme } = useTheme();
     const checkTheme = useCallback(() => {
         if (theme !== 'light') {
             setTheme('light');
@@ -40,25 +40,30 @@ const ThemeSetter = () => {
 
 export const GraphQLExplorerPage = (props: Props) => {
     const [fetcher, setFetcher] = useState<Fetcher | null>(null);
-    const {classes} = useStyles();
+    const { classes } = useStyles();
 
     const frontmatter = props.source.frontmatter;
 
     useEffect(() => {
         const url = publicRuntimeConfig.fusionFeedUrl + '/v2/graphql';
-        const token = document.cookie.split("; ").find((row) => row.startsWith("fftoken="))?.split("=")[1];
-        setFetcher(() => createGraphiQLFetcher({
-            headers: {
-                Authorization: `token ${token}`,
-            },
-            url,
-        }));
+        const token = document.cookie
+            .split('; ')
+            .find((row) => row.startsWith('fftoken='))
+            ?.split('=')[1];
+        setFetcher(() =>
+            createGraphiQLFetcher({
+                headers: {
+                    Authorization: `token ${token}`,
+                },
+                url,
+            }),
+        );
     }, []);
 
     return (
         <>
             <Head>
-                <title>{frontmatter?.title}</title>
+                <title>{frontmatter?.title as string}</title>
             </Head>
             <Header />
             <main className={classes.main}>
@@ -71,5 +76,5 @@ export const GraphQLExplorerPage = (props: Props) => {
             </main>
             <Footer />
         </>
-    )
+    );
 };

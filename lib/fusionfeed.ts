@@ -12,7 +12,7 @@ export async function validateFusionFeedToken(token: string): Promise<boolean> {
         method: 'POST',
         headers: {
             'Content-Type': 'application/graphql',
-            'Authorization': 'token ' + token,
+            Authorization: 'token ' + token,
         },
         body: '{__typename}',
     });
@@ -25,14 +25,14 @@ export async function getGraphQLSchema(version: 'v1' | 'v2', authorization: stri
         method: 'POST',
         headers: {
             'Content-Type': 'application/graphql',
-            'Authorization': authorization,
+            Authorization: authorization,
         },
         body: getIntrospectionQuery(),
     });
     if (resp.status !== 200) {
         throw new Error(`Unexpected response code: ${resp.status}`);
     }
-    const result = await resp.json() as unknown as ExecutionResult<IntrospectionQuery>;
+    const result = (await resp.json()) as unknown as ExecutionResult<IntrospectionQuery>;
     if (result.errors && result.errors.length > 0) {
         throw new Error(`GraphQL error: ${result.errors[0].message}`);
     } else if (!result.data) {
@@ -52,10 +52,10 @@ export interface RESTPathParameter {
 export interface RESTPath {
     get: {
         parameters: RESTPathParameter[];
-    }
+    };
     post: {
         parameters: RESTPathParameter[];
-    }
+    };
 }
 
 export interface RESTSchema {
@@ -67,7 +67,7 @@ export async function getRESTSchema(version: 'v1' | 'v2', authorization: string)
     const resp = await fetch(url, {
         method: 'GET',
         headers: {
-            'Authorization': authorization,
+            Authorization: authorization,
         },
     });
     if (resp.status !== 200) {

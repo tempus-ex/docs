@@ -20,4 +20,4 @@ describe('canonicalContentPath', () => {
     it('traverses upward', async () => {
         expect(canonicalContentPath('/foo/../bar')).toBe('/bar');
     });
-})
+});

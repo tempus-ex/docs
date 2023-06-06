@@ -27,12 +27,11 @@ export const LoginPage = () => {
     const login = () => {
         setIsBusy(true);
         setErrorMessage('');
-
         validateFusionFeedToken(token)
             .then((ok) => {
                 if (ok) {
                     document.cookie = 'fftoken=' + token;
-                    const destination = (new URLSearchParams(window.location.hash.slice(1))).get('destination');
+                    const destination = new URLSearchParams(window.location.hash.slice(1)).get('destination');
                     window.location.href = destination || '/';
                 } else {
                     setErrorMessage('Invalid token.');
@@ -54,12 +53,16 @@ export const LoginPage = () => {
             <main>
                 <Container className={classes.wrapper}>
                     {errorMessage && (
-                        <Alert className={classes.alert} color="red">{errorMessage}</Alert>
+                        <Alert className={classes.alert} color="red">
+                            {errorMessage}
+                        </Alert>
                     )}
-                    <form onSubmit={(e) => {
-                        e.preventDefault();
-                        login();
-                    }}>
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            login();
+                        }}
+                    >
                         <PasswordInput
                             disabled={isBusy}
                             onChange={(e) => setToken(e.currentTarget.value)}
@@ -71,5 +74,5 @@ export const LoginPage = () => {
             </main>
             <Footer />
         </>
-    )
+    );
 };

@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "tsc -p . --noEmit && jest",
-    "format": "prettier --write './src/**/*.ts*' './aws/**/*.ts'"
+    "format": "prettier --write './lib/**/*.ts*' './components/**/*.ts*' './pages/**/*.ts*' './aws/**/*.ts'"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",

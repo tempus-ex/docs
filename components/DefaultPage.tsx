@@ -47,8 +47,7 @@ const useStyles = createStyles((theme) => ({
         fontWeight: 'bold',
     },
     tocTop: {
-        borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[3]
-            }`,
+        borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[3]}`,
         marginBottom: theme.spacing.md,
         padding: theme.spacing.md,
     },
@@ -83,12 +82,35 @@ export const DefaultPage = (props: Props) => {
                     <Navbar.Section>
                         {toc.pages.map((p) => (
                             <React.Fragment key={p.path}>
-                                <Link className={`${p.path === props.path ? classes.tocLinkCurrent : classes.tocLink} ${classes.tocTopLink}`} href={p.path}>{p.title}</Link>
+                                <Link
+                                    className={`${p.path === props.path ? classes.tocLinkCurrent : classes.tocLink} ${
+                                        classes.tocTopLink
+                                    }`}
+                                    href={p.path}
+                                >
+                                    {p.title}
+                                </Link>
                                 {p.children?.map((p) => (
                                     <>
-                                        <Link className={`${p.path === props.path ? classes.tocLinkCurrent : classes.tocLink} ${classes.tocNestedLink}`} href={p.path} key={p.path}>{p.title}</Link>
+                                        <Link
+                                            className={`${
+                                                p.path === props.path ? classes.tocLinkCurrent : classes.tocLink
+                                            } ${classes.tocNestedLink}`}
+                                            href={p.path}
+                                            key={p.path}
+                                        >
+                                            {p.title}
+                                        </Link>
                                         {p.children?.map((p) => (
-                                            <Link className={`${p.path === props.path ? classes.tocLinkCurrent : classes.tocLink} ${classes.tocTwiceNestedLink}`} href={p.path} key={p.path}>{p.title}</Link>
+                                            <Link
+                                                className={`${
+                                                    p.path === props.path ? classes.tocLinkCurrent : classes.tocLink
+                                                } ${classes.tocTwiceNestedLink}`}
+                                                href={p.path}
+                                                key={p.path}
+                                            >
+                                                {p.title}
+                                            </Link>
                                         ))}
                                     </>
                                 ))}
@@ -104,5 +126,5 @@ export const DefaultPage = (props: Props) => {
             </div>
             <Footer />
         </>
-    )
+    );
 };

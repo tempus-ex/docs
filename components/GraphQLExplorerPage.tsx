@@ -46,13 +46,18 @@ export const GraphQLExplorerPage = (props: Props) => {
 
     useEffect(() => {
         const url = publicRuntimeConfig.fusionFeedUrl + '/v2/graphql';
-        const token = document.cookie.split("; ").find((row) => row.startsWith("fftoken="))?.split("=")[1];
-        setFetcher(() => createGraphiQLFetcher({
-            headers: {
-                Authorization: `token ${token}`,
-            },
-            url,
-        }));
+        const token = document.cookie
+            .split('; ')
+            .find((row) => row.startsWith('fftoken='))
+            ?.split('=')[1];
+        setFetcher(() =>
+            createGraphiQLFetcher({
+                headers: {
+                    Authorization: `token ${token}`,
+                },
+                url,
+            }),
+        );
     }, []);
 
     return (
@@ -71,5 +76,5 @@ export const GraphQLExplorerPage = (props: Props) => {
             </main>
             <Footer />
         </>
-    )
+    );
 };

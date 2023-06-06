@@ -18,8 +18,8 @@ export const Footer = () => {
     return (
         <footer className={classes.footer}>
             <Text color="dimmed" size="sm">
-                ©{(new Date()).getFullYear()} Tempus Ex Machina, Inc.
+                ©{new Date().getFullYear()} Tempus Ex Machina, Inc.
             </Text>
         </footer>
-    )
+    );
 };

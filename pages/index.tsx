@@ -32,15 +32,16 @@ export const getServerSideProps = withAuth<{}, Props>(async function () {
                     icon: p.icon,
                     title: content.frontmatter.title,
                     description: p.description,
-                    children: p.children?.map((c) => {
-                        const path = canonicalContentPath(c);
-                        const content = allContent.get(path)!;
+                    children:
+                        p.children?.map((c) => {
+                            const path = canonicalContentPath(c);
+                            const content = allContent.get(path)!;
 
-                        return {
-                            path,
-                            title: content.frontmatter.title,
-                        };
-                    }) || [],
+                            return {
+                                path,
+                                title: content.frontmatter.title,
+                            };
+                        }) || [],
                 };
             }),
         },

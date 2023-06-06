@@ -31,5 +31,5 @@ export const Header = () => {
                 <span>Tempus Ex Docs</span>
             </Link>
         </MantineHeader>
-    )
+    );
 };

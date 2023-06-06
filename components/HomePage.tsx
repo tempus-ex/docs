@@ -1,12 +1,4 @@
-import {
-    createStyles,
-    ThemeIcon,
-    Text,
-    Title,
-    Container,
-    SimpleGrid,
-    useMantineTheme,
-} from '@mantine/core';
+import { createStyles, ThemeIcon, Text, Title, Container, SimpleGrid, useMantineTheme } from '@mantine/core';
 import Head from 'next/head';
 import Link from 'next/link';
 
@@ -56,7 +48,9 @@ export function Product(props: ProductProps) {
             </Text>
             <ul>
                 {props.children.map((c) => (
-                    <li key={c.path}><Link href={c.path}>{c.title}</Link></li>
+                    <li key={c.path}>
+                        <Link href={c.path}>{c.title}</Link>
+                    </li>
                 ))}
             </ul>
         </div>
@@ -83,11 +77,13 @@ export const HomePage = (props: Props) => {
                             { maxWidth: 755, cols: 1, spacing: 'xl' },
                         ]}
                     >
-                        {props.products.map((p) => (<Product key={p.path} {...p} />))}
+                        {props.products.map((p) => (
+                            <Product key={p.path} {...p} />
+                        ))}
                     </SimpleGrid>
                 </Container>
             </main>
             <Footer />
         </>
-    )
+    );
 };

@@ -63,7 +63,7 @@ export const Footer = () => {
                 src={github}
                 width={24}
                 height={24}
-                alt={"GitHub repository link"}
+                alt={"GitHub organization"}
               />
             </Link>
 

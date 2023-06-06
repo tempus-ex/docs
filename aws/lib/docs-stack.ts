@@ -59,3 +59,39 @@ export class DocsStack extends cdk.Stack {
         });
     }
 }
+
+export class ProdDocsStack extends cdk.Stack {
+    constructor(scope: cdk.App, id: string, props: DocsProps) {
+        super(scope, id, props);
+        const { domainName, subDomainName, certificateArn } = props;
+        const fullSubdomain = [subDomainName, domainName].join('.');
+
+        const domainCert = certificatemanager.Certificate.fromCertificateArn(this, 'DomainCert', certificateArn);
+
+        const docsHandler = new lambda.DockerImageFunction(this, 'Handler', {
+            code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../..'), {
+                platform: ecr_assets.Platform.LINUX_AMD64,
+            }),
+            timeout: cdk.Duration.seconds(30),
+        });
+
+        const api = new apigateway.LambdaRestApi(this, 'Api', {
+            binaryMediaTypes: ['*/*'],
+            handler: docsHandler,
+            domainName: {
+                domainName: fullSubdomain,
+                certificate: domainCert,
+            },
+        });
+
+        const zone = route53.HostedZone.fromLookup(this, 'HostedZone', {
+            domainName: fullSubdomain,
+        });
+
+        new route53.ARecord(this, 'Record', {
+            recordName: subDomainName,
+            zone,
+            target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api)),
+        });
+    }
+}

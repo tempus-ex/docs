@@ -59,7 +59,7 @@ export const HomePage = () => {
           {/*TODO add blurb copy*/}
           <Product
             image={"./images/GraphQL.svg"}
-            title="GraphQL"
+            title="GraphQL API"
             blurb={""}
             link={"./fusionfeed/graphql"}
             linkLabel="View Documentation"

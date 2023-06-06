@@ -26,7 +26,7 @@ export const Footer = () => {
             className={styles["footer__section-link"]}
             href="https://tempus-ex.com/"
           >
-            Tempus ex Home
+            Tempus Ex Home
           </Link>
           {/*TODO need an About link */}
           {/* <Link

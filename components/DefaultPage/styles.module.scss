@@ -4,11 +4,13 @@
 .main {
   display: flex;
   flex-direction: row;
-  flex-grow: 1;
+  width: 100%;
+  max-width: 100vw;
 }
 
 .navbar {
   width: 300px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--border-color);
@@ -94,10 +96,10 @@
 }
 
 .generated-content {
-  margin: spacing("xl") auto;
-  width: 100%;
-  max-width: breakpoint("lg");
-  padding: spacing("lg");
+  margin: 0 auto spacing("xl");
+  padding: 0 spacing("lg");
+  flex: 0 1 breakpoint("lg");
+  min-width: 0;
 
   a {
     color: var(--link-color);
@@ -107,24 +109,15 @@
     }
   }
 
-  h1 {
-    font-size: 4rem;
-  }
-
-  h2 {
-    font-size: 3rem;
-  }
-
-  h3 {
-    font-size: 2rem;
-  }
-
   pre {
     display: inline-block;
     border-radius: 4px;
     padding: spacing("xs") spacing("sm");
     margin-right: spacing("sm");
     background-color: var(--code-background-color);
+    overflow: auto;
+    overflow-x: scroll;
+    max-width: 100%;
 
     code {
       background-color: transparent;

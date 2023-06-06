@@ -89,7 +89,7 @@ export class ProdDocsStack extends cdk.Stack {
         });
 
         new route53.ARecord(this, 'Record', {
-            recordName: subDomainName,
+            recordName: '',
             zone,
             target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api)),
         });

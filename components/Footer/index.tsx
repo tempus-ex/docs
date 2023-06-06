@@ -76,7 +76,7 @@ export const Footer = () => {
                 src={twitter}
                 width={24}
                 height={24}
-                alt={"Tempus ex official Twitter account"}
+                alt={"Tempus Ex official Twitter account"}
               />
             </Link>
           </div>

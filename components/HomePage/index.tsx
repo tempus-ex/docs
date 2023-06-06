@@ -51,7 +51,7 @@ export const HomePage = () => {
           {/*TODO add blurb copy*/}
           <Product
             image={"./images/REST.svg"}
-            title="REST API v 1.0"
+            title="REST API"
             blurb={""}
             link={"./fusionfeed/rest"}
             linkLabel="View Documentation"

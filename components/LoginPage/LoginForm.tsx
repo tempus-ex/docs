@@ -71,7 +71,7 @@ export const LoginForm = ({ setLoginState }: LoginFormProps) => {
                         [styles['form__key-input--error']]: errorMessage,
                     })}
                     onChange={(e) => setToken(e.currentTarget.value)}
-                    placeholder="Enter your API Key"
+                    placeholder="Enter Your API Key"
                     value={token}
                 />
 

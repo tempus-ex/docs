@@ -1,4 +1,4 @@
-import type { GetServerSidePropsContext, GetServerSidePropsResult, PreviewData } from 'next';
+import type { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 
 import { validateFusionFeedToken } from './fusionfeed';

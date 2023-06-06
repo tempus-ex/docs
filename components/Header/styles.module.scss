@@ -1,0 +1,45 @@
+@use "../../styles/breakpoints" as *;
+@use "../../styles/spacing" as *;
+
+.header {
+  box-shadow: 0 4px 8px 0 rgba(96, 97, 112, 0.16),
+    0 0 2px 0 rgba(40, 41, 61, 0.04);
+  padding: spacing("sm");
+  border-bottom: 1px solid rgba(0,0,0,0);
+
+  &--dark-mode {
+    @extend .header;
+    box-shadow: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  @include above-breakpoint("xl") {
+    padding: 0;
+  }
+
+  &__inner {
+    margin: 0;
+    max-width: breakpoint("xl");
+    display: flex;
+    justify-content: space-between;
+
+    @include above-breakpoint("xl") {
+      margin: 0 auto;
+    }
+  }
+
+  &__link {
+    position: relative;
+  }
+
+  &__logo {
+    height: 52px;
+    @include above-breakpoint("md") {
+      margin-left: spacing("xl");
+    }
+
+    @include above-breakpoint("xl") {
+      height: 78px;
+    }
+  }
+}

@@ -1,0 +1,82 @@
+@use "../../styles/breakpoints" as *;
+@use "../../styles/spacing" as *;
+
+.main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.header {
+  margin: spacing("xl") spacing("xl") 0 spacing("xl");
+  max-width: breakpoint("xl");
+  @include above-breakpoint("xl") {
+    width: breakpoint("xl");
+    margin: spacing("xl") auto spacing("lg");
+    padding-left: spacing("xl");
+  }
+}
+
+.divider {
+  width: 100%;
+  border-image: 16
+    repeating-linear-gradient(
+      -45deg,
+      var(--border-color) 0,
+      var(--border-color) 1rem,
+      transparent 0,
+      transparent 2rem
+    );
+  border-top: 16px solid transparent;
+  margin: 0;
+}
+
+.section {
+  display: grid;
+  grid-template-columns: auto;
+  column-gap: spacing("xl");
+  width: 100%;
+  max-width: breakpoint("xl");
+  padding: spacing("xl");
+
+  @include above-breakpoint("md") {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @include above-breakpoint("xl") {
+    margin: 0 auto spacing("lg");
+  }
+}
+
+.product {
+  display: block;
+  box-shadow: -20px 20px 0px 0 rgba(0, 0, 0, 0.15),
+    inset 2px -2px 0 0 rgba(0, 0, 0, 0.05);
+  padding: spacing("lg");
+  margin-bottom: spacing("xl");
+
+  &__image {
+    display: block;
+    margin: 0 auto;
+  }
+
+  &__title {
+    margin-bottom: spacing("lg");
+    font-style: italic;
+  }
+
+  &__blurb {
+    margin-bottom: spacing("xl");
+  }
+
+  &__link {
+    background-color: #006bef;
+    border-radius: 4px;
+    padding: spacing("md");
+    color: #fff;
+    border-style: none;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+}

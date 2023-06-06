@@ -7,7 +7,7 @@ const demoArn = 'arn:aws:acm:us-east-1:992150767891:certificate/c5a6eb00-528f-47
 const webProdArn = 'arn:aws:acm:us-east-1:189912143729:certificate/217bc40a-88c9-437b-adb7-394bca6d31f1';
 
 const app = new cdk.App();
-new DocsStack(app, 'DocsStack', {
+new DocsStack(app, 'DemoDocsStack', {
     env: {
         account: '992150767891',
         region: 'us-east-1',
@@ -17,7 +17,7 @@ new DocsStack(app, 'DocsStack', {
     certificateArn: demoArn,
 });
 
-new DocsStack(app, 'DocsStack', {
+new DocsStack(app, 'ProdDocsStack', {
     env: {
         account: '189912143729',
         region: 'us-east-1',

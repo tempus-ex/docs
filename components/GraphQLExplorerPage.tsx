@@ -26,7 +26,7 @@ export interface Props {
 }
 
 const ThemeSetter = () => {
-    const {theme, setTheme} = useTheme();
+    const { theme, setTheme } = useTheme();
     const checkTheme = useCallback(() => {
         if (theme !== 'light') {
             setTheme('light');
@@ -40,7 +40,7 @@ const ThemeSetter = () => {
 
 export const GraphQLExplorerPage = (props: Props) => {
     const [fetcher, setFetcher] = useState<Fetcher | null>(null);
-    const {classes} = useStyles();
+    const { classes } = useStyles();
 
     const frontmatter = props.source.frontmatter;
 
@@ -58,7 +58,7 @@ export const GraphQLExplorerPage = (props: Props) => {
     return (
         <>
             <Head>
-                <title>{frontmatter?.title}</title>
+                <title>{frontmatter?.title as string}</title>
             </Head>
             <Header />
             <main className={classes.main}>

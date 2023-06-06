@@ -47,9 +47,8 @@ const useStyles = createStyles((theme) => ({
         fontWeight: 'bold',
     },
     tocTop: {
-        borderBottom: `1px solid ${
-            theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[3]
-        }`,
+        borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[3]
+            }`,
         marginBottom: theme.spacing.md,
         padding: theme.spacing.md,
     },
@@ -71,7 +70,7 @@ export const DefaultPage = (props: Props) => {
     return (
         <>
             <Head>
-                <title>{frontmatter?.title}</title>
+                <title>{frontmatter?.title as string}</title>
             </Head>
             <Header />
             <div className={classes.middle}>

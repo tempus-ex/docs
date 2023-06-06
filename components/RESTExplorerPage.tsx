@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Head from 'next/head';
 import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 
-const SwaggerUI = dynamic(import('swagger-ui-react'), {ssr: false})
+const SwaggerUI = dynamic(import('swagger-ui-react'), { ssr: false })
 
 import '../node_modules/swagger-ui-react/swagger-ui.css';
 
@@ -29,7 +29,7 @@ const getToken = () => document.cookie.split("; ").find((row) => row.startsWith(
 const specUrl = `${publicRuntimeConfig.fusionFeedUrl}/v2/openapi.json`;
 
 export const RESTExplorerPage = (props: Props) => {
-    const {classes} = useStyles();
+    const { classes } = useStyles();
 
     const frontmatter = props.source.frontmatter;
 
@@ -44,12 +44,12 @@ export const RESTExplorerPage = (props: Props) => {
                             authorization: `token ${token}`,
                         },
                     })
-                        .then( res => res.blob() )
-                        .then( blob => {
+                        .then(res => res.blob())
+                        .then(blob => {
                             saveAs(blob, 'openapi.json');
                         })
-                        .catch( err => console.error(err))
-                    ;
+                        .catch(err => console.error(err))
+                        ;
                 }}
             >
                 Download Spec
@@ -68,7 +68,7 @@ export const RESTExplorerPage = (props: Props) => {
     return (
         <>
             <Head>
-                <title>{frontmatter?.title}</title>
+                <title>{frontmatter?.title as string}</title>
             </Head>
             <Header />
             <main>

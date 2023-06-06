@@ -96,7 +96,7 @@
 }
 
 .generated-content {
-  margin: spacing("xl") auto;
+  margin: spacing("lg") auto spacing("xl");
   padding: 0 spacing("lg");
   flex: 0 1 breakpoint("lg");
   min-width: 0;
@@ -113,7 +113,7 @@
   h2,
   h3 {
     margin-top: spacing("lg");
-    margin-bottom: spacing("md");
+    margin-bottom: spacing("lg");
   }
 
   h4,
@@ -132,7 +132,7 @@
     background-color: var(--code-background-color);
     overflow: auto;
     overflow-x: scroll;
-    max-width: 100%;
+    width: 100%;
 
     code {
       background-color: transparent;

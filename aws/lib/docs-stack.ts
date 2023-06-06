@@ -40,7 +40,7 @@ export class DocsStack extends cdk.Stack {
       certificateArn
     );
 
-    const docsHandler = new lambda.DockerImageFunction(this, "DocsHandler", {
+    const docsHandler = new lambda.DockerImageFunction(this, "Handler", {
       code: lambda.DockerImageCode.fromImageAsset(
         path.join(__dirname, "../.."),
         {
@@ -50,7 +50,7 @@ export class DocsStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(30),
     });
 
-    const api = new apigateway.LambdaRestApi(this, "DocsEndpoint", {
+    const api = new apigateway.LambdaRestApi(this, "Api", {
       binaryMediaTypes: ["*/*"],
       handler: docsHandler,
       domainName: {
@@ -59,11 +59,11 @@ export class DocsStack extends cdk.Stack {
       },
     });
 
-    const zone = route53.HostedZone.fromLookup(this, "zone", {
+    const zone = route53.HostedZone.fromLookup(this, "HostedZone", {
       domainName,
     });
 
-    new route53.ARecord(this, "a-record", {
+    new route53.ARecord(this, "Record", {
       recordName: subDomainName,
       zone,
       target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api)),

@@ -11,7 +11,15 @@ import type { Root } from 'mdast';
 import { lowlight } from 'lowlight/lib/core.js';
 import http from 'highlight.js/lib/languages/http';
 
-import { canonicalContentPath, Content, Frontmatter, GraphQL, REST, TableOfContents, TableOfContentsPage } from './content';
+import {
+    canonicalContentPath,
+    Content,
+    Frontmatter,
+    GraphQL,
+    REST,
+    TableOfContents,
+    TableOfContentsPage,
+} from './content';
 
 async function* walk(dir: string): AsyncGenerator<string> {
     for await (const d of await fs.opendir(dir)) {
@@ -22,16 +30,19 @@ async function* walk(dir: string): AsyncGenerator<string> {
 }
 
 interface ParsedHttpCodeBlock {
-    method: string,
-    url: string,
-    headers: Headers,
-    body?: string,
+    method: string;
+    url: string;
+    headers: Headers;
+    body?: string;
 }
 
 function parseHttpMarkdownCode(code: string): ParsedHttpCodeBlock {
     const normalized = code.replace(/\r\n/g, '\n');
     const firstLineEnd = normalized.includes('\n') ? normalized.indexOf('\n') : normalized.length;
-    const [method, url] = normalized.slice(0, firstLineEnd).split(' ').map((s) => s.trim());
+    const [method, url] = normalized
+        .slice(0, firstLineEnd)
+        .split(' ')
+        .map((s) => s.trim());
 
     let body = undefined;
     const headers = new Headers();
@@ -40,7 +51,10 @@ function parseHttpMarkdownCode(code: string): ParsedHttpCodeBlock {
     for (let i = 0; i < lines.length; ++i) {
         const line = lines[i];
         if (!line.trim()) {
-            body = lines.slice(i + 1).join('\n').trim();
+            body = lines
+                .slice(i + 1)
+                .join('\n')
+                .trim();
             break;
         }
         const [key, value] = line.split(':').map((s) => s.trim());
@@ -97,69 +111,74 @@ export async function getAllContent(): Promise<Map<string, Content>> {
             mdxOptions: {
                 remarkPlugins: [
                     remarkGfm,
-                    [remarkCodeExtra, {
-                        transform: (node: MDASTCode) => {
-                            if (node.lang === 'gql' || node.lang === 'graphql') {
-                                if (node.meta !== 'v1' && node.meta !== 'v2') {
-                                    throw new Error('GraphQL code must be marked as V1 or V2.');
-                                }
-
-                                const version = node.meta;
-                                graphql.push({
-                                    document: node.value,
-                                    version,
-                                });
-
-                                return {
-                                    after: [{
-                                        type: 'text',
-                                        // TODO: Add a "run" button? Or example output?
-                                        value: `This GraphQL query can be executed against /${version}/graphql`,
-                                    }],
-                                };
-                            } else if (node.lang === 'http' || node.lang === 'https') {
-                                const { method, url, headers, body } = parseHttpMarkdownCode(node.value);
-
-                                const [path, params] = url.split('?');
-                                if (path === '/v1/graphql' || path === '/v2/graphql') {
-                                    // This is actually a GraphQL request.
-                                    const version = path === '/v1/graphql' ? 'v1' : 'v2';
-                                    if (method === 'GET') {
-                                        graphql.push({
-                                            document: new URLSearchParams(params).get('query') || '',
-                                            version,
-                                        });
-                                    } else if (headers.get('Content-Type') === 'application/json') {
-                                        graphql.push({
-                                            document: JSON.parse(body || '').query || '',
-                                            version,
-                                        });
-                                    } else if (headers.get('Content-Type') === 'application/graphql') {
-                                        graphql.push({
-                                            document: body || '',
-                                            version,
-                                        });
-                                    } else {
-                                        throw new Error('Invalid HTTP request for GraphQL v2.');
+                    [
+                        remarkCodeExtra,
+                        {
+                            transform: (node: MDASTCode) => {
+                                if (node.lang === 'gql' || node.lang === 'graphql') {
+                                    if (node.meta !== 'v1' && node.meta !== 'v2') {
+                                        throw new Error('GraphQL code must be marked as V1 or V2.');
                                     }
-                                    return null;
+
+                                    const version = node.meta;
+                                    graphql.push({
+                                        document: node.value,
+                                        version,
+                                    });
+
+                                    return {
+                                        after: [
+                                            {
+                                                type: 'text',
+                                                // TODO: Add a "run" button? Or example output?
+                                                value: `This GraphQL query can be executed against /${version}/graphql`,
+                                            },
+                                        ],
+                                    };
+                                } else if (node.lang === 'http' || node.lang === 'https') {
+                                    const { method, url, headers, body } = parseHttpMarkdownCode(node.value);
+
+                                    const [path, params] = url.split('?');
+                                    if (path === '/v1/graphql' || path === '/v2/graphql') {
+                                        // This is actually a GraphQL request.
+                                        const version = path === '/v1/graphql' ? 'v1' : 'v2';
+                                        if (method === 'GET') {
+                                            graphql.push({
+                                                document: new URLSearchParams(params).get('query') || '',
+                                                version,
+                                            });
+                                        } else if (headers.get('Content-Type') === 'application/json') {
+                                            graphql.push({
+                                                document: JSON.parse(body || '').query || '',
+                                                version,
+                                            });
+                                        } else if (headers.get('Content-Type') === 'application/graphql') {
+                                            graphql.push({
+                                                document: body || '',
+                                                version,
+                                            });
+                                        } else {
+                                            throw new Error('Invalid HTTP request for GraphQL v2.');
+                                        }
+                                        return null;
+                                    }
+
+                                    if (method !== 'GET' && method !== 'POST') {
+                                        throw new Error('Only GET and POST requests are supported.');
+                                    }
+
+                                    rest.push({
+                                        method,
+                                        url,
+                                        body: body,
+                                    });
                                 }
 
-                                if (method !== 'GET' && method !== 'POST') {
-                                    throw new Error("Only GET and POST requests are supported.");
-                                }
-
-                                rest.push({
-                                    method,
-                                    url,
-                                    body: body,
-                                });
-                            }
-
-                            return null;
+                                return null;
+                            },
                         },
-                    }],
-                    [markdownLinkPlugin, {}]
+                    ],
+                    [markdownLinkPlugin, {}],
                 ],
                 rehypePlugins: [rehypeHighlight],
             },
@@ -176,7 +195,7 @@ export async function getAllContent(): Promise<Map<string, Content>> {
         });
     }
     return ret;
-};
+}
 
 function tocPagesForContent(allContent: Map<string, Content>, content: Content): TableOfContentsPage[] {
     return (content.frontmatter.children || []).map((c) => {
@@ -206,4 +225,4 @@ export async function getProductTableOfContents(path: string): Promise<TableOfCo
         pages: tocPagesForContent(allContent, content),
         path: canonicalContentPath(path),
     };
-};
+}

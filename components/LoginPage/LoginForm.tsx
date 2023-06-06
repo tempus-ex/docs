@@ -27,7 +27,7 @@ export const LoginForm = ({ setLoginState }: LoginFormProps) => {
             .then((ok) => {
                 if (ok) {
                     cookie.set('fftoken', token, {
-                        expires: remember ? undefined : 1,
+                        expires: remember ? 30 : undefined,
                     });
                     const agreement = cookie.get('ffagreement');
                     if (!agreement) {

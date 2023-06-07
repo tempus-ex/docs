@@ -1,5 +1,5 @@
 {
-    "testPathIgnorePatterns": ["fixtures"],
+    "testPathIgnorePatterns": ["aws", "fixtures"],
     "transformIgnorePatterns": [],
     "transform": {
         "\\.m?[jt]sx?$": [

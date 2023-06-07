@@ -47,7 +47,7 @@ export const GraphQLExplorerPage = ({ source: { frontmatter } }: Props) => {
     return (
         <>
             <Head>
-                <title>{frontmatter?.title}</title>
+                <title>{frontmatter?.title as string}</title>
             </Head>
             <Header />
             <main className={styles.main}>

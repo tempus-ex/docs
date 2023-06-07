@@ -60,7 +60,7 @@ export const RESTExplorerPage = (props: Props) => {
     return (
         <>
             <Head>
-                <title>{frontmatter?.title}</title>
+                <title>{frontmatter?.title as string}</title>
             </Head>
             <Header />
             <main className={styles.main}>

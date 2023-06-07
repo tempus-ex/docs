@@ -29,7 +29,7 @@ export class DocsStack extends cdk.Stack {
     constructor(scope: cdk.App, id: string, props: DocsProps) {
         super(scope, id, props);
         const { domainName, subDomainName, certificateArn } = props;
-        const fullSubdomain = [subDomainName, domainName].join('.');
+        const fullSubdomain = [subDomainName, domainName].join('.').replace(/^\./, '');
 
         const domainCert = certificatemanager.Certificate.fromCertificateArn(this, 'DomainCert', certificateArn);
 

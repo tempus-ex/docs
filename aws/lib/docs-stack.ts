@@ -89,11 +89,21 @@ export class ProdDocsStack extends cdk.Stack {
 
         const api = new apigateway.LambdaRestApi(this, 'Api', {
             binaryMediaTypes: ['*/*'],
+            endpointTypes: [apigateway.EndpointType.REGIONAL],
             handler: docsHandler,
-            domainName: {
-                domainName: fullSubdomain,
-                certificate: domainCert,
+        });
+        
+        const apiDist = new cloudfront.Distribution(this, 'ApiDistribution', {
+            certificate: domainCert,
+            defaultBehavior: {
+                allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+                cachePolicy: new cloudfront.CachePolicy(this, 'ApiCachePolicy', {
+                    cookieBehavior: cloudfront.CacheCookieBehavior.allowList('fftoken'),
+                }),
+                origin: new origins.RestApiOrigin(api),
+                viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
             },
+            domainNames: [fullSubdomain],
         });
 
         const zone = route53.HostedZone.fromLookup(this, 'HostedZone', {

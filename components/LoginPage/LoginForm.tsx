@@ -14,7 +14,7 @@ export type LoginFormProps = {
 
 export const LoginForm = ({ setLoginState }: LoginFormProps) => {
     const [isBusy, setIsBusy] = useState(false);
-    const [remember, setRemember] = useState(true);
+    const [remember, setRemember] = useState(false);
     const [token, setToken] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const router = useRouter();

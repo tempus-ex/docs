@@ -69,8 +69,15 @@ function parseHttpMarkdownCode(code: string): ParsedHttpCodeBlock {
     };
 }
 
+let cachedContent: Map<string, Content> | undefined = undefined;
+
 // Returns a map where each key is a path, such as "/" or "/fusion-feed".
 export async function getAllContent(): Promise<Map<string, Content>> {
+    // This function can be expensive, so memoize it in production.
+    if (process.env.NODE_ENV === 'production' && cachedContent) {
+        return cachedContent;
+    }
+
     const ret = new Map();
     for await (const p of walk('./content')) {
         if (!p.endsWith('.mdx')) {
@@ -194,6 +201,8 @@ export async function getAllContent(): Promise<Map<string, Content>> {
             path: contentPath,
         });
     }
+
+    cachedContent = ret;
     return ret;
 }
 

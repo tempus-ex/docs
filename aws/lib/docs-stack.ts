@@ -29,7 +29,8 @@ export class DocsStack extends cdk.Stack {
     constructor(scope: cdk.App, id: string, props: DocsProps) {
         super(scope, id, props);
         const { domainName, subDomainName, certificateArn } = props;
-        const fullSubdomain = [subDomainName, domainName].join('.');
+        const fullSubdomain = [subDomainName, domainName].join('.').replace(/^\./, "");
+        console.log('fullSubdomain', fullSubdomain)
 
         const domainCert = certificatemanager.Certificate.fromCertificateArn(this, 'DomainCert', certificateArn);
 
@@ -68,52 +69,6 @@ export class DocsStack extends cdk.Stack {
             recordName: subDomainName,
             zone,
             target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(apiDist)),
-        });
-    }
-}
-
-export class ProdDocsStack extends cdk.Stack {
-    constructor(scope: cdk.App, id: string, props: DocsProps) {
-        super(scope, id, props);
-        const { domainName, subDomainName, certificateArn } = props;
-        const fullSubdomain = [subDomainName, domainName].join('.');
-
-        const domainCert = certificatemanager.Certificate.fromCertificateArn(this, 'DomainCert', certificateArn);
-
-        const docsHandler = new lambda.DockerImageFunction(this, 'Handler', {
-            code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../..'), {
-                platform: ecr_assets.Platform.LINUX_AMD64,
-            }),
-            timeout: cdk.Duration.seconds(30),
-        });
-
-        const api = new apigateway.LambdaRestApi(this, 'Api', {
-            binaryMediaTypes: ['*/*'],
-            endpointTypes: [apigateway.EndpointType.REGIONAL],
-            handler: docsHandler,
-        });
-        
-        const apiDist = new cloudfront.Distribution(this, 'ApiDistribution', {
-            certificate: domainCert,
-            defaultBehavior: {
-                allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-                cachePolicy: new cloudfront.CachePolicy(this, 'ApiCachePolicy', {
-                    cookieBehavior: cloudfront.CacheCookieBehavior.allowList('fftoken'),
-                }),
-                origin: new origins.RestApiOrigin(api),
-                viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-            },
-            domainNames: [fullSubdomain],
-        });
-
-        const zone = route53.HostedZone.fromLookup(this, 'HostedZone', {
-            domainName: fullSubdomain,
-        });
-
-        new route53.ARecord(this, 'Record', {
-            recordName: '',
-            zone,
-            target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api)),
         });
     }
 }

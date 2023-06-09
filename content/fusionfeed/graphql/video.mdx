@@ -70,3 +70,58 @@ query VideoDownloadExample {
   }
 }
 ```
+
+## Augmented Reality
+
+Some streams have camera calibration data available. This data can be used to determine precisely where the camera is looking at any given time. A common use-case for this information is rendering AR overlays on top of the video.
+
+Streams have a `projectionViewMatrix` field that provides a 4x4 matrix that can be used to transform 3D world-space points into 2D screen-space points. For fixed cameras, this field is available directly on the `AVStream`. For moving cameras, this field is available on the nodes of the stream's `cameraCalibrationsConnection`:
+
+
+```graphql v2
+query CameraCalibrations($streamId: ID!) {
+  node(id: $streamId) {
+    ... on AVStream {
+      # For fixed cameras, this field is populated.
+      projectionViewMatrix
+      # For moving cameras, this connection must be used.
+      cameraCalibrationsConnection(first: 100) {
+        edges {
+          node {
+            time
+            projectionViewMatrix
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+To use this matrix, world-space coordinates must be converted into meters from the center of the field. By multiplying those coordinates with the `projectionViewMatrix`, the resulting coordinates will be in normalized camera coordinates. These coordinates can then be converted into pixel coordinates:
+
+```python
+im = Image.open('frame.png')
+projection_matrix = np.array(node['projectionViewMatrix'])
+
+
+def world_to_pixel_coord(x, y, z):
+    world_coord = np.array([x, y, z, 1])
+    camera_coord = projection_matrix.dot(world_coord)
+    normalized_camera_coord = camera_coord[:2] / camera_coord[3]
+    pixel_coord = (normalized_camera_coord * np.array([0.5, -0.5]) + 0.5) * np.array([im.width, im.height])
+    return pixel_coord
+
+
+for i in range(104):
+    pos1 = world_to_pixel_coord(i - 51.5, -34, 0)
+    pos2 = world_to_pixel_coord(i - 51.5, 34, 0)
+    draw.line([tuple(pos1), tuple(pos2)], fill='yellow', width=2)
+
+
+im.save('frame-out.png')
+```
+
+This output of the above Python snippet looks like this:
+
+<img height="360" src="/images/fusionfeed/graphql/ar-example.png" />

@@ -3,6 +3,7 @@ title: GraphQL
 children:
   - executing-queries
   - concepts
+  - best-practices
   - football
   - soccer
   - video
@@ -15,7 +16,7 @@ The preferred method of accessing FusionFeed is through its [GraphQL](https://gr
 For example, to fetch the 2022 regular season games for the Pac-12 and the abbreviations for their teams, you can use the following query:
 
 ```gql v2
-{
+query Pac12FootballSchedule {
   ncaa {
     football(conference: PAC12) {
       schedule(season: 2022, type: REGULAR) {

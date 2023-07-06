@@ -9,7 +9,7 @@ Video is made available primarily via HLS. You can get the available streams and
 
 ```graphql v2
 query VideoStreamExample {
-  node(id: "CA~MjAyMS9SRUcvMS81ODUwMw") {
+  node(id: "CA~MjAyMi9QT1NULzQvNTkxNzE") {
     ... on NFLGame {
       avStreamsConnection(first: 100) {
         edges {
@@ -26,6 +26,44 @@ query VideoStreamExample {
 ```
 
 The HLS playlists include precise timestamps via `#EXT-X-PROGRAM-DATE-TIME`. This can be used to synchronize data with video.
+
+### Identifying Streams
+
+The `name` field is intended to be used only for humans and is subject to change. To identify a particular stream, such as the program stream, it's recommended that you use the `contentDescriptor` field, which is more stable and intended for this use-case. For the main program stream, this will always be "Program".
+
+Most streams are multivariant streams. That means each stream will have multiple renditions available with varying bitrates and codecs. For example, program streams typically have 4-5 video resolutions available and an audio-only variant. Players will automatically choose an appropriate variant based on the player size and network conditions, but there are cases where it's useful to know which variants are available ahead of time. You can access this information via the `variantsConnection` field.
+
+For example, this query will return the content descriptors and variants available for all streams:
+
+```graphql v2
+query StreamIdentificationExample {
+  node(id: "CA~MjAyMi9QT1NULzQvNTkxNzE") {
+    ... on NFLGame {
+      avStreamsConnection(first: 100) {
+        edges {
+          node {
+            id
+            contentDescriptor
+            variantsConnection(first: 100) {
+              edges {
+                node {
+                  bitrate
+                  tracks {
+                    rfc6381Codec
+                    ... on AVStreamVariantVideoTrack {
+                      height
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
 
 ### Clips
 

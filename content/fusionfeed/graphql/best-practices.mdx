@@ -1,0 +1,93 @@
+---
+title: Best Practices
+---
+# Best Practices
+
+When working with the GraphQL, we recommend incorporating the following best practices.
+
+## Name your operations
+
+GraphQL allows you to write anonymous queries such as this:
+
+```gql v2
+query {
+  ncaa {
+    football(conference: PAC12) {
+      schedule(season: 2022, type: REGULAR) {
+        games {
+          id
+        }
+      }
+    }
+  }
+}
+```
+
+However, we recommend always giving your queries a descriptive name:
+
+```gql v2
+query Pac12FootballSchedule {
+  ncaa {
+    football(conference: PAC12) {
+      schedule(season: 2022, type: REGULAR) {
+        games {
+          id
+        }
+      }
+    }
+  }
+}
+```
+
+This make generally improves observability and better enables us to help if there's an issue with your query that requires our assistance. In the future, we may also provide developers with usage metrics that can be aggregated by query name.
+
+## Use statically defined operations and validate them in your build process
+
+For queries with dynamic inputs, it's strongly recommended that GraphQL variables are used:
+
+```gql v2
+query Pac12FootballScheduleForSeason($season: Int!) {
+  ncaa {
+    football(conference: PAC12) {
+      schedule(season: $season, type: REGULAR) {
+        games {
+          id
+        }
+      }
+    }
+  }
+}
+```
+
+Queries should never be created via string interpolation.
+
+Statically defined queries can be validated at build time by popular tools such as [Apollo](https://www.apollographql.com). This helps you ensure that your queries are always valid before you even execute them.
+
+## Use cacheable variable values
+
+FusionFeed uses caching to ensure that users are able to get high performance at scale. When making requests from apps that generate large amounts of concurrent traffic, it's recommended that you avoid using values that aren't conducive to cache hits.
+
+For example, consider an app that allows users to visualize telemetry data. It might use a query like the following to get telemetry from a time of the user's choice:
+
+```gql v2
+query Telemetry($time: DateTime!) {
+   node(id: "CA~MjAyMi9QT1NULzQvNTkxNzE") {
+     ... on NFLGame {
+       telemetryPacketsConnection(first: 100, atOrAfterTime: $time) {
+        edges {
+          node {
+            objectSamples {
+              position {
+                xFeet
+                yFeet
+              }
+            }
+          }
+        }
+      }
+   }
+  }
+}
+```
+
+If all users submit this query with arbitrary times at millisecond precision, it'll result in misses in the cache tiers closest to the user. However, if times are rounded to the nearest second, it'll result in far more users making the same request and thus more cache hits at the edge servers closest to them. This ensures that user requests have the lowest latency possible.

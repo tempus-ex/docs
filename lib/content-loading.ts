@@ -2,6 +2,7 @@ import { promises as fs } from 'fs';
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import { hasProperty } from 'hast-util-has-property';
 import { headingRank } from 'hast-util-heading-rank';
+import { isElement } from 'hast-util-is-element';
 import { toString } from 'hast-util-to-string';
 import path from 'path';
 import { serialize } from 'next-mdx-remote/serialize';
@@ -13,6 +14,7 @@ import { MDASTCode } from 'remark-code-extra/types';
 import remarkGfm from 'remark-gfm';
 import { visit } from 'unist-util-visit';
 import type { Root } from 'mdast';
+import type { Node } from 'unist';
 
 import { lowlight } from 'lowlight/lib/core.js';
 import http from 'highlight.js/lib/languages/http';
@@ -127,14 +129,16 @@ export async function getAllContent(): Promise<Map<string, Content>> {
 
         const headingPlugin = () => {
             return (tree: Root) => {
-                visit(tree, 'element', (node) => {
-                    const rank = headingRank(node);
-                    if (rank && node.properties && hasProperty(node, 'id')) {
-                        headings.push({
-                            id: node.properties.id,
-                            text: toString(node),
-                            rank,
-                        });
+                visit(tree, (node: Node) => {
+                    if (isElement(node)) {
+                        const rank = headingRank(node);
+                        if (rank && node.properties && hasProperty(node, 'id') && typeof node.properties.id === 'string') {
+                            headings.push({
+                                id: node.properties.id,
+                                text: toString(node),
+                                rank,
+                            });
+                        }
                     }
                 });
             };

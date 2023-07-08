@@ -10,7 +10,7 @@ import styles from './styles.module.scss';
 interface ProductChildProps {
     path: string;
     title: string;
-    children: ProductChildProps[];
+    children?: ProductChildProps[];
 }
 
 interface ProductProps {
@@ -42,7 +42,7 @@ const Product = (props: ProductProps) => {
                         {props.children.map((child) => (
                             <li key={child.path}>
                                 <Link href={child.path}>{child.title}</Link>
-                                {child.children.length > 0 && (
+                                {child.children && child.children.length > 0 && (
                                     <ul>
                                         {child.children.map((child) => (
                                             <li key={child.path}>

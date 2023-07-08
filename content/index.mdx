@@ -1,12 +1,22 @@
 ---
 products:
-  - path: fusionfeed
-    icon: IconApi
-    description: The API that powers everything.
+  - title: FusionFeed
+    image: fusionfeed.svg
+    description: |
+      Learn how to use FusionFeed, our advanced sports data API, to power new products and experiences.
+    link: /fusionfeed
+    linkLabel: Get Started
     children:
-      - fusionfeed/graphql
-      - fusionfeed/rest
-  - path: support
-    icon: IconHelp
-    description: Need help? Find it here.
+      - path: fusionfeed/graphql
+        children:
+          - path: fusionfeed/graphql/explorer-and-reference
+      - path: fusionfeed/rest
+        children:
+          - path: fusionfeed/rest/explorer-and-reference
+  - title: Support
+    image: support.svg
+    description: |
+      If you require any further assistance, please do not hesitate to contact us. Our team of experts is always available to help in any way we can. We would be more than happy to assist you with any questions or concerns you may have.
+    link: mailto:support@tempus-ex.com
+    linkLabel: Contact Us
 ---

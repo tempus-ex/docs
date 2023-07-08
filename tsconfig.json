@@ -35,6 +35,7 @@
     "aws"
   ],
   "files": [
+    "node_modules/next/image-types/global.d.ts",
     "node_modules/jest-expect-message/types/index.d.ts"
   ]
 }

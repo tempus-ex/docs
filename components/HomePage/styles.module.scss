@@ -60,5 +60,14 @@
   &__children {
     padding: 0 spacing("lg");
     margin: 0 auto;
+
+    a {
+      color: #767676;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--text-color);
+    }
   }
 }

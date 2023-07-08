@@ -18,3 +18,9 @@ $breakpoints: (
     @content;
   }
 };
+
+@mixin below-breakpoint($maxwidth) {
+  @media (max-width: map.get($breakpoints, $maxwidth)) {
+    @content;
+  }
+};

@@ -4,23 +4,23 @@ import { TableOfContents, TableOfContentsPage } from '@/lib/content';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 
-export type NavBarProps = {
+export type Props = {
     toc: TableOfContents;
     path: string;
 };
 
-type NavbarSectionProps = {
+type SectionProps = {
     page: TableOfContentsPage;
     path: string;
 };
 
-type NavbarPageProps = {
+type PageProps = {
     page: TableOfContentsPage;
     path: string;
     level: number;
 };
 
-const NavbarPage = ({ page, path, level }: NavbarPageProps) => {
+const NavbarPage = ({ page, path, level }: PageProps) => {
     const checkRecursiveActive = (acc: boolean, child: TableOfContentsPage): boolean => {
         if (acc) {
             return true;
@@ -60,7 +60,7 @@ const NavbarPage = ({ page, path, level }: NavbarPageProps) => {
     );
 };
 
-export const NavBar = ({ toc, path }: NavBarProps) => {
+export const NavBar = ({ toc, path }: Props) => {
     return (
         <div className={styles['navbar']}>
             <div className={styles['navbar__top']}>

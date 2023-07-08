@@ -1,7 +1,13 @@
 import { promises as fs } from 'fs';
+import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
+import { hasProperty } from 'hast-util-has-property';
+import { headingRank } from 'hast-util-heading-rank';
+import { toString } from 'hast-util-to-string';
 import path from 'path';
 import { serialize } from 'next-mdx-remote/serialize';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeHighlight from 'rehype-highlight';
+import rehypeSlug from 'rehype-slug';
 import remarkCodeExtra from 'remark-code-extra';
 import { MDASTCode } from 'remark-code-extra/types';
 import remarkGfm from 'remark-gfm';
@@ -11,11 +17,14 @@ import type { Root } from 'mdast';
 import { lowlight } from 'lowlight/lib/core.js';
 import http from 'highlight.js/lib/languages/http';
 
+import linkIcon from '../node_modules/@tabler/icons/icons/link.svg';
+
 import {
     canonicalContentPath,
     Content,
     Frontmatter,
     GraphQL,
+    Heading,
     REST,
     TableOfContents,
     TableOfContentsPage,
@@ -114,6 +123,23 @@ export async function getAllContent(): Promise<Map<string, Content>> {
             };
         };
 
+        const headings: Heading[] = [];
+
+        const headingPlugin = () => {
+            return (tree: Root) => {
+                visit(tree, 'element', (node) => {
+                    const rank = headingRank(node);
+                    if (rank && node.properties && hasProperty(node, 'id')) {
+                        headings.push({
+                            id: node.properties.id,
+                            text: toString(node),
+                            rank,
+                        });
+                    }
+                });
+            };
+        };
+
         const source = await serialize(body, {
             mdxOptions: {
                 remarkPlugins: [
@@ -185,9 +211,19 @@ export async function getAllContent(): Promise<Map<string, Content>> {
                             },
                         },
                     ],
-                    [markdownLinkPlugin, {}],
+                    markdownLinkPlugin,
                 ],
-                rehypePlugins: [rehypeHighlight],
+                rehypePlugins: [
+                    rehypeHighlight,
+                    rehypeSlug,
+                    [rehypeAutolinkHeadings, {
+                        properties: {
+                            className: 'heading-anchor',
+                        },
+                        content: fromHtmlIsomorphic(`<img src="${linkIcon.src}" />`, {fragment: true}).children
+                    }],
+                    headingPlugin,
+                ],
             },
             parseFrontmatter: true,
         });
@@ -195,6 +231,7 @@ export async function getAllContent(): Promise<Map<string, Content>> {
         ret.set(contentPath, {
             frontmatter: source.frontmatter as unknown as Frontmatter,
             graphql,
+            headings,
             rest,
             links,
             source,

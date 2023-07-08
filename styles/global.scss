@@ -86,3 +86,20 @@ code, code > * {
   display: flex;
   flex-direction: column;
 }
+
+a.heading-anchor {
+  float: left; 
+  margin-left: -26px;
+  padding-right: 2px;
+  line-height: 1;
+}
+
+a.heading-anchor img {
+  width: 24px;
+  height: 24px;
+  visibility: hidden;
+}
+
+a.heading-anchor:hover img, h1:hover a.heading-anchor img, h2:hover a.heading-anchor img, h3:hover a.heading-anchor img, h4:hover a.heading-anchor img, h5:hover a.heading-anchor img, h6:hover a.heading-anchor img {
+  visibility: visible;
+}

@@ -19,6 +19,7 @@
 
   &__inner {
     margin: 0;
+    padding: 12px;
     max-width: breakpoint("xl");
     display: flex;
     justify-content: space-between;
@@ -30,16 +31,29 @@
 
   &__link {
     position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__text {
+    text-transform: uppercase;
+    font-weight: 900;
+    color: #333;
+    line-height: 46px;
+    font-size: 46px;
   }
 
   &__logo {
     height: 52px;
+    vertical-align: middle;
+    margin-right: spacing("lg");
+
     @include above-breakpoint("md") {
       margin-left: spacing("xl");
     }
 
     @include above-breakpoint("xl") {
-      height: 78px;
+      height: 64px;
     }
   }
 }

@@ -7,32 +7,60 @@ import { Header } from '../Header';
 
 import styles from './styles.module.scss';
 
-const Divider = () => {
-    return <div className={styles.divider}></div>;
-};
-
-interface ProductProps {
-    image: string;
+interface ProductChildProps {
+    path: string;
     title: string;
-    blurb: string;
-    link: string;
-    linkLabel: string;
+    children?: ProductChildProps[];
 }
 
-const Product = ({ image, title, blurb, link, linkLabel }: ProductProps) => {
+interface ProductProps {
+    link: string;
+    linkLabel: string;
+    image: string;
+    title: string;
+    description: string;
+    children: ProductChildProps[];
+}
+
+export interface Props {
+    products: ProductProps[];
+}
+
+const Product = (props: ProductProps) => {
     return (
         <div className={styles.product}>
-            <Image src={image} width={350} height={180} alt={title} className={styles['product__image']} />
-            <h5 className={styles['product__title']}>{title}</h5>
-            <p className={styles['product__blurb']}>{blurb}</p>
-            <Link href={link}>
-                <button className={styles['product__link']}>{linkLabel}</button>
+            <Image src={`./images/${props.image}`} width={350} height={180} alt={props.title} className={styles['product__image']} />
+            <h3 className={styles['product__title']}>{props.title}</h3>
+            <p className={styles['product__blurb']}>{props.description}</p>
+            <Link href={props.link}>
+                <button className={styles['product__link']}>{props.linkLabel}</button>
             </Link>
+            {props.children.length > 0 && (
+                <>
+                    <h4>Popular Pages</h4>
+                    <ul className={styles['product__children']}>
+                        {props.children.map((child) => (
+                            <li key={child.path}>
+                                <Link href={child.path}>{child.title}</Link>
+                                {child.children && child.children.length > 0 && (
+                                    <ul>
+                                        {child.children.map((child) => (
+                                            <li key={child.path}>
+                                                <Link href={child.path}>{child.title}</Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </>
+            )}
         </div>
     );
 };
 
-export const HomePage = () => {
+export const HomePage = (props: Props) => {
     return (
         <>
             <Head>
@@ -40,35 +68,10 @@ export const HomePage = () => {
             </Head>
             <Header />
             <main className={styles.main}>
-                <h2 className={styles.header}>Documentation</h2>
                 <div className={styles.section}>
-                    <Product
-                        image={'./images/GraphQL.svg'}
-                        title="GraphQL API"
-                        blurb={''}
-                        link={'./fusionfeed/graphql'}
-                        linkLabel="View Documentation"
-                    />
-                    <Product
-                        image={'./images/REST.svg'}
-                        title="REST API"
-                        blurb={''}
-                        link={'./fusionfeed/rest'}
-                        linkLabel="View Documentation"
-                    />
-                </div>
-                <Divider />
-                <h2 className={styles.header}>Support</h2>
-                <div className={styles.section}>
-                    <Product
-                        image={'./images/Support.svg'}
-                        title={'Ask a Question'}
-                        blurb={
-                            'If you require any further assistance, please do not hesitate to contact us. Our team of experts is always available to help in any way we can. We would be more than happy to assist you with any questions or concerns you may have.'
-                        }
-                        link={'mailto:support@tempus-ex.com'}
-                        linkLabel={'Contact Us'}
-                    />
+                    {props.products.map((product) => (
+                        <Product key={product.link} {...product} />
+                    ))}
                 </div>
             </main>
             <Footer />

@@ -64,7 +64,7 @@
       font-weight: bold;
       text-transform: uppercase;
       &::before {
-        content: url("../../public/images/Navbar-arrow.svg");
+        content: url("../../public/images/navbar-arrow.svg");
         display: inline-block;
         width: spacing("md");
         height: 100%;

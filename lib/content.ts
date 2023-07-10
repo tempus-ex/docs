@@ -19,12 +19,19 @@ export interface REST {
     body?: string;
 }
 
+export interface Heading {
+    id: string;
+    text: string;
+    rank: number;
+}
+
 export interface Content {
     frontmatter: Frontmatter;
     source: MDXRemoteSerializeResult;
     path: string;
     graphql: GraphQL[];
     rest: REST[];
+    headings: Heading[];
     links: Set<string>;
 }
 

@@ -96,6 +96,64 @@
   }
 }
 
+.pagenavbar {
+  border-left: 1px solid var(--border-color);
+  padding-left: spacing("lg");
+  padding-right: spacing("lg");
+  width: 300px;
+  display: none;
+
+  @include above-breakpoint("lg") {
+    display: unset;
+  }
+
+  a {
+    color: #767676;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--text-color);
+    }
+  }
+
+  &__content {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    padding-top: spacing("xl");
+  }
+
+  &--rank-1 {
+    padding-left: calc(spacing("md") * 0);
+    margin-bottom: spacing("md");
+  }
+
+  &--rank-2 {
+    padding-left: calc(spacing("md") * 1);
+    margin-bottom: spacing("sm");
+  }
+
+  &--rank-3 {
+    padding-left: calc(spacing("md") * 2);
+    margin-bottom: spacing("sm");
+  }
+
+  &--rank-4 {
+    padding-left: calc(spacing("md") * 3);
+    margin-bottom: spacing("sm");
+  }
+
+  &--rank-5 {
+    padding-left: calc(spacing("md") * 4);
+    margin-bottom: spacing("sm");
+  }
+
+  &--rank-6 {
+    padding-left: calc(spacing("md") * 5);
+    margin-bottom: spacing("sm");
+  }
+}
+
 .generated-content {
   margin: spacing("lg") auto spacing("xl");
   padding: 0 spacing("lg");

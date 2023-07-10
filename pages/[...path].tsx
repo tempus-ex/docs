@@ -33,6 +33,7 @@ export const getServerSideProps = withAuth<Params, Props>(async function ({ para
             path,
             source: content.source,
             tableOfContents,
+            headings: content.headings,
         },
     };
 });

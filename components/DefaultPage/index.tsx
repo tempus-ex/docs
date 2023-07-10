@@ -5,10 +5,11 @@ import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 
 import { Footer } from '../Footer';
 import { Header } from '../Header';
-import { TableOfContents } from '../../lib/content';
+import { Heading, TableOfContents } from '../../lib/content';
 
 import styles from './styles.module.scss';
-import { NavBar } from './Navbar';
+import { NavBar } from './NavBar';
+import { PageNavBar } from './PageNavBar';
 
 const scope = {
     config: getConfig(),
@@ -18,6 +19,7 @@ export interface Props {
     path: string;
     source: MDXRemoteSerializeResult;
     tableOfContents: TableOfContents;
+    headings: Heading[];
 }
 
 export const DefaultPage = (props: Props) => {
@@ -35,6 +37,7 @@ export const DefaultPage = (props: Props) => {
                 <div className={styles['generated-content']}>
                     <MDXRemote {...props.source} scope={scope} />
                 </div>
+                <PageNavBar headings={props.headings} />
             </main>
             <Footer />
         </>

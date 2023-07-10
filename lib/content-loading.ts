@@ -1,21 +1,32 @@
 import { promises as fs } from 'fs';
+import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
+import { hasProperty } from 'hast-util-has-property';
+import { headingRank } from 'hast-util-heading-rank';
+import { isElement } from 'hast-util-is-element';
+import { toString } from 'hast-util-to-string';
 import path from 'path';
 import { serialize } from 'next-mdx-remote/serialize';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeHighlight from 'rehype-highlight';
+import rehypeSlug from 'rehype-slug';
 import remarkCodeExtra from 'remark-code-extra';
 import { MDASTCode } from 'remark-code-extra/types';
 import remarkGfm from 'remark-gfm';
 import { visit } from 'unist-util-visit';
 import type { Root } from 'mdast';
+import type { Node } from 'unist';
 
 import { lowlight } from 'lowlight/lib/core.js';
 import http from 'highlight.js/lib/languages/http';
+
+import linkIcon from '../node_modules/@tabler/icons/icons/link.svg';
 
 import {
     canonicalContentPath,
     Content,
     Frontmatter,
     GraphQL,
+    Heading,
     REST,
     TableOfContents,
     TableOfContentsPage,
@@ -114,6 +125,25 @@ export async function getAllContent(): Promise<Map<string, Content>> {
             };
         };
 
+        const headings: Heading[] = [];
+
+        const headingPlugin = () => {
+            return (tree: Root) => {
+                visit(tree, (node: Node) => {
+                    if (isElement(node)) {
+                        const rank = headingRank(node);
+                        if (rank && node.properties && hasProperty(node, 'id') && typeof node.properties.id === 'string') {
+                            headings.push({
+                                id: node.properties.id,
+                                text: toString(node),
+                                rank,
+                            });
+                        }
+                    }
+                });
+            };
+        };
+
         const source = await serialize(body, {
             mdxOptions: {
                 remarkPlugins: [
@@ -185,9 +215,19 @@ export async function getAllContent(): Promise<Map<string, Content>> {
                             },
                         },
                     ],
-                    [markdownLinkPlugin, {}],
+                    markdownLinkPlugin,
                 ],
-                rehypePlugins: [rehypeHighlight],
+                rehypePlugins: [
+                    rehypeHighlight,
+                    rehypeSlug,
+                    [rehypeAutolinkHeadings, {
+                        properties: {
+                            className: 'heading-anchor',
+                        },
+                        content: fromHtmlIsomorphic(`<img src="${linkIcon.src}" />`, {fragment: true}).children
+                    }],
+                    headingPlugin,
+                ],
             },
             parseFrontmatter: true,
         });
@@ -195,6 +235,7 @@ export async function getAllContent(): Promise<Map<string, Content>> {
         ret.set(contentPath, {
             frontmatter: source.frontmatter as unknown as Frontmatter,
             graphql,
+            headings,
             rest,
             links,
             source,

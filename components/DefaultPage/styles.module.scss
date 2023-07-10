@@ -101,9 +101,10 @@
   padding-left: spacing("lg");
   padding-right: spacing("lg");
   width: 300px;
+  display: none;
 
-  @include below-breakpoint("lg") {
-    display: none;
+  @include above-breakpoint("lg") {
+    display: unset;
   }
 
   a {

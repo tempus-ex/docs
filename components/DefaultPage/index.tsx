@@ -12,7 +12,7 @@ import { NavBar } from './NavBar';
 import { PageNavBar } from './PageNavBar';
 
 const scope = {
-    config: getConfig(),
+    config: getConfig().publicRuntimeConfig,
 };
 
 export interface Props {

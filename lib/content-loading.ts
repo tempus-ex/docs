@@ -164,13 +164,16 @@ export async function getAllContent(): Promise<Map<string, Content>> {
                                     });
 
                                     return {
-                                        after: [
-                                            {
-                                                type: 'text',
-                                                // TODO: Add a "run" button? Or example output?
-                                                value: `This GraphQL query can be executed against /${version}/graphql`,
-                                            },
-                                        ],
+                                        transform: (node) => {
+                                            node.type = 'mdxJsxFlowElement';
+                                            node.name = `GraphQLExample`;
+                                            node.attributes = [{
+                                                type: 'mdxJsxAttribute',
+                                                name: 'document',
+                                                value: node.value,
+                                            }];
+                                            node.children = [];
+                                        },
                                     };
                                 } else if (node.lang === 'http' || node.lang === 'https') {
                                     const { method, url, headers, body } = parseHttpMarkdownCode(node.value);

@@ -21,9 +21,11 @@ export interface Props {
 }
 
 export const GraphQLExplorerPage = ({ source: { frontmatter } }: Props) => {
-    const [fetcher, setFetcher] = useState<Fetcher | null>(null);
+    const [ fetcher, setFetcher ] = useState<Fetcher | null>(null);
     const { setTheme } = useTheme();
     const { theme: docsTheme } = useDocsTheme();
+    const [ query, setQuery ] = useState<string | null>(null);
+    const [ variables, setVariables ] = useState<string | null>(null);
 
     useEffect(() => {
         if (fetcher) {
@@ -32,6 +34,22 @@ export const GraphQLExplorerPage = ({ source: { frontmatter } }: Props) => {
     }, [docsTheme, fetcher, setTheme]);
 
     useEffect(() => {
+        const { hash } = window.location;
+
+        if (hash) {
+            const params = new URLSearchParams(hash.slice(1));
+            const query = params.get('query');
+            if (query) {
+                setQuery(query);
+                setVariables('');
+                if ('pushState' in window.history) {
+                    window.history.pushState('', document.title, window.location.pathname + window.location.search);
+                } else {
+                    window.location.hash = '';
+                }
+            }
+        }
+
         const url = publicRuntimeConfig.fusionFeedUrl + '/v2/graphql';
         const token = cookie.get('fftoken');
         setFetcher(() =>
@@ -51,7 +69,13 @@ export const GraphQLExplorerPage = ({ source: { frontmatter } }: Props) => {
             </Head>
             <Header />
             <main className={styles.main}>
-                <div className={styles.wrapper}>{fetcher && <GraphiQL fetcher={fetcher} />}</div>
+                <div className={styles.wrapper}>{fetcher && (
+                    <GraphiQL
+                        fetcher={fetcher}
+                        query={query}
+                        variables={variables}
+                    />
+                )}</div>
             </main>
             <Footer />
         </>

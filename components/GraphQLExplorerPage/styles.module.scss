@@ -9,10 +9,10 @@
 }
 
 .wrapper {
-  margin: spacing("xl") auto;
+  margin: spacing("lg") auto;
   width: 100%;
   max-width: breakpoint("xl");
-  height: 600px;
+  height: calc(100vh - 88px - 2 * spacing("lg"));
   min-height: 50vh;
   > * {
     background-color: rgba(0,0,0,0) !important;

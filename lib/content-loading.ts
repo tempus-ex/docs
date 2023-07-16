@@ -14,6 +14,7 @@ import { MDASTCode } from 'remark-code-extra/types';
 import remarkGfm from 'remark-gfm';
 import { visit } from 'unist-util-visit';
 import type { Root } from 'mdast';
+import type { MdxJsxFlowElement } from 'mdast-util-mdx-jsx';
 import type { Node } from 'unist';
 
 import { lowlight } from 'lowlight/lib/core.js';
@@ -158,19 +159,21 @@ export async function getAllContent(): Promise<Map<string, Content>> {
                                     }
 
                                     const version = node.meta;
+                                    const document = node.value;
+
                                     graphql.push({
-                                        document: node.value,
+                                        document,
                                         version,
                                     });
 
                                     return {
-                                        transform: (node) => {
+                                        transform: (node: MdxJsxFlowElement) => {
                                             node.type = 'mdxJsxFlowElement';
                                             node.name = `GraphQLExample`;
                                             node.attributes = [{
                                                 type: 'mdxJsxAttribute',
                                                 name: 'document',
-                                                value: node.value,
+                                                value: document,
                                             }];
                                             node.children = [];
                                         },

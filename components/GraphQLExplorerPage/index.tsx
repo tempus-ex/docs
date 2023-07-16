@@ -24,8 +24,8 @@ export const GraphQLExplorerPage = ({ source: { frontmatter } }: Props) => {
     const [ fetcher, setFetcher ] = useState<Fetcher | null>(null);
     const { setTheme } = useTheme();
     const { theme: docsTheme } = useDocsTheme();
-    const [ query, setQuery ] = useState<string | null>(null);
-    const [ variables, setVariables ] = useState<string | null>(null);
+    const [ query, setQuery ] = useState<string | undefined>(undefined);
+    const [ variables, setVariables ] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         if (fetcher) {

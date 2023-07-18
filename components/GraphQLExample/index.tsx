@@ -16,9 +16,9 @@ export const GraphQLExample = (props: Props) => {
         <div>
             <Prism className={styles.code} copyLabel="Copy" language="graphql">{props.document}</Prism>
             <Paper className={styles.footer}>
-                <Link className={styles.footerLink} href={`/fusionfeed/graphql/explorer-and-reference#query=${encodeURIComponent(props.document)}`} target="_blank">
+                <Link className={styles['footer__link']} href={`/fusionfeed/graphql/explorer-and-reference#query=${encodeURIComponent(props.document)}`} target="_blank">
                     <Image src={graphqlIcon} alt="GraphQL Explorer" />
-                    <span className={styles.footerText}>Open in GraphQL Explorer</span>
+                    <span className={styles['footer__text']}>Open in GraphQL Explorer</span>
                 </Link>
             </Paper>
         </div>

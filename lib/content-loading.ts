@@ -158,19 +158,24 @@ export async function getAllContent(): Promise<Map<string, Content>> {
                                     }
 
                                     const version = node.meta;
+                                    const document = node.value;
+
                                     graphql.push({
-                                        document: node.value,
+                                        document,
                                         version,
                                     });
 
                                     return {
-                                        after: [
-                                            {
-                                                type: 'text',
-                                                // TODO: Add a "run" button? Or example output?
-                                                value: `This GraphQL query can be executed against /${version}/graphql`,
-                                            },
-                                        ],
+                                        transform: (node: any) => {
+                                            node.type = 'mdxJsxFlowElement';
+                                            node.name = `GraphQLExample`;
+                                            node.attributes = [{
+                                                type: 'mdxJsxAttribute',
+                                                name: 'document',
+                                                value: document,
+                                            }];
+                                            node.children = [];
+                                        },
                                     };
                                 } else if (node.lang === 'http' || node.lang === 'https') {
                                     const { method, url, headers, body } = parseHttpMarkdownCode(node.value);

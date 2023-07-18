@@ -1,0 +1,30 @@
+@use "../../styles/spacing" as *;
+
+.code {
+    border: 1px solid var(--border-color);
+    border-radius: 4px 4px 0 0;
+}
+
+.footer {
+    border-right: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 0 0 4px 4px;
+    padding: spacing("xs") spacing("md");
+
+
+    &__link {
+        display: flex;
+
+        img {
+            filter: invert(20%) sepia(92%) saturate(5756%) hue-rotate(308deg) brightness(86%) contrast(116%);
+            height: 40px;
+            margin-right: spacing("xs");
+            vertical-align: middle;
+        }
+    }
+
+    &__text {
+        margin: auto 0;
+    }
+}

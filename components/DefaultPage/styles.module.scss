@@ -46,6 +46,9 @@
     color: #767676;
     text-decoration: none;
     padding: spacing("md");
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 
     &:hover {
       color: var(--text-color);

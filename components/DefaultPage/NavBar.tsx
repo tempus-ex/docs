@@ -49,6 +49,7 @@ const NavbarPage = ({ page, path, level }: PageProps) => {
                     [styles['navbar__link--level-2']]: level === 2,
                 })}
                 href={page.path}
+                title={page.title}
             >
                 {page.title}
             </Link>

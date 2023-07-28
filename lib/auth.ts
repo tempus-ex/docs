@@ -9,10 +9,11 @@ export function withAuth<Params, Props>(
     return async (ctx) => {
         const { req } = ctx;
         const token = req.cookies['fftoken'];
+        const dest = ctx.resolvedUrl || req.url || '/';
         if (!token || !(await validateFusionFeedToken(token))) {
             return {
                 redirect: {
-                    destination: '/login#destination=' + encodeURIComponent(req.url || '/'),
+                    destination: '/login#destination=' + encodeURIComponent(dest),
                     permanent: false,
                 },
             };

@@ -173,6 +173,10 @@ export async function getAllContent(): Promise<Map<string, Content>> {
                                                 type: 'mdxJsxAttribute',
                                                 name: 'document',
                                                 value: document,
+                                            }, {
+                                                type: 'mdxJsxAttribute',
+                                                name: 'version',
+                                                value: version,
                                             }];
                                             node.children = [];
                                         },

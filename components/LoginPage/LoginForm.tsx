@@ -33,7 +33,7 @@ export const LoginForm = ({ setLoginState }: LoginFormProps) => {
                     if (!agreement) {
                         setLoginState('agreement');
                     } else {
-                        const destination = new URLSearchParams(window.location.search).get('destination');
+                        const destination = window.location.hash.length > 1 && new URLSearchParams(window.location.hash.slice(1)).get('destination');
                         router.push(destination || '/');
                     }
                 } else {

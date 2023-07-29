@@ -1,5 +1,4 @@
 import { HomePage, Props } from '../components/HomePage';
-import { withAuth } from '../lib/auth';
 import { canonicalContentPath, Frontmatter } from '../lib/content';
 import { getAllContent } from '../lib/content-loading';
 
@@ -23,7 +22,7 @@ interface HomePageFrontmatter extends Frontmatter {
     products: ProductFrontmatter[];
 }
 
-export const getServerSideProps = withAuth<{}, Props>(async function () {
+export const getStaticProps = async function () {
     const allContent = await getAllContent();
     const content = allContent.get('/')!;
     const frontmatter = content.frontmatter as unknown as HomePageFrontmatter;
@@ -59,4 +58,4 @@ export const getServerSideProps = withAuth<{}, Props>(async function () {
             }),
         },
     };
-});
+};

@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 
 import { DefaultPage, Props } from '../components/DefaultPage';
-import { withAuth } from '../lib/auth';
 import { canonicalContentPath } from '../lib/content';
 import { getAllContent, getProductTableOfContents } from '../lib/content-loading';
 
@@ -11,7 +10,7 @@ interface Params {
     path: string[];
 }
 
-export const getServerSideProps = withAuth<Params, Props>(async function ({ params }) {
+export const getStaticProps = async function ({ params }: { params: Params }) {
     if (!params) {
         return { notFound: true };
     }
@@ -36,4 +35,21 @@ export const getServerSideProps = withAuth<Params, Props>(async function ({ para
             headings: content.headings,
         },
     };
-});
+};
+
+export const getStaticPaths = async function () {
+    const allContent = await getAllContent();
+
+    return {
+        fallback: false,
+        paths: Array.from(allContent.keys()).filter((key) => ![
+            '/',
+            '/fusionfeed/rest/explorer-and-reference',
+            '/fusionfeed/graphql/explorer-and-reference',
+        ].includes(key)).map((key) => ({
+            params: {
+                path: canonicalContentPath(key).split('/').slice(1),
+            },
+        })),
+    };
+};

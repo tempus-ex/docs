@@ -30,6 +30,7 @@ export const getStaticProps = async function ({ params }: { params: Params }) {
     return {
         props: {
             path,
+            filePath: content.filePath,
             source: content.source,
             tableOfContents,
             headings: content.headings,

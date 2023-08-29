@@ -249,6 +249,7 @@ export async function getAllContent(): Promise<Map<string, Content>> {
             links,
             source,
             path: contentPath,
+            filePath: p,
         });
     }
 

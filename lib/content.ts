@@ -29,6 +29,7 @@ export interface Content {
     frontmatter: Frontmatter;
     source: MDXRemoteSerializeResult;
     path: string;
+    filePath: string;
     graphql: GraphQL[];
     rest: REST[];
     headings: Heading[];

@@ -43,7 +43,7 @@ This will allow the example to be automatically validated by tests and gain addi
 
 ### REST Examples
 
-To include a GraphQL example in the documentation, you can use a standard Markdown code block like so:
+To include a REST example in the documentation, you can use a standard Markdown code block like so:
 
 ````markdown
 ```http

@@ -13,4 +13,11 @@ However, FusionFeed also provides some functionality via REST API. In general, t
 ## Next Steps
 
 - [Explore the REST API.](explorer-and-reference)
-- Note: When using multiple filters in the REST API endpoints, the results are derived from AND operations between the filters
+
+## Filters
+
+Many of the REST endpoints offer filtering functionality. Only results which match all of the provided filters are returned. For example, the following request returns only games that are both for the Pac-12 _and_ for the 2023 season:
+
+```
+GET /v2/games?filter.league.code=pac12football&filter.schedule.season.year=2023
+```

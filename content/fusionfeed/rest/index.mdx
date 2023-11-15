@@ -10,6 +10,16 @@ The preferred way to access the FusionFeed API is through its [GraphQL API](/fus
 
 However, FusionFeed also provides some functionality via REST API. In general, the functionality offered via REST is a subset of the GraphQL API's functionality. However, there are some operations that are only available via REST such as those that return binary data.
 
+Use the GET /games, GET /teams and GET /players endpoints to get a full list of game ids, team and player information. The game ids can then be used to retrieve play information or AV stream ids for transcoding video angles.
+
+## Filters
+
+Many of the REST endpoints offer filtering functionality. Only results which match all of the provided filters are returned. For example, the following request returns only games that are both for the Pac-12 _and_ for the 2023 season:
+
+```
+GET /v2/games?filter.league.code=pac12football&filter.schedule.season.year=2023
+```
+
 ## Next Steps
 
 - [Explore the REST API.](explorer-and-reference)

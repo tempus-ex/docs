@@ -70,6 +70,7 @@ export const RESTExplorerPage = (props: Props) => {
                             const token = getToken();
                             if (token) {
                                 sys.preauthorizeApiKey('api_key', `token ${token}`);
+                                sys.preauthorizeApiKey('ApiKeyAuth', `token ${token}`);
                             }
                         }}
                         plugins={[SpecDownloadPlugin]}

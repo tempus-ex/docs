@@ -1,0 +1,104 @@
+---
+title: Data
+---
+# Data
+
+FusionFeed provides comprehensive coverage for foundational game data. Unless otherwise mentioned,
+all data is made available in realtime at low latency during the game.
+
+FusionFeed data is ingested from the truest and lowest latency source possible, usually on-site.
+Data that pre-dates FusionFeed's operation within a given league is typically unavailable. NFL
+coverage for example begin in 2021, and data from earlier seasons is not available.
+
+All non-static data (including video) is precisely stamped with wall-clock times so that it can be
+synchronized with any other data from FusionFeed or from third parties providing accurately
+timestamped data. 
+
+## Audio/Video (AV)
+
+FusionFeed provides AV streams from:
+
+- **TV network Cameras** - We collect video by physically connecting to the raw camera SDI feeds
+  on-site, before any quality is lost to encoding. The number of cameras we ingest varies by game.
+  For a typical NFL game, we collect around 20 camera feeds, including:
+    - Handhelds
+    - Main 50
+    - Left, main, and right 20
+    - Endzones
+    - Slashes
+    - Beauty cams
+    - Cable cams
+    - Goal posts
+    - All 22/29
+- **Team Cameras** - We collect video from team cameras in a similar manner, by physically
+  connecting on-site.
+- **Program Feeds** - We provide "dirty" program feeds by physically integrating with the on-site OB
+  truck.
+- **8K Cameras** - We set up fixed 8K cameras around the stadium to capture all the action that's not
+  caught by TV cameras.
+- **FusionCams** - These are virtual cameras that follow a specific subject, region, or group of
+  subjects within the field of view of an 8K camera. Users can create FusionCams for use-cases such
+  as isolating individual players or as an alternative to the traditional all 22 cameras.
+
+Video is made available through FusionFeed via the HLS protocol. HLS video can be distributed at a
+global scale directly from FusionFeed with approximately 10 seconds of end-to-end latency.
+
+On request, SRT feeds can be provided for video for viewing with sub-second latency from the camera
+glass to the client's screen.
+
+Select AV streams are processed using state-of-the-art computer vision to provide:
+
+- Bounding boxes
+- Skeletal pose estimation
+- Masks
+- Camera calibration
+
+See [GraphQL Video](graphql/video) for details on how to get started working with video using FusionFeed's GraphQL API.
+
+## Telemetry
+
+FusionFeed provides X/Y coordinates for players, officials, balls, and other subjects.
+
+This data may be based on hardware tracking devices or computer vision (CV) depending on the game.
+When there are hardware tracking devices worn, tracking data is typically collected in the stadium,
+as close to the source as possible. Otherwise, if players are not wearing hardware tracking devices
+or in cases where redundancy is desired, optical CV-based tracking based on our 8K video feeds is
+used.
+
+Telemetry data is provided live, typically at under 3 seconds of latency and is commonly used for use-cases such as:
+
+- Determining which players are on the field or bench for any given play, time, etc. I.e. determining "player
+  participation".
+- Analyzing player performance throughout the game.
+- Creating 2D or 3D visualizations or game reconstructions.
+- Deriving additional data points such as formations.
+
+## Scoreboard
+
+FusionFeed provides data directly from the stadium scoreboard, typically at subsecond latency.
+Depending on the venue, this may come from a direct physical connection, e.g. to a Daktronics or OES
+serial port, or from a distribution server.
+
+## Statistics
+
+FusionFeed provides detailed timelines and statistics for all covered games, live, in realtime. The
+source of these statistics varies by league.
+
+For leagues with the notion of "official" statistics, FusionFeed collects official stats directly
+from the source and provides those by default, as soon as they're available. For the NFL for
+example, official play-by-play and cumulative statistics are typically updated immediately at the
+end of each play.
+
+Alternatively or in addition to official statistics, FusionFeed can provide AI-based automated
+statistics. Our AI-based solution takes all available game data such as tracking and scoreboard data
+and builds a comprehensive understanding of the game live. Automated stats can provide superhuman
+speed, objectivity, and precision. They can be used to calculate statistics for plays as the plays
+are still unfolding or can be used to identify the precise time and location of any sub-play event.
+
+Often the best solution for clients is to utilize a combination of official and automated stats.
+
+## Game Metadata
+
+Game metadata, such as schedules and rosters are made available in FusionFeed as soon as they're
+available from the official source, and changes are propagated through FusionFeed as they're made in
+realtime.

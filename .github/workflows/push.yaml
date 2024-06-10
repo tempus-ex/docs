@@ -68,7 +68,7 @@ jobs:
         working-directory: aws
         run: |
           npx aws-cdk deploy ProdDocsStack -r arn:aws:iam::189912143729:role/ProdDocsGitHubActionsStack-UpdateRoleD9565374-i7KuEu6ZL8fY -c deployRoleArn=arn:aws:iam::189912143729:role/ProdDocsGitHubActionsStack-DeployRole885297C3-9V3OU3WKMFNF
-          aws cloudfront create-invalidation --distribution-id E3LRF6MMAY4LIQ --paths '/*'"
+          aws cloudfront create-invalidation --distribution-id E3LRF6MMAY4LIQ --paths '/*'
       - name: Update deployment status (success)
         if: success()
         uses: chrnorm/deployment-status@releases/v1

@@ -91,8 +91,12 @@ export class GitHubActionsStack extends Stack {
             inlinePolicies: {
                 policy: new iam.PolicyDocument({
                     statements: [new iam.PolicyStatement({
-                        actions: ['iam:AssumeRole'],
-                        resources: [deployRole.roleArn],
+                        actions: ['sts:AssumeRole'],
+                        resources: [
+                            deployRole.roleArn,
+                            `arn:aws:iam::${Aws.ACCOUNT_ID}:role/cdk-*-image-publishing-role-${Aws.ACCOUNT_ID}-${Aws.REGION}`,
+                            `arn:aws:iam::${Aws.ACCOUNT_ID}:role/cdk-*-file-publishing-role-${Aws.ACCOUNT_ID}-${Aws.REGION}`,
+                        ],
                     }), new iam.PolicyStatement({
                         actions: ['cloudfront:CreateInvalidation'],
                         resources: ['*'],

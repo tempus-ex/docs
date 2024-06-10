@@ -30,3 +30,57 @@ jobs:
         run: |
           npm ci
           npm run test
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      id-token: write
+      contents: read
+      packages: write
+      actions: read
+      deployments: write
+    needs:
+      - test
+      - build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Turnstyle
+        uses: softprops/turnstyle@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::189912143729:role/ProdDocsGitHubActionsStack-Role1ABCC5F0-KyOsFJsaLrnn
+          aws-region: us-east-1
+      - name: Create GitHub deployment
+        uses: chrnorm/deployment-action@releases/v1
+        id: deployment
+        with:
+          token: "${{ github.token }}"
+          environment: prod
+      - name: NPM Install
+        working-directory: aws
+        run: npm ci
+      - name: Deploy
+        working-directory: aws
+        run: |
+          npx aws-cdk deploy ProdDocsStack -r arn:aws:iam::189912143729:role/ProdDocsGitHubActionsStack-UpdateRoleD9565374-i7KuEu6ZL8fY -c deployRoleArn=arn:aws:iam::189912143729:role/ProdDocsGitHubActionsStack-DeployRole885297C3-9V3OU3WKMFNF
+          aws cloudfront create-invalidation --distribution-id E3LRF6MMAY4LIQ --paths '/*'"
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@releases/v1
+        with:
+          token: "${{ github.token }}"
+          environment_url: https://docs.tempus-ex.com
+          state: "success"
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@releases/v1
+        with:
+          token: "${{ github.token }}"
+          state: "failure"
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}

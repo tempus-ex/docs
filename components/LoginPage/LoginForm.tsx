@@ -4,6 +4,7 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import cookie from 'js-cookie';
 
+import { getDestination } from '.';
 import { validateFusionFeedToken } from '../../lib/fusionfeed';
 import styles from './styles.module.scss';
 import { useRouter } from 'next/router';
@@ -33,8 +34,7 @@ export const LoginForm = ({ setLoginState }: LoginFormProps) => {
                     if (!agreement) {
                         setLoginState('agreement');
                     } else {
-                        const destination = window.location.hash.length > 1 && new URLSearchParams(window.location.hash.slice(1)).get('destination');
-                        router.push(destination || '/');
+                        router.push(getDestination());
                     }
                 } else {
                     setErrorMessage('Invalid token.');

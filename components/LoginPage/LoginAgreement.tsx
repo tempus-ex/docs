@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import cookie from 'js-cookie';
 import { useRouter } from 'next/router';
+
+import { getDestination } from '.';
 import styles from './styles.module.scss';
 
 export type LoginAgreementProps = {
@@ -17,8 +19,7 @@ export const LoginAgreement = ({ setLoginState }: LoginAgreementProps) => {
 
     const acceptAgreement = () => {
         cookie.set('ffagreement', 'true');
-        const destination = window.location.hash.length > 1 && new URLSearchParams(window.location.hash.slice(1)).get('destination');
-        router.push(destination || '/');
+        router.push(getDestination());
     };
 
     return (

@@ -8,6 +8,14 @@ import { LoginForm } from './LoginForm';
 import { useState } from 'react';
 import { LoginAgreement } from './LoginAgreement';
 
+export const getDestination = () => {
+    const unsafeDestination = window.location.hash.length > 1 && new URLSearchParams(window.location.hash.slice(1)).get('destination');
+    if (unsafeDestination && unsafeDestination.startsWith('/') && !unsafeDestination.startsWith('//') && !unsafeDestination.includes('\\')) {
+        return unsafeDestination;
+    }
+    return '/';
+};
+
 export const LoginPage = () => {
     const [loginState, setLoginState] = useState<'login' | 'agreement'>('login');
 

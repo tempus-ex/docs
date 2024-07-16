@@ -12,7 +12,7 @@ export async function validateFusionFeedToken(token: string): Promise<boolean> {
         method: 'POST',
         headers: {
             'Content-Type': 'application/graphql',
-            Authorization: 'token ' + token,
+            Authorization: (token.includes('.') ? 'Bearer ' : 'token ') + token,
         },
         body: '{__typename}',
     });

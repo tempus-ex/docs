@@ -23,6 +23,15 @@ const getToken = () =>
         .find((row) => row.startsWith('fftoken='))
         ?.split('=')[1];
 
+const getAuthorization = () => {
+    const token = getToken();
+    if (!token) {
+        return '';
+    }
+    const tokenType = token.includes('.') ? 'Bearer' : 'token';
+    return `${tokenType} ${token}`;
+};
+
 const specUrl = `${publicRuntimeConfig.fusionFeedUrl}/v2/openapi.json`;
 
 export const RESTExplorerPage = (props: Props) => {
@@ -32,10 +41,9 @@ export const RESTExplorerPage = (props: Props) => {
         <button
             className={styles['swagger__button']}
             onClick={() => {
-                const token = getToken();
                 fetch(specUrl, {
                     headers: {
-                        authorization: `token ${token}`,
+                        authorization: getAuthorization(),
                     },
                 })
                     .then((res) => res.blob())
@@ -67,17 +75,17 @@ export const RESTExplorerPage = (props: Props) => {
                 <div className={styles.wrapper}>
                     <SwaggerUI
                         onComplete={(sys) => {
-                            const token = getToken();
-                            if (token) {
-                                sys.preauthorizeApiKey('api_key', `token ${token}`);
-                                sys.preauthorizeApiKey('ApiKeyAuth', `token ${token}`);
+                            const auth = getAuthorization();
+                            if (auth) {
+                                sys.preauthorizeApiKey('api_key', auth);
+                                sys.preauthorizeApiKey('ApiKeyAuth', auth);
                             }
                         }}
                         plugins={[SpecDownloadPlugin]}
                         requestInterceptor={(req) => {
-                            const token = getToken();
-                            if (token && req.url.endsWith('/v2/openapi.json')) {
-                                req.headers['authorization'] = `token ${token}`;
+                            const auth = getAuthorization();
+                            if (auth && req.url.endsWith('/v2/openapi.json')) {
+                                req.headers['authorization'] = auth;
                             }
                             return req;
                         }}

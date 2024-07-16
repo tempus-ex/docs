@@ -53,15 +53,16 @@ export const GraphQLExplorerPage = ({ source: { frontmatter } }: Props) => {
         const url = publicRuntimeConfig.fusionFeedUrl + '/v2/graphql';
         const subscriptionUrl = publicRuntimeConfig.fusionFeedUrl + '/v2/graphql-ws';
         const token = cookie.get('fftoken');
+        const tokenType = token?.includes('.') ? 'Bearer' : 'token';
         setFetcher(() =>
             createGraphiQLFetcher({
                 headers: {
-                    Authorization: `token ${token}`,
+                    Authorization: `${tokenType} ${token}`,
                 },
                 subscriptionUrl,
                 url,
                 wsConnectionParams: {
-                    Authorization: `token ${token}`,
+                    Authorization: `${tokenType} ${token}`,
                 },
             }),
         );

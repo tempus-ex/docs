@@ -1,16 +1,15 @@
-import { saveAs } from 'file-saver';
+import { API } from '@stoplight/elements';
 import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { MDXRemoteSerializeResult } from 'next-mdx-remote';
-import '../../node_modules/swagger-ui-react/swagger-ui.css';
+import { useEffect, useRef, useState } from 'react';
 
 import { Footer } from '../Footer';
 import { Header } from '../Header';
 
 import styles from './styles.module.scss';
 
-const SwaggerUI = dynamic(import('swagger-ui-react'), { ssr: false });
 const { publicRuntimeConfig } = getConfig();
 
 export interface Props {
@@ -34,36 +33,75 @@ const getAuthorization = () => {
 
 const specUrl = `${publicRuntimeConfig.fusionFeedUrl}/v2/openapi.json`;
 
+function redactFromNode(node: Node, sensitiveText: string, replacement: string) {
+    if (node.hasChildNodes()) {
+        node.childNodes.forEach((child) => {
+            redactFromNode(child, sensitiveText, replacement);
+        });
+    } else if (node.textContent?.includes(sensitiveText)) {
+        node.textContent = node.textContent.replaceAll(sensitiveText, replacement);
+    }
+}
+
 export const RESTExplorerPage = (props: Props) => {
-    const frontmatter = props.source.frontmatter;
+    const wrapperRef = useRef(null);
+    const [spec, setSpec] = useState('');
 
-    const SpecDownloadInfoUrl = () => (
-        <button
-            className={styles['swagger__button']}
-            onClick={() => {
-                fetch(specUrl, {
-                    headers: {
-                        authorization: getAuthorization(),
-                    },
-                })
-                    .then((res) => res.blob())
-                    .then((blob) => {
-                        saveAs(blob, 'openapi.json');
-                    })
-                    .catch((err) => console.error(err));
-            }}
-        >
-            Download Spec
-        </button>
-    );
+    useEffect(() => {
+        // Get credentials and configure the explorer.
+        const authorization = getAuthorization();
+        if (!authorization) {
+            alert('Please authenticate to view this page.');
+            return;
+        }
 
-    const SpecDownloadPlugin = () => {
-        return {
-            wrapComponents: {
-                InfoUrl: () => SpecDownloadInfoUrl,
+        window.localStorage.setItem(
+            'TryIt_securitySchemeValues',
+            JSON.stringify({
+                ApiKeyAuth: authorization,
+            }),
+        );
+
+        // Fetch the spec.
+        fetch(specUrl, {
+            headers: {
+                authorization,
             },
-        };
-    };
+        })
+            .then((res) => res.json())
+            .then((spec) => {
+                if (spec.servers.length === 1) {
+                    spec.servers[0].url = publicRuntimeConfig.fusionFeedUrl + spec.servers[0].url;
+                }
+                setSpec(spec);
+            })
+            .catch((err) => alert(err));
+
+        // Censor the credentials wherever they appear in the explorer.
+        const sensitiveText = authorization;
+        const replacement = 'INSERT_YOUR_AUTHORIZATION_HERE';
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                if (mutation.type === 'characterData') {
+                    redactFromNode(mutation.target, sensitiveText, replacement);
+                } else if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach((node) => {
+                        redactFromNode(node, sensitiveText, replacement);
+                    });
+                }
+            }
+        });
+        if (wrapperRef.current) {
+            observer.observe(wrapperRef.current, {
+                characterData: true,
+                childList: true,
+                subtree: true,
+            });
+        }
+        return () => observer.disconnect();
+    }, []);
+
+    const frontmatter = props.source.frontmatter;
 
     return (
         <>
@@ -72,25 +110,8 @@ export const RESTExplorerPage = (props: Props) => {
             </Head>
             <Header />
             <main className={styles.main}>
-                <div className={styles.wrapper}>
-                    <SwaggerUI
-                        onComplete={(sys) => {
-                            const auth = getAuthorization();
-                            if (auth) {
-                                sys.preauthorizeApiKey('api_key', auth);
-                                sys.preauthorizeApiKey('ApiKeyAuth', auth);
-                            }
-                        }}
-                        plugins={[SpecDownloadPlugin]}
-                        requestInterceptor={(req) => {
-                            const auth = getAuthorization();
-                            if (auth && req.url.endsWith('/v2/openapi.json')) {
-                                req.headers['authorization'] = auth;
-                            }
-                            return req;
-                        }}
-                        url={specUrl}
-                    />
+                <div className={styles.wrapper + ' elements-api'} ref={wrapperRef}>
+                    {spec && <API apiDescriptionDocument={spec} router="hash" />}
                 </div>
             </main>
             <Footer />

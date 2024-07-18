@@ -47,7 +47,7 @@ To include a REST example in the documentation, you can use a standard Markdown 
 
 ````markdown
 ```http
-GET /v2/games?filter.league.code=NFL
+GET /v2/nfl/games?last=100
 ```
 ````
 

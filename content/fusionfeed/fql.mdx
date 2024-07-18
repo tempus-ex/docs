@@ -23,6 +23,12 @@ query FQLExample {
 }
 ```
 
+Or via REST:
+
+```http
+GET /v2/nfl/plays?first=500&predicate=%7B%22expression%22%3A%22team%28%5C%22NYJ%5C%22%29+has+TOUCHDOWN%22%7D
+```
+
 The language itself is not football-specific. The things you can query and the attributes you query them by are all context-dependent. For each API where you can use FQL, there is additional reference specific to that API.
 
 ## Syntax

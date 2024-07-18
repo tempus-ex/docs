@@ -11,7 +11,7 @@ children:
 ---
 # GraphQL
 
-The preferred method of accessing FusionFeed is through its [GraphQL](https://graphql.org) API. GraphQL provides makes it possible to efficiently access all the data you need while minimizing round trips to FusionFeed.
+For most use-cases, we recommend accessing FusionFeed through its [GraphQL](https://graphql.org) API. GraphQL makes it possible to efficiently access all the data you need while minimizing round trips to FusionFeed.
 
 For example, to fetch the 2022 regular season games for the Pac-12 and the abbreviations for their teams, you can use the following query:
 
@@ -39,6 +39,8 @@ query Pac12FootballSchedule {
   }
 }
 ```
+
+While GraphQL is generally recommended, for those that prefer it, a [REST API](/fusionfeed/rest) is also available. Both REST and GraphQL APIs have all of the same data and can be used interchangeably.
 
 ## Next Steps
 

@@ -49,6 +49,27 @@ describe('graphql', () => {
     });
 });
 
+const pathMatches = (path: string, def: string) => {
+    const pathParts = path.split('/');
+    const defParts = def.split('/');
+
+    if (pathParts.length !== defParts.length) {
+        return false;
+    }
+
+    for (let i = 0; i < pathParts.length; i++) {
+        if (defParts[i].startsWith('{')) {
+            continue;
+        }
+
+        if (pathParts[i] !== defParts[i]) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
 describe('rest', () => {
     it('validates', async () => {
         const auth = process.env.FUSION_FEED_AUTHORIZATION || '';
@@ -74,7 +95,7 @@ describe('rest', () => {
 
                 let found = false;
                 for (const [def, pathSchema] of Object.entries(version === 'v1' ? schema.paths : schema.paths)) {
-                    if (path === def) {
+                    if (pathMatches(path, def)) {
                         found = true;
 
                         let schema = pathSchema.get;

